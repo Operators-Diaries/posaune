@@ -1,0 +1,180 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+:root {
+    --background: #edf0f3;
+    --background-embed: #e4e6ec;
+    --shadow: #d5dbe7cb;
+    --text: #101116;
+    --secondary-text: #292c38;
+}
+
+.änderung {
+    color: rgb(253, 49, 49);
+    font-weight: 500;
+}
+
+body {
+    margin: 0;
+    font-family: "Poppins";
+    background-color: var(--background);
+    color: var(--text)
+}
+
+#content-section {
+    height: 90vh;
+    display: flex;
+}
+
+#plan-section {
+    width: 80vw;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+.scrollable::-webkit-scrollbar {
+    display: none;
+}
+
+.plan-wrapper {
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(325px, 1fr));
+    gap: 20px;
+    justify-content: center;    
+}
+
+.klasse {
+    position: relative;
+    padding: 4.5em 1.5em 2.8em 1.5em;
+    background-color: var(--background-embed);
+    box-shadow: inset 18px 18px 20px var(--shadow), inset -18px -18px 20px #ffffff;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.klassenkürzel {
+    position: absolute;
+    top: 15px;
+    left: calc(50% - 1.7em);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--background);
+    box-shadow: -8px -8px 20px #ffffff, 8px 8px 20px var(--shadow);
+    width: 1.7em;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    padding: 10px;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.periode-wrapper {
+    
+}
+
+.periode {
+    display: flex;
+    border-radius: 5px;
+    align-items: center;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 5px 0;
+}
+
+.periode.unterscheidbar {
+    box-shadow: 0 -1px 0 var(--shadow), 0 1px 0 var(--shadow);
+}
+
+.periode-zahl {
+    margin-right: 15px;
+    margin-left: -15px;
+    width: 30px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 22px;
+}
+
+.stunden-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 5px;
+    padding: 5px;
+    width: fit-content;
+    margin: 0 auto;
+}
+
+.stunde {
+
+}
+
+.stunden-flr {
+    font-size: 19px;
+    display: grid;
+    grid-template-columns: 85px 65px 75px;
+    column-gap: 0px;
+    white-space: nowrap;
+}
+
+.stunden-flr .raum {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+}
+
+.stundeninfo {
+    font-size: 12px;
+    color: var(--secondary-text);
+    width: 225px;
+}
+
+#sidebar-section {
+    width: 20vw;
+    background: rgba(0, 128, 0, 0.089);
+}
+
+#footer-section {
+    background: rgba(255, 0, 0, 0.119);
+    height: 5vh;
+}
+
+#header-section {
+    background: var(--background);
+    height: 5vh;
+}
+
+.ticker-wrapper {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    box-sizing: border-box;
+    padding: 5px 0;
+    display: flex;
+    align-items: center;
+}
+
+.ticker {
+    display: inline-block;
+    padding-left: 100%;
+    animation: ticker 30s linear infinite;
+    font-size: 40px;
+    font-weight: 500;
+}
+
+@keyframes ticker {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-100%);
+    }
+}
