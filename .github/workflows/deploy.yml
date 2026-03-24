@@ -1,57 +1,71 @@
 name: Deploy to GitHub Pages
 
 on:
-  push:
-    branches: [ main ]
-  workflow_dispatch:
+    push:
+        branches: [ main ]
+    workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+    contents: read
+    pages: write
+    id-token: write
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+    build:
+        runs-on: ubuntu-latest
 
-    steps:
-      - name: Repository auschecken
-        uses: actions/checkout@v4
+        steps:
+            - name: Repository auschecken
+              uses: actions/checkout@v4
 
-      - name: Python installieren
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
+            - name: Python installieren
+              uses: actions/setup-python@v5
+              with:
+                python-version: '3.11'  
+            - name: Abhängigkeiten installieren
+              run: |
+                pip install vpmobil pydantic-settings pyyaml flask 
 
-      - name: Abhängigkeiten installieren
-        run: |
-          pip install vpmobil pydantic-settings pyyaml flask 
+            - name: Patch vpmobil SyntaxError
+              run: |
+                  python - <<'PY'
+                  from pathlib import Path
+                  import sysconfig
+  
+                  purelib = Path(sysconfig.get_paths()["purelib"])
+                  models = purelib / "vpmobil" / "models.py"
+  
+                  text = models.read_text(encoding="utf-8")
+  
+                  old = 'find("Kopf/planart").text'
+                  new = "find('Kopf/planart').text"
+  
+                  if old not in text:
+                      raise SystemExit(f"Pattern not found in {models}")
+  
+                  models.write_text(text.replace(old, new), encoding="utf-8")
+                  print(f"Patched {models}")
+                  PY
 
-      - name: Patch vpmobil SyntaxError
-        run: |
-            FILE=$(python -c "import vpmobil; import os; print(os.path.join(os.path.dirname(vpmobil.__file__), 'models.py'))")
-            
-            sed -i "s/find(\"Kopf\/planart\")\.text/find('Kopf\/planart').text/g" $FILE
+            - name: Build-Ordner erstellen
+              run: mkdir -p build
 
-      - name: Build-Ordner erstellen
-        run: mkdir -p build
+            - name: Flask Seite rendern
+              run: python build_static.py
 
-      - name: Flask Seite rendern
-        run: python build_static.py
+            - name: Statische Dateien kopieren
+              run: |
+                cp -r static build/
 
-      - name: Statische Dateien kopieren
-        run: |
-          cp -r static build/
+            - name: Pages Artifact hochladen
+              uses: actions/upload-pages-artifact@v3
+              with:
+                path: build
 
-      - name: Pages Artifact hochladen
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: build
+    deploy:
+        needs: build
+        runs-on: ubuntu-latest
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: GitHub Pages deployen
-        uses: actions/deploy-pages@v4
+        steps:
+            - name: GitHub Pages deployen
+              uses: actions/deploy-pages@v4
