@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="A basic website">
-    <link rel="stylesheet" href="static/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     
     <title>Benno Vertretungsplan</title>
 
@@ -110,7 +110,7 @@
                 {% endif %}
         </script>
         <div id="sidebar-section" {% if not cfg.content.sidebar %}style="display: none;"{% endif %}>
-            <img src="static/logo.svg" alt="Logo" style="height: 70%; color: blue;">
+            <img src="{{ url_for('static', filename='logo.svg') }}" alt="Logo" style="height: 70%; color: blue;">
         </div>
     </div>
 
