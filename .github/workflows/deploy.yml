@@ -26,25 +26,42 @@ jobs:
               run: |
                 pip install vpmobil pydantic-settings pyyaml flask 
 
-            - name: Patch vpmobil SyntaxError
+            - name: Patch vpmobil vollständig
               run: |
                   python - <<'PY'
                   from pathlib import Path
                   import sysconfig
+                  import re
   
-                  purelib = Path(sysconfig.get_paths()["purelib"])
-                  models = purelib / "vpmobil" / "models.py"
+                  base = Path(sysconfig.get_paths()["purelib"]) / "vpmobil"
   
-                  text = models.read_text(encoding="utf-8")
+                  for file in base.rglob("*.py"):
+                      text = file.read_text(encoding="utf-8")
   
-                  old = 'find("Kopf/planart").text'
-                  new = "find('Kopf/planart').text"
+                      original = text
   
-                  if old not in text:
-                      raise SystemExit(f"Pattern not found in {models}")
+                      # 1️⃣ Problem: doppelte Quotes in f-strings (find("..."))
+                      text = text.replace(
+                          'find("Kopf/planart").text',
+                          "find('Kopf/planart').text"
+                      )
   
-                  models.write_text(text.replace(old, new), encoding="utf-8")
-                  print(f"Patched {models}")
+                      # 2️⃣ Problem: f-string mit verschachtelten Quotes wie:
+                      # f"... {", ".join(...)} ..."
+                      text = re.sub(
+                          r'\{", "\.join\((.*?)\)\}',
+                          r"{', '.join(\1)}",
+                          text
+                      )
+  
+                      # 3️⃣ Optional: weitere typische Fehler patterns
+                      text = text.replace('"{", ".join', '"{\', \'.join')
+  
+                      if text != original:
+                          file.write_text(text, encoding="utf-8")
+                          print(f"Patched: {file}")
+  
+                  print("Patch abgeschlossen")
                   PY
 
             - name: Build-Ordner erstellen
