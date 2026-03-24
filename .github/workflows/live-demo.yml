@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: Deploy Live Demo
 
 on:
     push:
@@ -68,7 +68,7 @@ jobs:
               run: mkdir -p build
 
             - name: Flask Seite rendern
-              run: python build_static.py
+              run: python .github/workflows/build.py
 
             - name: Statische Dateien kopieren
               run: |

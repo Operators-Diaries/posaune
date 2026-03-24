@@ -11,7 +11,7 @@
     <script>
         setInterval(() => {
             location.reload();
-        }, 5 * 60 * 1000);
+        }, {{ cfg.updatecycle }} * 60 * 1000);
     </script>
 
 </head>
@@ -26,68 +26,77 @@
 
     <div id="content-section">
         <div id="plan-section">
-            <div class="plan-wrapper">
-                {% for klasse in vp.klassen.values() if klasse.kürzel in cfg.content.klassen %}
+            <div id="content-scroller">
+                <div class="plan-wrapper">
+                    {% for klasse in vp.klassen.values() if klasse.kürzel in cfg.content.klassen %}
+                        <div class="klasse">
+                            <div class="klassenkürzel">{{ klasse.kürzel }}</div>
+                            <div class="perioden-wrapper">
+                                {% for periode in klasse.stunden.keys() %}
+                                    <div class="periode">
+                                        <div class="periode-zahl">{{ periode }}</div>
+                                        <div class="stunden-wrapper">
+                                            {% for stunde in klasse.stunden[periode] %}
+                                                <div class="stunde">
+                                                    <div class="stunden-flr">
+                                                        {% if not stunde.ausfall %}
+                                                            <span class="fach{% if stunde.fachgeändert %} änderung{% endif %}">{{ (stunde.fach or "").replace("Fördern", "Fö") }}</span>
+                                                            <span class="lehrer{% if stunde.lehrergeändert %} änderung{% endif %}">{{ ", ".join(stunde.lehrer)}}</span>
+                                                            <span class="raum{% if stunde.raumgeändert %} änderung{% endif %}">{{ ", ".join(stunde.räume) }}</span>
+                                                        {% else %}
+                                                            <span class="änderung">Ausfall</span>
+                                                        {% endif %}
+                                                    </div>
+                                                    {% if stunde.info is not none %}<div class="stundeninfo">{{ stunde.info }}</div>{% endif %}
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="plan-wrapper">
+                    {% for klasse in vp.klassen.values() if klasse.kürzel in cfg.content.klassendetailiert %}
                     <div class="klasse">
                         <div class="klassenkürzel">{{ klasse.kürzel }}</div>
                         <div class="perioden-wrapper">
                             {% for periode in klasse.stunden.keys() %}
-                                <div class="periode">
-                                    <div class="periode-zahl">{{ periode }}</div>
-                                    <div class="stunden-wrapper">
-                                        {% for stunde in klasse.stunden[periode] %}
-                                            <div class="stunde">
-                                                <div class="stunden-flr">
-                                                    {% if not stunde.ausfall %}
-                                                        <span class="fach{% if stunde.fachgeändert %} änderung{% endif %}">{{ (stunde.fach or "").replace("Fördern", "Fö") }}</span>
-                                                        <span class="lehrer{% if stunde.lehrergeändert %} änderung{% endif %}">{{ ", ".join(stunde.lehrer)}}</span>
-                                                        <span class="raum{% if stunde.raumgeändert %} änderung{% endif %}">{{ ", ".join(stunde.räume) }}</span>
-                                                    {% else %}
-                                                        <span class="änderung">Ausfall</span>
-                                                    {% endif %}
-                                                </div>
-                                                {% if stunde.info is not none %}<div class="stundeninfo">{{ stunde.info }}</div>{% endif %}
-                                            </div>
-                                        {% endfor %}
+                            <div class="periode unterscheidbar">
+                                <div class="periode-zahl">{{ periode }}</div>
+                                <div class="stunden-wrapper">
+                                    {% for stunde in klasse.stunden[periode] %}
+                                    <div class="stunde">
+                                        <div class="stunden-flr">
+                                            {% if not stunde.ausfall %}
+                                            <span class="fach{% if stunde.fachgeändert %} änderung{% endif %}">{{ stunde.fach or ""
+                                                }}</span>
+                                            <span class="lehrer{% if stunde.lehrergeändert %} änderung{% endif %}">{{ ",
+                                                ".join(stunde.lehrer)}}</span>
+                                            <span class="raum{% if stunde.raumgeändert %} änderung{% endif %}">{{ ",
+                                                ".join(stunde.räume) }}</span>
+                                            {% else %}
+                                            <span class="änderung">Ausfall</span>
+                                            {% endif %}
+                                        </div>
+                                        {% if stunde.info is not none %}<div class="stundeninfo">{{ stunde.info }}</div>{% endif %}
                                     </div>
+                                    {% endfor %}
                                 </div>
+                            </div>
                             {% endfor %}
                         </div>
                     </div>
-                {% endfor %}
+                    {% endfor %}
+                </div>
             </div>
-            <div class="plan-wrapper">
-                {% for klasse in vp.klassen.values() if klasse.kürzel in cfg.content.klassendetailiert %}
-                <div class="klasse">
-                    <div class="klassenkürzel">{{ klasse.kürzel }}</div>
-                    <div class="perioden-wrapper">
-                        {% for periode in klasse.stunden.keys() %}
-                        <div class="periode unterscheidbar">
-                            <div class="periode-zahl">{{ periode }}</div>
-                            <div class="stunden-wrapper">
-                                {% for stunde in klasse.stunden[periode] %}
-                                <div class="stunde">
-                                    <div class="stunden-flr">
-                                        {% if not stunde.ausfall %}
-                                        <span class="fach{% if stunde.fachgeändert %} änderung{% endif %}">{{ stunde.fach or ""
-                                            }}</span>
-                                        <span class="lehrer{% if stunde.lehrergeändert %} änderung{% endif %}">{{ ",
-                                            ".join(stunde.lehrer)}}</span>
-                                        <span class="raum{% if stunde.raumgeändert %} änderung{% endif %}">{{ ",
-                                            ".join(stunde.räume) }}</span>
-                                        {% else %}
-                                        <span class="änderung">Ausfall</span>
-                                        {% endif %}
-                                    </div>
-                                    {% if stunde.info is not none %}<div class="stundeninfo">{{ stunde.info }}</div>{% endif %}
-                                </div>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        {% endfor %}
+            <div id="footer-section">
+                <div class="ticker-wrapper">
+                    <div class="ticker">
+                        {{ (vp.zusatzInfo or "").replace('\n', ' +++ ').replace('\r\n', ' +++ ') }}
                     </div>
                 </div>
-                {% endfor %}
             </div>
         </div>
         <script>
@@ -95,12 +104,20 @@
                 const speed = {{ cfg.content.scrolling.pixels }};
                 const interval = {{ cfg.content.scrolling.interval }} * 1000;
 
+                let isScrolling = true;
+
                 function autoScroll() {
+                    if (!isScrolling) return;
+                    
                     container.scrollTop += speed;
 
                     if (container.scrollTop + container.clientHeight >= container.scrollHeight) {
+                        isScrolling = false;
                         setTimeout(() => {
                             container.scrollTop = 0;
+                            setTimeout(() => {
+                                isScrolling = true;
+                            }, 1000);
                         }, 1000);
                     }
                 }
@@ -110,14 +127,8 @@
                 {% endif %}
         </script>
         <div id="sidebar-section" {% if not cfg.content.sidebar %}style="display: none;"{% endif %}>
-            <img src="{{ url_for('static', filename='logo.svg') }}" alt="Logo" style="height: 70%; color: blue;">
-        </div>
-    </div>
-
-    <div id="footer-section">
-        <div class="ticker-wrapper">
-            <div class="ticker">
-                {{ (vp.zusatzInfo or "").replace('\n', ' +++ ').replace('\r\n', ' +++ ') }}
+            <div class="sidebar-container">
+                <img src="{{ url_for('static', filename='logo.svg') }}" alt="Logo" style="height: 70%; color: blue;">
             </div>
         </div>
     </div>

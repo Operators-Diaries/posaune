@@ -22,3 +22,4 @@ class Config(BaseSettings):
     dev: bool = False
     content: Content = Content()
     vertretungsplan: Vertretungsplan = Vertretungsplan()
+    updatecycle: float = 5

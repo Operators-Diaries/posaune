@@ -1,6 +1,4 @@
 from flask import Flask, render_template
-from threading import Thread
-from time import sleep
 from vpmobil import Vertretungsplan
 from pathlib import Path
 import yaml
@@ -25,33 +23,32 @@ else:
 #======// App //=================================================================================//
 
 app = Flask(__name__)
+app.jinja_env.globals['type'] = type
+
 vp = Vertretungsplan(
     cfg.vertretungsplan.schulnummer,
     cfg.vertretungsplan.benutzer,
     cfg.vertretungsplan.passwort
 )
 
-# data_cache = None
-
-# def update_data():
-#     global data_cache
-#     while True:
-#         data_cache = vp.fetch()
-#         sleep(5 * 60)
-
-# thread = Thread(target=update_data, daemon=True)
-# thread.start()
-
 @app.route('/')
 def index():
 
-    data = vp.fetch()
+    try:
+        data = vp.fetch()
 
-    return render_template(
-        'main.html',
-        vp=data,
-        cfg=cfg
-    )
+        return render_template(
+            'main.html',
+            vp=data,
+            cfg=cfg
+        )
+    
+    except Exception as e:
+        return render_template(
+            '404.html',
+            cfg=cfg,
+            e=e
+        )
 
 if __name__ == "__main__":
     app.run(debug=True)

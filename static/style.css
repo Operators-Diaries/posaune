@@ -5,7 +5,7 @@
     --background-embed: #e4e6ec;
     --shadow: #d5dbe7cb;
     --text: #101116;
-    --secondary-text: #292c38;
+    --secondary-text: #515667;
 }
 
 .änderung {
@@ -13,29 +13,71 @@
     font-weight: 500;
 }
 
+
+/* ====== // Sections //=========================================================================== */
+
 body {
     margin: 0;
     font-family: "Poppins";
     background-color: var(--background);
-    color: var(--text)
+    color: var(--text);
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+#header-section {
+    background: var(--background);
+    height: 7vh;
 }
 
 #content-section {
-    height: 86vh;
+    height: 93vh;
     display: flex;
 }
 
+
 #plan-section {
     flex: 1;
+    height: 93vh;
+}
+
+#content-scroller {
+    height: calc(100% - 7vh);
     overflow-y: auto;
     overflow-x: hidden;
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* Internet Explorer 10+ */
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* Internet Explorer 10+ */
+}
+
+#footer-section {
+    background: rgba(255, 0, 0, 0.119);
+    height: 7vh;
+    width: 100%;
+
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.15);
+    mask-image: linear-gradient(to bottom,
+            rgba(0, 0, 0, 0) 0%,
+            rgba(0, 0, 0, 1) 50%);
+    -webkit-mask-image: linear-gradient(to bottom,
+            rgba(0, 0, 0, 0) 0%,
+            rgba(0, 0, 0, 1) 50%);
 }
 
 .scrollable::-webkit-scrollbar {
     display: none;
 }
+
+#sidebar-section {
+    width: 20vw;
+    padding-bottom: 20px;
+}
+
+
+/* ====== // Vertretungsplan //==================================================================== */
 
 .plan-wrapper {
     padding: 20px;
@@ -138,23 +180,18 @@ body {
     width: 225px;
 }
 
-#sidebar-section {
-    width: 20vw;
+
+/* ====== // Sidebar //============================================================================ */
+
+.sidebar-container {
     background: rgba(0, 128, 0, 0.089);
     box-shadow: inset 18px 18px 20px var(--shadow), inset 0 -18px 20px #ffffff;
     border-radius: 30px 0 0 30px;
     background-color: var(--background);
 }
 
-#footer-section {
-    background: rgba(255, 0, 0, 0.119);
-    height: 7vh;
-}
 
-#header-section {
-    background: var(--background);
-    height: 7vh;
-}
+/* ====== // Header & Footer //==================================================================== */
 
 .ticker-wrapper {
     width: 100%;
