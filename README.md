@@ -1,11 +1,33 @@
-# Zu beachten
-- Deaktiviere *"Cache deaktivieren"* in den Netzwerk-Einstellungen des Browsers
 
+# Setup
+
+**Voraussetzungen**
+
+- Python >= 3.12
+- Pakete:
+    ```sh
+    pip install vpmobil pydantic-settings pyyaml flask
+    ```
+- Startup-Skript (siehe Abschnitt *Starten*)
+
+**Zu beachten**
+- Die Option *"Cache deaktivieren"* ist in den Netzwerk-Einstellungen der Entwickler-Tools des Browsers zu **abzuwählen bzw. abgewählt zu lassen**, um Flackern beim Neuladen zu vermeiden
+- Es kann sinnvoll sein, browserseitig die Zoomstufe zu erhöhen. Normalerweise speichert der Browser das für eine Domain, sodass es nur einmal eingestellt werden muss. 
 
 # Konfiguration
+Nach dem ersten Starten wird eine Datei `config.yaml` mit Standardwerten angelegt. 
 
+Die Konfigurationsparameter werden nur beim Start des Servers ausgelesen.
 
-# Startten
-```
+# Starten
+Der Webserver wird einfach durch
+```sh
 python main.py
 ```
+gestartet.
+
+Es wird eine Website bereitgestellt, die unter
+```
+http://127.0.0.1:5000/
+```
+erreichbar ist.

@@ -21,12 +21,12 @@ body {
 }
 
 #content-section {
-    height: 90vh;
+    height: 86vh;
     display: flex;
 }
 
 #plan-section {
-    width: 80vw;
+    flex: 1;
     overflow-y: auto;
     overflow-x: hidden;
     scrollbar-width: none; /* Firefox */
@@ -41,13 +41,13 @@ body {
     padding: 20px;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(325px, 1fr));
-    gap: 20px;
+    gap: 30px;
     justify-content: center;    
 }
 
 .klasse {
     position: relative;
-    padding: 4.5em 1.5em 2.8em 1.5em;
+    padding: 4.8em 1.5em 2.0em 1.5em;
     background-color: var(--background-embed);
     box-shadow: inset 18px 18px 20px var(--shadow), inset -18px -18px 20px #ffffff;
     border-radius: 15px;
@@ -59,32 +59,34 @@ body {
 .klassenkürzel {
     position: absolute;
     top: 15px;
-    left: calc(50% - 1.7em);
+    left: calc(50% - 2em);
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: var(--background);
     box-shadow: -8px -8px 20px #ffffff, 8px 8px 20px var(--shadow);
-    width: 1.7em;
-    aspect-ratio: 1 / 1;
-    border-radius: 50%;
+    width: 4em;
+    height: 1.2em;
+    border-radius: calc(0.6em + 10px); /* Height + Padding */
     padding: 10px;
-    font-size: 20px;
+    font-size: 22px;
     font-weight: 700;
 }
 
 .periode-wrapper {
-    
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }
 
 .periode {
     display: flex;
     border-radius: 5px;
     align-items: center;
-    width: fit-content;
+    width: 100%;
     margin-left: auto;
     margin-right: auto;
-    padding: 5px 0;
+    justify-content: center;
 }
 
 .periode.unterscheidbar {
@@ -96,7 +98,7 @@ body {
     margin-left: -15px;
     width: 30px;
     text-align: center;
-    font-weight: 600;
+    font-weight: 700;
     font-size: 22px;
 }
 
@@ -105,7 +107,7 @@ body {
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
-    gap: 5px;
+    gap: 4px;
     padding: 5px;
     width: fit-content;
     margin: 0 auto;
@@ -117,6 +119,7 @@ body {
 
 .stunden-flr {
     font-size: 19px;
+    font-weight: 500;
     display: grid;
     grid-template-columns: 85px 65px 75px;
     column-gap: 0px;
@@ -138,16 +141,19 @@ body {
 #sidebar-section {
     width: 20vw;
     background: rgba(0, 128, 0, 0.089);
+    box-shadow: inset 18px 18px 20px var(--shadow), inset 0 -18px 20px #ffffff;
+    border-radius: 30px 0 0 30px;
+    background-color: var(--background);
 }
 
 #footer-section {
     background: rgba(255, 0, 0, 0.119);
-    height: 5vh;
+    height: 7vh;
 }
 
 #header-section {
     background: var(--background);
-    height: 5vh;
+    height: 7vh;
 }
 
 .ticker-wrapper {
@@ -165,7 +171,7 @@ body {
     display: inline-block;
     padding-left: 100%;
     animation: ticker 30s linear infinite;
-    font-size: 40px;
+    font-size: 3.5vh;
     font-weight: 500;
 }
 

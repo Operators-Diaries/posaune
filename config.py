@@ -1,17 +1,24 @@
 from pydantic_settings import BaseSettings
 from pydantic import BaseModel
 
-class Scrolling(BaseModel):
-    pixels: int = 1
-    interval: float = 0.02
-
-class Vertretungsplan(BaseModel):
-    schulnummer: int = 10000000
-    benutzer: str = "schueler"
-    passwort: str = "password"
-
 class Config(BaseSettings):
-    vertretungsplan: Vertretungsplan = Vertretungsplan()
-    scrolling: Scrolling = Scrolling()
-    ticker: list[str] = ["Ticker sind Nachrichten die angezeigt werden", "Zeile 2"]
+
+    class Vertretungsplan(BaseModel):
+        schulnummer: int = 10000000
+        benutzer: str = "schueler"
+        passwort: str = "password"
+
+    class Content(BaseModel):
+        class Scrolling(BaseModel):
+            pixels: int = 1
+            interval: float = 0.02
+
+        ticker: list[str] = ["Ticker sind Nachrichten die angezeigt werden", "Zeile 2"]
+        klassen: list[str] = ["5a", "5b", "5c", "6a", "6b", "6c", "7a", "7b", "7c", "8a", "8b", "8c", "9a", "9b", "9c", "10a", "10b", "10c"]
+        klassendetailiert: list[str] = ["11", "12"]
+        scrolling: Scrolling = Scrolling()
+        sidebar: bool = True
+
     dev: bool = False
+    content: Content = Content()
+    vertretungsplan: Vertretungsplan = Vertretungsplan()

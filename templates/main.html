@@ -19,7 +19,7 @@
     <div id="header-section">
         <div class="ticker-wrapper">
             <div class="ticker">
-                {{ "  +++  ".join(cfg.ticker) }}
+                {{ "  +++  ".join(cfg.content.ticker) }}
             </div>
         </div>
     </div>
@@ -27,7 +27,7 @@
     <div id="content-section">
         <div id="plan-section">
             <div class="plan-wrapper">
-                {% for klasse in vp.klassen.values() if klasse.kürzel not in ["11", "12"] %}
+                {% for klasse in vp.klassen.values() if klasse.kürzel in cfg.content.klassen %}
                     <div class="klasse">
                         <div class="klassenkürzel">{{ klasse.kürzel }}</div>
                         <div class="perioden-wrapper">
@@ -57,7 +57,7 @@
                 {% endfor %}
             </div>
             <div class="plan-wrapper">
-                {% for klasse in vp.klassen.values() if klasse.kürzel in ["11", "12"] %}
+                {% for klasse in vp.klassen.values() if klasse.kürzel in cfg.content.klassendetailiert %}
                 <div class="klasse">
                     <div class="klassenkürzel">{{ klasse.kürzel }}</div>
                     <div class="perioden-wrapper">
@@ -92,8 +92,8 @@
         </div>
         <script>
             const container = document.getElementById("plan-section");
-                const speed = {{ cfg.scrolling.pixels }};
-                const interval = {{ cfg.scrolling.interval }} * 1000;
+                const speed = {{ cfg.content.scrolling.pixels }};
+                const interval = {{ cfg.content.scrolling.interval }} * 1000;
 
                 function autoScroll() {
                     container.scrollTop += speed;
@@ -109,7 +109,8 @@
                     setInterval(autoScroll, interval);
                 {% endif %}
         </script>
-        <div id="sidebar-section">
+        <div id="sidebar-section" {% if not cfg.content.sidebar %}style="display: none;"{% endif %}>
+            <img src="{{ url_for('static', filename='logo.svg') }}" alt="Logo" style="height: 70%; color: blue;">
         </div>
     </div>
 

@@ -31,16 +31,16 @@ vp = Vertretungsplan(
     cfg.vertretungsplan.passwort
 )
 
-data_cache = None
+# data_cache = None
 
-def update_data():
-    global data_cache
-    while True:
-        data_cache = vp.fetch()
-        sleep(5 * 60)
+# def update_data():
+#     global data_cache
+#     while True:
+#         data_cache = vp.fetch()
+#         sleep(5 * 60)
 
-thread = Thread(target=update_data, daemon=True)
-thread.start()
+# thread = Thread(target=update_data, daemon=True)
+# thread.start()
 
 @app.route('/')
 def index():
