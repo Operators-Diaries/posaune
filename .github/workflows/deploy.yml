@@ -1,0 +1,51 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Repository auschecken
+        uses: actions/checkout@v4
+
+      - name: Python installieren
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Abhängigkeiten installieren
+        run: |
+          pip install vpmobil pydantic-settings pyyaml flask 
+
+      - name: Build-Ordner erstellen
+        run: mkdir -p build
+
+      - name: Flask Seite rendern
+        run: python build_static.py
+
+      - name: Statische Dateien kopieren
+        run: |
+          cp -r static build/
+
+      - name: Pages Artifact hochladen
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: build
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: GitHub Pages deployen
+        uses: actions/deploy-pages@v4
