@@ -27,6 +27,12 @@ jobs:
         run: |
           pip install vpmobil pydantic-settings pyyaml flask 
 
+      - name: Patch vpmobil SyntaxError
+        run: |
+            FILE=$(python -c "import vpmobil; import os; print(os.path.join(os.path.dirname(vpmobil.__file__), 'models.py'))")
+            
+            sed -i "s/find(\"Kopf\/planart\")\.text/find('Kopf\/planart').text/g" $FILE
+
       - name: Build-Ordner erstellen
         run: mkdir -p build
 
