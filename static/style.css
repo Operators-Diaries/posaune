@@ -89,7 +89,7 @@ body {
 
 .klasse {
     position: relative;
-    padding: 4.8em 1.5em 2.0em 1.5em;
+    padding: 5em 1.5em 2.0em 1.5em;
     background-color: var(--background-embed);
     box-shadow: inset 18px 18px 20px var(--shadow), inset -18px -18px 20px #ffffff;
     border-radius: 15px;
@@ -100,7 +100,7 @@ body {
 
 .klassenkürzel {
     position: absolute;
-    top: 15px;
+    top: 20px;
     left: calc(50% - 2em);
     display: flex;
     align-items: center;
