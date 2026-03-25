@@ -7,12 +7,16 @@ curl -sSL https://raw.githubusercontent.com/Operators-Diaries/posaune/main/start
 
 **Voraussetzungen**
 
-- Python >= 3.12
-- Pakete:
-    ```sh
-    python3 -m pip install -r requirements.txt
-    ```
+- `apt`, `dnf` oder `pacman` Paket-Manager
+- Ein Benutzer mit Administratorrechten
 - Startup-Skript (siehe Abschnitt *Starten*)
+
+### Setup
+Die Posaune kann per curl heruntergeladen und installiert werden:
+```sh
+curl -sSL https://raw.githubusercontent.com/Operators-Diaries/posaune/main/start.sh | bash
+```
+Dafür ist beim ersten Ausführen wahrscheinlich die Eingabe des Systempassworts nötig.
 
 **Zu beachten**
 - Die Option *"Cache deaktivieren"* ist in den Netzwerk-Einstellungen der Entwickler-Tools des Browsers zu **abzuwählen bzw. abgewählt zu lassen**, um Flackern beim Neuladen zu vermeiden

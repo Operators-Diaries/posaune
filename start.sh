@@ -8,36 +8,25 @@ cd "$TARGET_DIR"
 
 echo "=== Prüfe Installationen ==="
 
-if command -v python3 &> /dev/null && command -v git &> /dev/null && python3 -m pip --version &> /dev/null && python3 -m venv --version &> /dev/null; then
+if command -v python3 &> /dev/null && command -v git &> /dev/null && python3 -m pip --version &> /dev/null && python3 -m venv --version &> /dev/null && command -v chromium &> /dev/null; then
     echo "Python: $(python3 --version)"
     echo "Git: $(git --version)"
     echo "Pip: $(python3 -m pip --version)"
     echo "Venv: $(python3 -m venv --version)"
+    echo "Chromium: $(chromium --version)"
 else
     echo "Mindestens eine Installation fehlt"
     echo "=== Prüfe Paketmanager ==="
 
-    install_python_debian() {
-        sudo apt update
-        sudo apt install -y python3 python3-pip git python3.12-venv
-    }
-
-    install_python_fedora() {
-        sudo dnf install -y python3 python3-pip git python3.12-venv
-    }
-
-    install_python_arch() {
-        sudo pacman -Sy --noconfirm python python-pip git python3.12-venv
-    }
-
     if command -v apt &> /dev/null; then
-        install_python_debian
+        sudo apt update
+        sudo apt install -y python3 python3-pip git python3.12-venv chromium
 
     elif command -v dnf &> /dev/null; then
-        install_python_fedora
+        sudo dnf install -y python3 python3-pip git python3.12-venv chromium
 
     elif command -v pacman &> /dev/null; then
-        install_python_arch
+        sudo pacman -Sy --noconfirm python python-pip git python3.12-venv chromium
 
     else
         echo "Kein unterstützter Paketmanager gefunden"
@@ -81,7 +70,7 @@ python3 -m pip install -r requirements.txt
 
 echo "=== Starte Flask-Server ==="
 
-python3 app.py &
+python3 main.py &
 
 FLASK_PID=$!
 
@@ -94,16 +83,7 @@ echo "=== Öffne Browser im Vollbild ==="
 
 URL="http://127.0.0.1:5000"
 
-if command -v chromium &> /dev/null; then
-    chromium --start-fullscreen "$URL" &
-elif command -v google-chrome &> /dev/null; then
-    google-chrome --start-fullscreen "$URL" &
-elif command -v firefox &> /dev/null; then
-    firefox --kiosk "$URL" &
-else
-    echo "Kein unterstützter Browser gefunden"
-fi
-
+chromium --start-fullscreen "$URL" &
 
 echo "=== Setup abgeschlossen ==="
 echo "Flask läuft mit PID $FLASK_PID"
