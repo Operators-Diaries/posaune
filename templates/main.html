@@ -43,6 +43,7 @@
                                                             <span class="lehrer{% if stunde.lehrergeändert %} änderung{% endif %}">{{ ", ".join(stunde.lehrer)}}</span>
                                                             <span class="raum{% if stunde.raumgeändert %} änderung{% endif %}">{{ ", ".join(stunde.räume) }}</span>
                                                         {% else %}
+                                                            <span class="fach änderung">{{ (klasse.kurse[stunde.kursnummer].kürzel or "").replace("Fördern", "Fö (" + klasse.kurse[stunde.kursnummer].fach + ")") }}</span>
                                                             <span class="änderung">Ausfall</span>
                                                         {% endif %}
                                                     </div>
@@ -65,18 +66,16 @@
                             <div class="periode">
                                 <div class="periode-zahl">{{ periode }}</div>
                                 <div class="stunden-wrapper">
-                                    {% for stunde in klasse.stunden[periode] | sort(attribute='fach') %}
+                                    {% for stunde in sort_stunden_by_fach(klasse.stunden[periode]) %}
                                     <div class="stunde">
                                         <div class="stunden-flr">
                                             {% if not stunde.ausfall %}
-                                            <span class="fach{% if stunde.fachgeändert %} änderung{% endif %}">{{ stunde.fach or ""
-                                                }}</span>
-                                            <span class="lehrer{% if stunde.lehrergeändert %} änderung{% endif %}">{{ ",
-                                                ".join(stunde.lehrer)}}</span>
-                                            <span class="raum{% if stunde.raumgeändert %} änderung{% endif %}">{{ ",
-                                                ".join(stunde.räume) }}</span>
+                                                <span class="fach{% if stunde.fachgeändert %} änderung{% endif %}">{{ stunde.fach or ""}}</span>
+                                                <span class="lehrer{% if stunde.lehrergeändert %} änderung{% endif %}">{{ ",".join(stunde.lehrer)}}</span>
+                                                <span class="raum{% if stunde.raumgeändert %} änderung{% endif %}">{{ ",".join(stunde.räume) }}</span>
                                             {% else %}
-                                            <span class="änderung">Ausfall</span>
+                                                <span class="fach änderung">{{ klasse.kurse[stunde.kursnummer].kürzel or "" }}</span>
+                                                <span class="änderung">Ausfall</span>
                                             {% endif %}
                                         </div>
                                         {% if stunde.info is not none %}<div class="stundeninfo">{{ stunde.info }}</div>{% endif %}

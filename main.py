@@ -24,6 +24,8 @@ else:
 
 app = Flask(__name__)
 app.jinja_env.globals['type'] = type
+app.jinja_env.globals['sort_stunden_by_fach'] = lambda x: sorted(x, key=lambda s: (s.fach is None, s.fach)  # None kommt ans Ende
+)
 
 vp = Vertretungsplan(
     cfg.vertretungsplan.schulnummer,

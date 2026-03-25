@@ -50,7 +50,7 @@ body {
 }
 
 #footer-section {
-    background: rgba(255, 0, 0, 0.119);
+    background: var(--background);
     height: 7vh;
     width: 100%;
 }
@@ -165,7 +165,7 @@ body {
 .stundeninfo {
     font-size: 12px;
     color: var(--secondary-text);
-    width: 225px;
+    width: 220px;
 }
 
 
@@ -185,12 +185,19 @@ body {
 }
 
 .detailed .perioden-wrapper > * {
-    border-bottom: 1px solid #ccc;
-    padding: 5px 0;
+    border-radius: 15px;
+    box-shadow: -6px -6px 20px var(--background);
+    padding: 10px 0;
 }
 
 .detailed .perioden-wrapper > *:last-child {
     border-bottom: none;
+}
+
+.detailed .periode-zahl {
+    margin-left: 15px;
+    width: 30px;
+    text-align: left;
 }
 
 .detailed .stunden-wrapper {
@@ -204,7 +211,15 @@ body {
 }
 
 .detailed .stunden-flr {
-    grid-template-columns: 85px 60px 75px;
+    grid-template-columns: 80px 70px 75px;
+}
+
+.detailed .stundeninfo {
+    width: 220px;
+}
+
+.detailed .stunden-flr .raum {
+    justify-content: flex-start;
 }
 
 /* ====== // Sidebar //============================================================================ */
@@ -252,7 +267,7 @@ body {
 .ticker {
     display: inline-block;
     padding-left: 100%;
-    animation: ticker 30s linear infinite;
+    animation: ticker 40s linear infinite;
     font-size: 3.5vh;
     font-weight: 500;
 }

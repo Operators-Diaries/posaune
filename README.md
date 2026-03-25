@@ -33,7 +33,7 @@ Ein fertiges Start-Skript liegt in `~/posaune/start.sh`. Seine Ausführung muss 
 
 ---
 
-Temporäre Alternative für Windows
+#### Temporäre Alternative für Windows
 ```
 iwr "https://raw.githubusercontent.com/Operators-Diaries/posaune/main/start.ps1" -UseBasicParsing | iex
 ```

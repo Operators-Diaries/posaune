@@ -15,12 +15,6 @@
         }, {{ cfg.updatecycle }} * 60 * 1000);
     </script>
 
-</head>
-<body>
-    <div id="container">
-        <h2 id="heading">{{ type(e).__name__ }}</h2>
-        <p>{{ e }}</p>
-    </div>
     <style>
         body {
             height: 100vh;
@@ -29,31 +23,38 @@
             align-items: center;
             color: var(--secondary-text);
         }
-
-        .heading {
+    
+        #heading {
             font-size: 40px;
             font-weight: 800;
             color: var(--background-embed);
             text-shadow: 2px 1px 1px rgba(0, 0, 0, 0.3), -2px -1px 1px rgba(255, 255, 255, 0.3);
         }
-
-        .container {
+    
+        #container {
             width: fit-content;
             min-width: 50vh;
-
+    
             height: fit-content;
             min-height: 15vh;
             padding: 30px 60px;
             background-color: var(--background-embed);
             box-shadow: inset 18px 18px 20px var(--shadow), inset -18px -18px 20px #ffffff;
             border-radius: 20px;
-        
+    
             display: flex;
             flex-direction: column;
-        
+    
             justify-content: center;
             align-items: center;
         }
     </style>
+
+</head>
+<body>
+    <div id="container">
+        <h2 id="heading">{{ type(e).__name__ }}</h2>
+        <p>{{ e }}</p>
+    </div>
 </body>
 </html>
