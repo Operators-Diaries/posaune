@@ -2,7 +2,7 @@
 
 set -e
 
-cd "$TARGET_DIR"
+TARGET_DIR="posaune"
 
 #======// Python, Git & Chromium sicherstellen //==================================================//
 
@@ -40,7 +40,6 @@ fi
 echo "=== Repository herunterladen ==="
 
 REPO_URL="https://github.com/Operators-Diaries/posaune.git"
-TARGET_DIR="posaune"
 
 if [ -d "$TARGET_DIR" ]; then
     echo "Repository existiert bereits – ziehe Updates"
@@ -58,7 +57,7 @@ cd "$TARGET_DIR"
 python3 -m venv venv
 source venv/bin/activate
 
-echo "=== Stelle sicher, dass pip aktuell ist ==="
+echo "=== Pip aktualisieren ==="
 python3 -m pip install --upgrade pip
 
 echo "=== Installiere/aktualisiere benötigte Pakete ==="

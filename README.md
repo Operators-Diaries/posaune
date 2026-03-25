@@ -30,3 +30,10 @@ Die Konfigurationsparameter werden nur beim Start des Servers ausgelesen.
 
 ## Starten
 Ein fertiges Start-Skript liegt in `~/posaune/start.sh`. Seine Ausführung muss lediglich als Schedule im System hinterlegt werden - beispielsweise mit `crontab`.
+
+---
+
+Temporäre Alternative für Windows
+```
+iwr "https://raw.githubusercontent.com/Operators-Diaries/posaune/main/start.ps1" -UseBasicParsing | iex
+```
