@@ -63,6 +63,11 @@ fi
 
 #======// Requirements //========================================================================//
 
+echo "=== Virtual Environment erstellen ==="
+cd "$TARGET_DIR"
+python3 -m venv venv
+source venv/bin/activate
+
 echo "=== Stelle sicher, dass pip aktuell ist ==="
 python3 -m pip install --upgrade pip
 
