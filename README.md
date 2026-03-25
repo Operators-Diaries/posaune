@@ -1,41 +1,32 @@
 
-# Setup
+<h1 align="center">Posaune</h1>
+<h6 align="center">Vertretungsplan-Anzeige für das St. Benno Gymnasium</h6>
 
-```sh
-curl -sSL https://raw.githubusercontent.com/Operators-Diaries/posaune/main/start.sh | bash
-```
+<p align="center"><a href="https://operators-diaries.github.io/posaune/">Live-Demo</a></p>
 
+## Setup
 **Voraussetzungen**
 
+- Unix-Shell
+- Benutzer mit Administratorrechten
 - `apt`, `dnf` oder `pacman` Paket-Manager
-- Ein Benutzer mit Administratorrechten
-- Startup-Skript (siehe Abschnitt *Starten*)
+- `curl`
 
-### Setup
+### Installation
 Die Posaune kann per curl heruntergeladen und installiert werden:
 ```sh
 curl -sSL https://raw.githubusercontent.com/Operators-Diaries/posaune/main/start.sh | bash
 ```
-Dafür ist beim ersten Ausführen wahrscheinlich die Eingabe des Systempassworts nötig.
+Dafür ist beim ersten Ausführen wahrscheinlich die Eingabe des Systempassworts nötig. (Das Verzeichnis, **in dem dieser Befehl ausgeführt wurde** sei als `~` bezeichnet) Der curl-Befehl erzeugt das Verzeichnis `~/posaune`.
 
 **Zu beachten**
 - Die Option *"Cache deaktivieren"* ist in den Netzwerk-Einstellungen der Entwickler-Tools des Browsers zu **abzuwählen bzw. abgewählt zu lassen**, um Flackern beim Neuladen zu vermeiden
 - Es kann sinnvoll sein, browserseitig die Zoomstufe zu erhöhen. Normalerweise speichert der Browser das für eine Domain, sodass es nur einmal eingestellt werden muss. 
 
-# Konfiguration
-Nach dem ersten Starten wird eine Datei `config.yaml` mit Standardwerten angelegt. 
+## Konfiguration
+Nach dem ersten Starten wird eine Datei `~/posaune/config.yaml` mit Standardwerten angelegt. 
 
 Die Konfigurationsparameter werden nur beim Start des Servers ausgelesen.
 
-# Starten
-Der Webserver wird einfach durch
-```sh
-python main.py
-```
-gestartet.
-
-Es wird eine Website bereitgestellt, die unter
-```
-http://127.0.0.1:5000/
-```
-erreichbar ist.
+## Starten
+Ein fertiges Start-Skript liegt in `~/posaune/start.sh`. Seine Ausführung muss lediglich als Schedule im System hinterlegt werden - beispielsweise mit `crontab`.

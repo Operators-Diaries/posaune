@@ -4,7 +4,7 @@ set -e
 
 cd "$TARGET_DIR"
 
-#======// Python & Git sicherstellen //============================================================//
+#======// Python, Git & Chromium sicherstellen //==================================================//
 
 echo "=== Prüfe Installationen ==="
 
