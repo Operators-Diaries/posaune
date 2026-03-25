@@ -56,16 +56,16 @@
                         </div>
                     {% endfor %}
                 </div>
-                <div class="plan-wrapper">
+                <div class="plan-wrapper detailed">
                     {% for klasse in vp.klassen.values() if klasse.kürzel in cfg.content.klassendetailiert %}
                     <div class="klasse">
                         <div class="klassenkürzel">{{ klasse.kürzel }}</div>
                         <div class="perioden-wrapper">
                             {% for periode in klasse.stunden.keys() %}
-                            <div class="periode unterscheidbar">
+                            <div class="periode">
                                 <div class="periode-zahl">{{ periode }}</div>
                                 <div class="stunden-wrapper">
-                                    {% for stunde in klasse.stunden[periode] %}
+                                    {% for stunde in klasse.stunden[periode] | sort(attribute='fach') %}
                                     <div class="stunde">
                                         <div class="stunden-flr">
                                             {% if not stunde.ausfall %}
@@ -99,9 +99,10 @@
             </div>
         </div>
         <div id="sidebar-section" {% if not cfg.content.sidebar %}style="display: none;"{% endif %}>
-            <div class="sidebar-container">
-                <img src="{{ url_for('static', filename='logo.svg') }}" alt="Logo" style="height: 70%; color: blue;">
+            <div class="sidebar-container" style="background-image: url('{{ url_for('static', filename='logo.svg') }}') ">
+                {# <img id="logo-bg" src="{{ url_for('static', filename='logo.svg') }}" alt="Logo" style="height: 70%; color: blue;"> #}
             </div>
+            <div id="watermark"><p>Werbunk</p></div>
         </div>
 
     </div>
