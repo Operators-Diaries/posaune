@@ -6,7 +6,7 @@
 - Python >= 3.12
 - Pakete:
     ```sh
-    pip install vpmobil pydantic-settings pyyaml flask
+    python3 -m pip install -r requirements.txt
     ```
 - Startup-Skript (siehe Abschnitt *Starten*)
 
