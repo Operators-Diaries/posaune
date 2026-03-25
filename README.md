@@ -2,7 +2,7 @@
 # Setup
 
 ```sh
-curl -sSL https://raw.githubusercontent.com/USERNAME/REPO/main/script.sh | bash
+curl -sSL https://raw.githubusercontent.com/Operators-Diaries/posaune/main/start.sh | bash
 ```
 
 **Voraussetzungen**
