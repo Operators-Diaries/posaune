@@ -2,15 +2,18 @@
 
 set -e
 
+cd "$TARGET_DIR"
+
 #======// Python & Git sicherstellen //============================================================//
 
-echo "=== Prüfe Python Installation ==="
+echo "=== Prüfe Installationen ==="
 
-if command -v python3 &> /dev/null && command -v git &> /dev/null; then
-    echo "Python installiert: $(python3 --version)"
-    echo "Python installiert: $(git --version)"
+if command -v python3 &> /dev/null && command -v git &> /dev/null && python3 -m pip --version &> /dev/null; then
+    echo "Python: $(python3 --version)"
+    echo "Git: $(git --version)"
+    echo "Pip: $(python3 -m pip --version)"
 else
-
+    echo "Mindestens eine Installation fehlt"
     echo "=== Prüfe Paketmanager ==="
 
     install_python_debian() {
@@ -42,7 +45,7 @@ else
 
 fi
 
-#======// Python & Git sicherstellen //============================================================//
+#======// Repository pullen //=====================================================================//
 
 echo "=== Repository herunterladen ==="
 
@@ -57,37 +60,20 @@ else
     git clone "$REPO_URL" "$TARGET_DIR"
 fi
 
-# Python Installation
-echo "=== Prüfe Python-Installation ==="
 
-if ! command -v python3 &> /dev/null; then
-    echo "Python3 nicht gefunden. Installation wird versucht..."
+#======// Requirements //========================================================================//
 
-    sudo apt update
-    sudo apt install -y python3 python3-pip
-
-else
-    echo "Python3 gefunden: $(python3 --version)"
-fi
-
-# Pip
 echo "=== Stelle sicher, dass pip aktuell ist ==="
 python3 -m pip install --upgrade pip
 
-# Requirements
 echo "=== Installiere/aktualisiere benötigte Pakete ==="
-
-REQUIRED_PACKAGES=(
-    flask
-    requests
-    gunicorn
-)
 
 python3 -m pip install -r requirements.txt
 
-echo "=== Starte Flask-Server ==="
 
-cd "$TARGET_DIR"
+#======// Server //==============================================================================//
+
+echo "=== Starte Flask-Server ==="
 
 python3 app.py &
 
@@ -95,6 +81,8 @@ FLASK_PID=$!
 
 sleep 3
 
+
+#======// Website öffnen //========================================================================//
 
 echo "=== Öffne Browser im Vollbild ==="
 
