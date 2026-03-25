@@ -20,7 +20,7 @@ curl -sSL https://raw.githubusercontent.com/Operators-Diaries/posaune/main/start
 Dafür ist beim ersten Ausführen wahrscheinlich die Eingabe des Systempassworts nötig. (Das Verzeichnis, **in dem dieser Befehl ausgeführt wurde** sei als `~` bezeichnet) Der curl-Befehl erzeugt das Verzeichnis `~/posaune`.
 
 **Zu beachten**
-- Die Option *"Cache deaktivieren"* ist in den Netzwerk-Einstellungen der Entwickler-Tools des Browsers zu **abzuwählen bzw. abgewählt zu lassen**, um Flackern beim Neuladen zu vermeiden
+- Die Option *"Cache deaktivieren"* ist in den Netzwerk-Einstellungen der Entwickler-Tools des Browsers **abzuwählen bzw. abgewählt zu lassen**, um Flackern beim Neuladen zu vermeiden
 - Es kann sinnvoll sein, browserseitig die Zoomstufe zu erhöhen. Normalerweise speichert der Browser das für eine Domain, sodass es nur einmal eingestellt werden muss. 
 
 ## Konfiguration
