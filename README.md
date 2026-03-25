@@ -1,6 +1,10 @@
 
 # Setup
 
+```sh
+curl -sSL https://raw.githubusercontent.com/USERNAME/REPO/main/script.sh | bash
+```
+
 **Voraussetzungen**
 
 - Python >= 3.12

@@ -2,7 +2,48 @@
 
 set -e
 
-# Repository
+#======// Python & Git sicherstellen //============================================================//
+
+echo "=== Prüfe Python Installation ==="
+
+if command -v python3 &> /dev/null && command -v git &> /dev/null; then
+    echo "Python installiert: $(python3 --version)"
+    echo "Python installiert: $(git --version)"
+else
+
+    echo "=== Prüfe Paketmanager ==="
+
+    install_python_debian() {
+        sudo apt update
+        sudo apt install -y python3 python3-pip git
+    }
+
+    install_python_fedora() {
+        sudo dnf install -y python3 python3-pip git
+    }
+
+    install_python_arch() {
+        sudo pacman -Sy --noconfirm python python-pip git
+    }
+
+    if command -v apt &> /dev/null; then
+        install_python_debian
+
+    elif command -v dnf &> /dev/null; then
+        install_python_fedora
+
+    elif command -v pacman &> /dev/null; then
+        install_python_arch
+
+    else
+        echo "Kein unterstützter Paketmanager gefunden"
+        exit 1
+    fi
+
+fi
+
+#======// Python & Git sicherstellen //============================================================//
+
 echo "=== Repository herunterladen ==="
 
 REPO_URL="https://github.com/Operators-Diaries/posaune.git"
