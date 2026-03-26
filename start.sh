@@ -7,31 +7,19 @@ set -e
 TARGET_NAME="posaune"
 
 if [[ -n "${BASH_SOURCE[0]}" && -f "${BASH_SOURCE[0]}" ]]; then
-    # Skript läuft als Datei → Ort des Skripts ist maßgeblich
-    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    # Skript liegt als Datei vor -> Ordner der Datei ist das Ziel
+    WORK_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 else
-    # Skript wurde gepiped (curl | bash) → aktuelles Verzeichnis verwenden
-    SCRIPT_DIR="$PWD"
+    # Skript läuft gepiped -> aktuelles Verzeichnis ist der Ausgangspunkt
+    if [[ "$(basename "$PWD")" == "$TARGET_NAME" ]]; then
+        WORK_DIR="$PWD"
+    else
+        WORK_DIR="$PWD/$TARGET_NAME"
+        mkdir -p "$WORK_DIR"
+    fi
 fi
 
-CURRENT_BASENAME="$(basename "$PWD")"
-
-# Fall: wir sind bereits im posaune-Ordner
-if [[ "$CURRENT_BASENAME" == "$TARGET_NAME" ]]; then
-    echo "Bereits im Zielordner ($TARGET_NAME)"
-
-# Fall: Ordner existiert → reinwechseln
-elif [[ -d "$SCRIPT_DIR/$TARGET_NAME" ]]; then
-    echo "Wechsle in bestehenden Ordner $TARGET_NAME"
-    cd "$SCRIPT_DIR/$TARGET_NAME"
-
-# Fall: Ordner existiert nicht → erstellen und rein
-else
-    echo "Erstelle Ordner $TARGET_NAME"
-    mkdir -p "$SCRIPT_DIR/$TARGET_NAME"
-    cd "$SCRIPT_DIR/$TARGET_NAME"
-fi
-
+cd "$WORK_DIR"
 echo "Arbeitsverzeichnis: $PWD"
 
 
