@@ -2,6 +2,36 @@ $TARGET_DIR = "posaune"
 $REPO_URL = "https://github.com/Operators-Diaries/posaune.git"
 $URL = "http://127.0.0.1:5000"
 
+#======// Startlogik: korrektes Arbeitsverzeichnis sicherstellen //===========//
+
+$TARGET_NAME = "posaune"
+
+# Prüfen, ob Skript als Datei läuft oder gepiped wurde
+if ($MyInvocation.MyCommand.Path) {
+    # Skript läuft als Datei → Verzeichnis der Datei verwenden
+    $SCRIPT_DIR = Split-Path -Parent $MyInvocation.MyCommand.Path
+    $WORK_DIR = $SCRIPT_DIR
+}
+else {
+    # Skript wurde gepiped (iwr | iex)
+    $CURRENT_DIR = Get-Location
+    $CURRENT_NAME = Split-Path $CURRENT_DIR -Leaf
+
+    if ($CURRENT_NAME -eq $TARGET_NAME) {
+        $WORK_DIR = $CURRENT_DIR
+    }
+    else {
+        $WORK_DIR = Join-Path $CURRENT_DIR $TARGET_NAME
+        if (-not (Test-Path $WORK_DIR)) {
+            New-Item -ItemType Directory -Path $WORK_DIR | Out-Null
+        }
+    }
+}
+
+Set-Location $WORK_DIR
+Write-Host "Arbeitsverzeichnis: $(Get-Location)"
+
+
 #======// Python & Git sicherstellen //============================================================//
 
 Write-Host "=== Prüfe Installationen ==="
@@ -37,24 +67,21 @@ try {
 
 Write-Host "=== Repository herunterladen ==="
 
-if (Test-Path $TARGET_DIR) {
+if (Test-Path ".git") {
     Write-Host "Repository existiert bereits – ziehe Updates"
-    Push-Location $TARGET_DIR
     git reset --hard
     git pull
-    Pop-Location
 } else {
-    git clone $REPO_URL $TARGET_DIR
+    git clone $REPO_URL .
 }
 
-#======// Requirements //========================================================================//
+#======// Requirements //======================================================//
 
 Write-Host "=== Virtual Environment erstellen ==="
 
-Push-Location $TARGET_DIR
 python -m venv venv
 
-powershell -ExecutionPolicy Bypass -File .\venv\Scripts\Activate.ps1
+. .\venv\Scripts\Activate.ps1
 
 Write-Host "=== Pip aktualisieren ==="
 python -m pip install --upgrade pip
