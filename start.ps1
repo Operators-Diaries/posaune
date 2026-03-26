@@ -1,7 +1,3 @@
-$TARGET_DIR = "posaune"
-$REPO_URL = "https://github.com/Operators-Diaries/posaune.git"
-$URL = "http://127.0.0.1:5000"
-
 #======// Startlogik: korrektes Arbeitsverzeichnis sicherstellen //===========//
 
 $TARGET_NAME = "posaune"
@@ -72,7 +68,7 @@ if (Test-Path ".git") {
     git reset --hard
     git pull
 } else {
-    git clone $REPO_URL .
+    git clone "https://github.com/Operators-Diaries/posaune.git" .
 }
 
 #======// Requirements //======================================================//
@@ -102,12 +98,10 @@ Write-Host "=== Öffne Browser im Vollbild ==="
 $EdgePath = "$env:ProgramFiles (x86)\Microsoft\Edge\Application\msedge.exe"
 if (-Not (Test-Path $EdgePath)) {
     
-    Start-Process $URL
+    Start-Process "http://127.0.0.1:5000"
     Write-Host "Standardbrowser geöffnet (Edge nicht gefunden)"
 } else {
-    Start-Process $EdgePath -ArgumentList "--kiosk $URL --edge-kiosk-type=fullscreen"
+    Start-Process $EdgePath -ArgumentList "--kiosk http://127.0.0.1:5000 --edge-kiosk-type=fullscreen"
 }
 
 Write-Host "=== Setup abgeschlossen ==="
-
-Pop-Location
