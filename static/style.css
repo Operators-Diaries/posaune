@@ -3,7 +3,7 @@
 :root {
     --background: hsl(210, 20%, 96%);
     --background-embed: hsl(225, 17%, 92%);
-    --shadow: #d5dbe7cb;
+    --shadow: hsla(220, 35%, 87%, 0.796);
     --text: #101116;
     --secondary-text: #515667;
 }
