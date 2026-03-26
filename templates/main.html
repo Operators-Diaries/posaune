@@ -38,12 +38,11 @@
                                             {% for stunde in klasse.stunden[periode] %}
                                                 <div class="stunde">
                                                     <div class="stunden-flr">
+                                                            <span class="fach{% if stunde.fachgeändert %} änderung{% endif %}">{{ (stunde.fach or klasse.kurse[stunde.kursnummer].kürzel or "").replace("Fördern", "Fö") }}</span>
                                                         {% if not stunde.ausfall %}
-                                                            <span class="fach{% if stunde.fachgeändert %} änderung{% endif %}">{{ (stunde.fach or "").replace("Fördern", "Fö") }}</span>
                                                             <span class="lehrer{% if stunde.lehrergeändert %} änderung{% endif %}">{{ ", ".join(stunde.lehrer)}}</span>
                                                             <span class="raum{% if stunde.raumgeändert %} änderung{% endif %}">{{ ", ".join(stunde.räume) }}</span>
                                                         {% else %}
-                                                            <span class="fach änderung">{{ (klasse.kurse[stunde.kursnummer].kürzel or "").replace("Fördern", "Fö (" + klasse.kurse[stunde.kursnummer].fach + ")") }}</span>
                                                             <span class="änderung">Ausfall</span>
                                                         {% endif %}
                                                     </div>
@@ -69,12 +68,11 @@
                                     {% for stunde in sort_stunden_by_fach(klasse.stunden[periode]) %}
                                     <div class="stunde">
                                         <div class="stunden-flr">
+                                                <span class="fach{% if stunde.fachgeändert %} änderung{% endif %}">{{ stunde.fach or klasse.kurse[stunde.kursnummer].kürzel or ""}}</span>
                                             {% if not stunde.ausfall %}
-                                                <span class="fach{% if stunde.fachgeändert %} änderung{% endif %}">{{ stunde.fach or ""}}</span>
                                                 <span class="lehrer{% if stunde.lehrergeändert %} änderung{% endif %}">{{ ",".join(stunde.lehrer)}}</span>
                                                 <span class="raum{% if stunde.raumgeändert %} änderung{% endif %}">{{ ",".join(stunde.räume) }}</span>
                                             {% else %}
-                                                <span class="fach änderung">{{ klasse.kurse[stunde.kursnummer].kürzel or "" }}</span>
                                                 <span class="änderung">Ausfall</span>
                                             {% endif %}
                                         </div>
@@ -99,11 +97,40 @@
         </div>
         <div id="sidebar-section" {% if not cfg.content.sidebar %}style="display: none;"{% endif %}>
             <div class="sidebar-container" style="background-image: url('{{ url_for('static', filename='logo.svg') }}') ">
+                <div id="clock">
+                    <span id="date"></span>
+                    <span id="time"></span>
+                </div>
             </div>
             <div id="watermark"><p>Werbunk</p></div>
         </div>
 
     </div>
+
+{# Clock #}
+<script>
+  function updateDateTime() {
+    const now = new Date();
+
+    const date = now.toLocaleDateString('de-DE', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+
+    const time = now.toLocaleTimeString('de-DE', {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+
+    document.getElementById('date').textContent = date;
+    document.getElementById('time').textContent = time;
+  }
+
+  updateDateTime();
+  setInterval(updateDateTime, 1000);
+</script>
 
 {# Auto-Scroller #}
 <script> 

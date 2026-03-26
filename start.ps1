@@ -54,7 +54,7 @@ Write-Host "=== Virtual Environment erstellen ==="
 Push-Location $TARGET_DIR
 python -m venv venv
 
-& "$PWD\venv\Scripts\Activate.ps1"
+powershell -ExecutionPolicy Bypass -File .\venv\Scripts\Activate.ps1
 
 Write-Host "=== Pip aktualisieren ==="
 python -m pip install --upgrade pip
