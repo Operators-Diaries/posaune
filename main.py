@@ -7,15 +7,14 @@ from config import Config
 
 CONFIG_PATH = Path("config.yaml")
 
-
 #======// Configuration //=======================================================================//
 
 if not CONFIG_PATH.exists():
     cfg = Config()
-    with CONFIG_PATH.open("w") as f:
+    with CONFIG_PATH.open("w", encoding="utf-8") as f:
         yaml.safe_dump(cfg.model_dump(), f)
 else:
-    with CONFIG_PATH.open() as f:
+    with CONFIG_PATH.open(encoding="utf-8") as f:
         data = yaml.safe_load(f)
     cfg = Config(**data)
 

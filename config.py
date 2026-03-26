@@ -16,6 +16,7 @@ class Config(BaseSettings):
         ticker: list[str] = ["Alternative für die VpMobil24 App jetzt auf vertretungsapp.de!"]
         klassen: list[str] = ["5a", "5b", "5c", "6a", "6b", "6c", "7a", "7b", "7c", "8a", "8b", "8c", "9a", "9b", "9c", "10a", "10b", "10c"]
         klassendetailiert: list[str] = ["11", "12"]
+        nuränderungen: bool = False
         scrolling: Scrolling = Scrolling()
         sidebar: bool = True
 

@@ -35,7 +35,7 @@
                                     <div class="periode">
                                         <div class="periode-zahl">{{ periode }}</div>
                                         <div class="stunden-wrapper">
-                                            {% for stunde in klasse.stunden[periode] %}
+                                            {% for stunde in klasse.stunden[periode] if (not cfg.content.nuränderungen) or stunde.geändert %}
                                                 <div class="stunde">
                                                     <div class="stunden-flr">
                                                             <span class="fach{% if stunde.fachgeändert %} änderung{% endif %}">{{ (stunde.fach or klasse.kurse[stunde.kursnummer].kürzel or "").replace("Fördern", "Fö") }}</span>
@@ -65,7 +65,7 @@
                             <div class="periode">
                                 <div class="periode-zahl">{{ periode }}</div>
                                 <div class="stunden-wrapper">
-                                    {% for stunde in sort_stunden_by_fach(klasse.stunden[periode]) %}
+                                    {% for stunde in sort_stunden_by_fach(klasse.stunden[periode]) if (not cfg.content.nuränderungen) or stunde.geändert %}
                                     <div class="stunde">
                                         <div class="stunden-flr">
                                                 <span class="fach{% if stunde.fachgeändert %} änderung{% endif %}">{{ stunde.fach or klasse.kurse[stunde.kursnummer].kürzel or ""}}</span>
