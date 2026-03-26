@@ -2,7 +2,38 @@
 
 set -e
 
-TARGET_DIR="posaune"
+#======// Startlogik: korrektes Arbeitsverzeichnis sicherstellen //================================//
+
+TARGET_NAME="posaune"
+
+if [[ -n "${BASH_SOURCE[0]}" && -f "${BASH_SOURCE[0]}" ]]; then
+    # Skript läuft als Datei → Ort des Skripts ist maßgeblich
+    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+else
+    # Skript wurde gepiped (curl | bash) → aktuelles Verzeichnis verwenden
+    SCRIPT_DIR="$PWD"
+fi
+
+CURRENT_BASENAME="$(basename "$PWD")"
+
+# Fall: wir sind bereits im posaune-Ordner
+if [[ "$CURRENT_BASENAME" == "$TARGET_NAME" ]]; then
+    echo "Bereits im Zielordner ($TARGET_NAME)"
+
+# Fall: Ordner existiert → reinwechseln
+elif [[ -d "$SCRIPT_DIR/$TARGET_NAME" ]]; then
+    echo "Wechsle in bestehenden Ordner $TARGET_NAME"
+    cd "$SCRIPT_DIR/$TARGET_NAME"
+
+# Fall: Ordner existiert nicht → erstellen und rein
+else
+    echo "Erstelle Ordner $TARGET_NAME"
+    mkdir -p "$SCRIPT_DIR/$TARGET_NAME"
+    cd "$SCRIPT_DIR/$TARGET_NAME"
+fi
+
+echo "Arbeitsverzeichnis: $PWD"
+
 
 #======// Python, Git & Chromium sicherstellen //==================================================//
 
@@ -41,19 +72,20 @@ echo "=== Repository herunterladen ==="
 
 REPO_URL="https://github.com/Operators-Diaries/posaune.git"
 
-if [ -d "$TARGET_DIR" ]; then
+if [ -d ".git" ]; then
     echo "Repository existiert bereits – ziehe Updates"
-    git -C "$TARGET_DIR" pull
+    git reset --hard
+    git pull
 else
     echo "Clone Repository"
-    git clone "$REPO_URL" "$TARGET_DIR"
+    git clone "$REPO_URL" .
 fi
 
 
 #======// Requirements //========================================================================//
 
 echo "=== Virtual Environment erstellen ==="
-cd "$TARGET_DIR"
+
 python3 -m venv venv
 source venv/bin/activate
 
