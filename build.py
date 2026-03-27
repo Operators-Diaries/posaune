@@ -15,4 +15,4 @@ with app.app_context():
 
     out = Path("build")
     out.mkdir(exist_ok=True)
-    (out / "index.jinja").write_text(html, encoding="utf-8")
+    (out / "index.html").write_text(html, encoding="utf-8")
