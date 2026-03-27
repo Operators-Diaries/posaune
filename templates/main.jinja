@@ -27,11 +27,20 @@
         <div id="plan-section">
             <div id="content-scroller">
                 <div class="plan-wrapper">
-                    {% for klasse in vp.klassen.values() if klasse.kürzel in cfg.content.klassen %}
+                    {% for klasse in vp.klassen.values()
+                        if klasse.kürzel in cfg.content.klassen
+                        and (
+                            not cfg.content.nuränderungen
+                            or (klasse.stunden.values() | sum(start=[]) | selectattr('geändert') | list | length > 0)
+                            )
+                    %}
                         <div class="klasse">
                             <div class="klassenkürzel">{{ klasse.kürzel }}</div>
                             <div class="perioden-wrapper">
-                                {% for periode in klasse.stunden.keys() %}
+                                {% for periode, stunden in klasse.stunden.items()
+                                    if not cfg.content.nurgeändert
+                                    or (stunden | selectattr('geändert') | list | length > 0)
+                                %}
                                     <div class="periode">
                                         <div class="periode-zahl">{{ periode }}</div>
                                         <div class="stunden-wrapper">

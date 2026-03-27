@@ -39,14 +39,14 @@ def index():
         data = vp.fetch()
 
         return render_template(
-            'main.html',
+            'main.jinja',
             vp=data,
             cfg=cfg
         )
     
     except Exception as e:
         return render_template(
-            '404.html',
+            '404.jinja',
             cfg=cfg,
             e=e
         )
