@@ -31,6 +31,7 @@ body {
 }
 
 #content-section {
+    width: 100vw;
     height: 93vh;
     display: flex;
 }

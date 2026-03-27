@@ -38,7 +38,7 @@
                             <div class="klassenkürzel">{{ klasse.kürzel }}</div>
                             <div class="perioden-wrapper">
                                 {% for periode, stunden in klasse.stunden.items()
-                                    if not cfg.content.nurgeändert
+                                    if not cfg.content.nuränderungen
                                     or (stunden | selectattr('geändert') | list | length > 0)
                                 %}
                                     <div class="periode">
@@ -70,7 +70,10 @@
                     <div class="klasse">
                         <div class="klassenkürzel">{{ klasse.kürzel }}</div>
                         <div class="perioden-wrapper">
-                            {% for periode in klasse.stunden.keys() %}
+                            {% for periode, stunden in klasse.stunden.items()
+                                if not cfg.content.nuränderungen
+                                or (stunden | selectattr('geändert') | list | length > 0)
+                            %}
                             <div class="periode">
                                 <div class="periode-zahl">{{ periode }}</div>
                                 <div class="stunden-wrapper">
