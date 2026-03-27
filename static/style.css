@@ -36,14 +36,15 @@ body {
     display: flex;
 }
 
-
 #plan-section {
     flex: 1;
     height: 93vh;
+    width: calc(100% - 20vw); /* Temporärer Fix */
 }
 
 #content-scroller {
     height: calc(100% - 7vh);
+    width: 100%;
     overflow-y: auto;
     overflow-x: hidden;
     scrollbar-width: none; /* Firefox */
@@ -74,21 +75,28 @@ body {
 
 .plan-wrapper {
     padding: 20px;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(325px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
     gap: 30px;
-    justify-content: center;    
+    justify-content: center;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .klasse {
+    flex: 1 1 325px;
+    max-width: 400px;
+    min-width: 250px;
+
     position: relative;
-    padding: 5em 1.5em 2.0em 1.5em;
+    padding: 5em 1.5em 2em 1.5em;
     background-color: var(--background-embed);
     box-shadow: inset 18px 18px 20px var(--shadow), inset -18px -18px 20px #ffffff;
     border-radius: 15px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    box-sizing: border-box;
 }
 
 .klassenkürzel {
@@ -144,9 +152,9 @@ body {
     margin: 0 auto;
 }
 
-.stunde {
+/* .stunde {
 
-}
+} */
 
 .stunden-flr {
     font-size: 19px;
@@ -172,12 +180,10 @@ body {
 
 /* ====== // Detailled overrides //================================================================ */
 
-.plan-wrapper.detailed {
-    padding: 20px;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(590px, 1fr));
-    gap: 30px;
-    justify-content: center;
+.detailed .klasse {
+    flex: 1 1 590px;
+    max-width: 665px;
+    min-width: 515px;
 }
 
 .detailed .perioden-wrapper {

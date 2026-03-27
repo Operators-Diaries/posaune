@@ -1,4 +1,4 @@
-vpmobil==2.0.0
+vpmobil==2.1.0
 pydantic-settings==2.13.1
 pyyaml==6.0.3
 flask==3.1.3

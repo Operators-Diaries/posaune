@@ -24,45 +24,45 @@ jobs:
                 python-version: '3.11'  
             - name: Abhängigkeiten installieren
               run: |
-                pip install vpmobil pydantic-settings pyyaml flask 
+                pip install -r requirements.txt
 
-            - name: Patch vpmobil vollständig
-              run: |
-                  python - <<'PY'
-                  from pathlib import Path
-                  import sysconfig
-                  import re
+            # - name: Patch vpmobil vollständig
+            #   run: |
+            #       python - <<'PY'
+            #       from pathlib import Path
+            #       import sysconfig
+            #       import re
   
-                  base = Path(sysconfig.get_paths()["purelib"]) / "vpmobil"
+            #       base = Path(sysconfig.get_paths()["purelib"]) / "vpmobil"
   
-                  for file in base.rglob("*.py"):
-                      text = file.read_text(encoding="utf-8")
+            #       for file in base.rglob("*.py"):
+            #           text = file.read_text(encoding="utf-8")
   
-                      original = text
+            #           original = text
   
-                      # 1️⃣ Problem: doppelte Quotes in f-strings (find("..."))
-                      text = text.replace(
-                          'find("Kopf/planart").text',
-                          "find('Kopf/planart').text"
-                      )
+            #           # 1️⃣ Problem: doppelte Quotes in f-strings (find("..."))
+            #           text = text.replace(
+            #               'find("Kopf/planart").text',
+            #               "find('Kopf/planart').text"
+            #           )
   
-                      # 2️⃣ Problem: f-string mit verschachtelten Quotes wie:
-                      # f"... {", ".join(...)} ..."
-                      text = re.sub(
-                          r'\{", "\.join\((.*?)\)\}',
-                          r"{', '.join(\1)}",
-                          text
-                      )
+            #           # 2️⃣ Problem: f-string mit verschachtelten Quotes wie:
+            #           # f"... {", ".join(...)} ..."
+            #           text = re.sub(
+            #               r'\{", "\.join\((.*?)\)\}',
+            #               r"{', '.join(\1)}",
+            #               text
+            #           )
   
-                      # 3️⃣ Optional: weitere typische Fehler patterns
-                      text = text.replace('"{", ".join', '"{\', \'.join')
+            #           # 3️⃣ Optional: weitere typische Fehler patterns
+            #           text = text.replace('"{", ".join', '"{\', \'.join')
   
-                      if text != original:
-                          file.write_text(text, encoding="utf-8")
-                          print(f"Patched: {file}")
+            #           if text != original:
+            #               file.write_text(text, encoding="utf-8")
+            #               print(f"Patched: {file}")
   
-                  print("Patch abgeschlossen")
-                  PY
+            #       print("Patch abgeschlossen")
+            #       PY
 
             - name: Build-Ordner erstellen
               run: mkdir -p build
