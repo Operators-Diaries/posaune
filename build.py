@@ -1,15 +1,17 @@
 from pathlib import Path
 from flask import render_template
-from main import app, vp, cfg, Stundenplan24Pfade
+from main import app, vp, cfg, Stundenplan24Pfade, fetch_solar
 
 with app.app_context():
     try:
         data = vp.fetch()
     except:
         data = vp.fetch(datei=Stundenplan24Pfade.Klassen)
-        
+
+    solardaten = fetch_solar()
+
     with app.test_request_context():
-        html = render_template("main.jinja", vp=data, cfg=cfg)
+        html = render_template("main.jinja", vp=data, cfg=cfg, sol=solardaten)
 
     # GitHub Pages: absolute /static/... in relative static/... umwandeln
     html = html.replace('href="/static/', 'href="static/')
