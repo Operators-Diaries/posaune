@@ -242,10 +242,12 @@ body {
     background-size: 75%;
     height: calc(95% - 80px);
     display: flex;
-    justify-content: center;
     overflow-y: hidden;
     overflow-x: hidden;
     padding: 40px 20px;
+    flex-direction: column;
+    gap: 50px;
+    align-items: center;
 }
 
 #clock {
@@ -256,6 +258,28 @@ body {
 
 #clock #time {
     font-size: 40px;
+    font-weight: 700;
+}
+
+#solardaten {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 80%;
+    background-color: var(--background);
+    box-shadow: -8px -8px 20px #ffffff, 8px 8px 20px var(--shadow);
+    border-radius: calc(0.6em + 10px);
+    padding: 20px;
+}
+
+.solarheader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 6em;
+    height: 1.2em;
+    padding-bottom: 10px;
+    font-size: 22px;
     font-weight: 700;
 }
 

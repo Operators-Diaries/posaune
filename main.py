@@ -1,9 +1,10 @@
 from flask import Flask, render_template
 from vpmobil import Vertretungsplan
 from pathlib import Path
-import yaml
+import yaml, datetime
 
 from config import Config
+from solar import fetch_solar
 
 CONFIG_PATH = Path("config.yaml")
 
@@ -35,13 +36,16 @@ vp = Vertretungsplan(
 @app.route('/')
 def index():
 
+    solardaten = fetch_solar()
+
     try:
-        data = vp.fetch()
+        data = vp.fetch(datetime.date(2026, 3, 27))
 
         return render_template(
             'main.jinja',
             vp=data,
-            cfg=cfg
+            cfg=cfg,
+            sol=solardaten
         )
     
     except Exception as e:
