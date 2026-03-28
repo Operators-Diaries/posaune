@@ -23,6 +23,7 @@ body {
     color: var(--text);
     overflow-x: hidden;
     overflow-y: hidden;
+    height: 100vh;
 }
 
 #header-section {

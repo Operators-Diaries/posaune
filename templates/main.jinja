@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     
     <title>Benno Vertretungsplan</title>
+    <link href="https://www.benno-gymnasium.de/favicon.ico" rel="icon">
 
     <script>
         setInterval(() => {
@@ -22,17 +23,16 @@
             </div>
         </div>
     </div>
-
+    
     <div id="content-section">
         <div id="plan-section">
             <div id="content-scroller">
+
+                {# Unter- & Mittelstufe #}
                 <div class="plan-wrapper">
                     {% for klasse in vp.klassen.values()
                         if klasse.kürzel in cfg.content.klassen
-                        and (
-                            not cfg.content.nuränderungen
-                            or (klasse.stunden.values() | sum(start=[]) | selectattr('geändert') | list | length > 0)
-                            )
+                        and (not cfg.content.nuränderungen or (klasse.stunden.values() | sum(start=[]) | selectattr('geändert') | list | length > 0))
                     %}
                         <div class="klasse">
                             <div class="klassenkürzel">{{ klasse.kürzel }}</div>
@@ -47,10 +47,12 @@
                                             {% for stunde in klasse.stunden[periode] if (not cfg.content.nuränderungen) or stunde.geändert %}
                                                 <div class="stunde">
                                                     <div class="stunden-flr">
-                                                            <span class="fach{% if stunde.fachgeändert %} änderung{% endif %}">{{ (stunde.fach or klasse.kurse[stunde.kursnummer].kürzel or "").replace("Fördern", "Fö") }}</span>
+                                                            <span class="fach {% if stunde.fachgeändert %}änderung{% endif %}">
+                                                                {{ (stunde.fach or (klasse.kurse[stunde.kursnummer].kürzel if stunde.kursnummer in klasse.kurse else '') or '').replace("Fördern", "Fö") }}
+                                                            </span>
                                                         {% if not stunde.ausfall %}
-                                                            <span class="lehrer{% if stunde.lehrergeändert %} änderung{% endif %}">{{ ", ".join(stunde.lehrer)}}</span>
-                                                            <span class="raum{% if stunde.raumgeändert %} änderung{% endif %}">{{ ", ".join(stunde.räume) }}</span>
+                                                            <span class="lehrer {% if stunde.lehrergeändert %}änderung{% endif %}">{{ ", ".join(stunde.lehrer)}}</span>
+                                                            <span class="raum {% if stunde.raumgeändert %}änderung{% endif %}">{{ ", ".join(stunde.räume) }}</span>
                                                         {% else %}
                                                             <span class="änderung">Ausfall</span>
                                                         {% endif %}
@@ -65,6 +67,8 @@
                         </div>
                     {% endfor %}
                 </div>
+
+                {# Oberstufe #}
                 <div class="plan-wrapper detailed">
                     {% for klasse in vp.klassen.values() if klasse.kürzel in cfg.content.klassendetailiert %}
                     <div class="klasse">

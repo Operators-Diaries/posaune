@@ -1,7 +1,7 @@
 from flask import Flask, render_template
-from vpmobil import Vertretungsplan
+from vpmobil import Vertretungsplan, Stundenplan24Pfade
 from pathlib import Path
-import yaml, datetime
+import yaml
 
 from config import Config
 from solar import fetch_solar
@@ -39,7 +39,10 @@ def index():
     solardaten = fetch_solar()
 
     try:
-        data = vp.fetch(datetime.date(2026, 3, 27))
+        try:
+            data = vp.fetch()
+        except:
+            data = vp.fetch(datei=Stundenplan24Pfade.Klassen)
 
         return render_template(
             'main.jinja',
