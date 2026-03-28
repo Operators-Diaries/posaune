@@ -182,5 +182,26 @@
     {% endif %}
 </script>
 
+{# Ticker #}
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll(".ticker-wrapper").forEach((wrapper) => {
+            const ticker = wrapper.querySelector(".ticker");
+            if (!ticker) return;
+
+            const text = ticker.innerHTML.trim();
+
+            ticker.innerHTML = `
+            <span class="ticker-item">${text}</span>
+            <span class="ticker-item" aria-hidden="true">${text}</span>
+            `;
+
+            const width = ticker.scrollWidth;
+            const speed = 160; // px pro Sekunde
+            ticker.style.setProperty("--duration", `${Math.max(width / speed, 8)}s`);
+        });
+    });
+</script>
+
 </body>
 </html>
