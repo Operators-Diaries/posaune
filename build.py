@@ -1,9 +1,13 @@
 from pathlib import Path
 from flask import render_template
-from main import app, vp, cfg
+from main import app, vp, cfg, Stundenplan24Pfade
 
 with app.app_context():
-    data = vp.fetch()
+    try:
+        data = vp.fetch()
+    except:
+        data = vp.fetch(datei=Stundenplan24Pfade.Klassen)
+        
     with app.test_request_context():
         html = render_template("main.jinja", vp=data, cfg=cfg)
 
