@@ -15,7 +15,7 @@
 ### Installation
 Die Posaune kann per curl heruntergeladen und installiert werden:
 ```sh
-curl -sSL https://raw.githubusercontent.com/Operators-Diaries/posaune/main/start.sh | bash
+curl -sSL https://raw.githubusercontent.com/Operators-Diaries/posaune/main/scripts/start.sh | bash
 ```
 Dafür ist beim ersten Ausführen wahrscheinlich die Eingabe des Systempassworts nötig. (Das Verzeichnis, **in dem dieser Befehl ausgeführt wurde** sei als `~` bezeichnet) Der curl-Befehl erzeugt das Verzeichnis `~/posaune`.
 
@@ -29,12 +29,12 @@ Nach dem ersten Starten wird eine Datei `~/posaune/config.yaml` mit Standardwert
 Die Konfigurationsparameter werden nur beim Start des Servers ausgelesen.
 
 ## Starten
-Ein fertiges Start-Skript liegt in `~/posaune/start.sh`. Seine Ausführung muss lediglich als Schedule im System hinterlegt werden - beispielsweise mit `crontab`.
+Ein fertiges Start-Skript liegt in `~/posaune/scripts/start.sh`. Seine Ausführung muss lediglich als Schedule im System hinterlegt werden - beispielsweise mit `crontab`.
 Zu beachten ist, dass das Skript mit `bash` und nicht mit `sh` ausgeführt werden muss.
 
 ---
 
 #### Temporäre Alternative für Windows
 ```
-iwr "https://raw.githubusercontent.com/Operators-Diaries/posaune/main/start.ps1" -UseBasicParsing | iex
+iwr "https://raw.githubusercontent.com/Operators-Diaries/posaune/main/scripts/start.ps1" -UseBasicParsing | iex
 ```

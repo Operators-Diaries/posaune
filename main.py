@@ -3,8 +3,8 @@ from vpmobil import Vertretungsplan, Stundenplan24Pfade
 from pathlib import Path
 import yaml
 
-from config import Config
-from solar import fetch_solar
+from lib.config import Config
+from lib.solar import fetch_solar
 
 CONFIG_PATH = Path("config.yaml")
 
