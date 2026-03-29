@@ -29,7 +29,7 @@ Nach dem ersten Starten wird eine Datei `~/posaune/config.yaml` mit Standardwert
 Die Konfigurationsparameter werden nur beim Start des Servers ausgelesen.
 
 ## Starten
-Ein fertiges Start-Skript liegt in `~/posaune/scripts/start.sh`. Seine Ausführung muss lediglich als Schedule im System hinterlegt werden - beispielsweise mit `crontab`.
+Ein fertiges Start-Skript liegt in `~/posaune/scripts/install.sh`. Seine Ausführung muss lediglich als Schedule im System hinterlegt werden - beispielsweise mit `crontab`.
 Zu beachten ist, dass das Skript mit `bash` und nicht mit `sh` ausgeführt werden muss.
 
 ---
