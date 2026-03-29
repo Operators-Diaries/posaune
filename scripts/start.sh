@@ -2,22 +2,13 @@
 
 set -e
 
+
 #======// Startlogik: korrektes Arbeitsverzeichnis sicherstellen //================================//
 
 TARGET_NAME="posaune"
 
-if [[ -n "${BASH_SOURCE[0]}" && -f "${BASH_SOURCE[0]}" ]]; then
-    # Skript liegt als Datei vor -> Ordner der Datei ist das Ziel
-    WORK_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-else
-    # Skript läuft gepiped -> aktuelles Verzeichnis ist der Ausgangspunkt
-    if [[ "$(basename "$PWD")" == "$TARGET_NAME" ]]; then
-        WORK_DIR="$PWD"
-    else
-        WORK_DIR="$PWD/$TARGET_NAME"
-        mkdir -p "$WORK_DIR"
-    fi
-fi
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+WORK_DIR="$(dirname "$SCRIPT_DIR")"
 
 cd "$WORK_DIR"
 echo "Arbeitsverzeichnis: $PWD"
@@ -54,27 +45,19 @@ else
 
 fi
 
+
 #======// Repository pullen //=====================================================================//
 
 echo "=== Repository herunterladen ==="
 
 REPO_URL="https://github.com/Operators-Diaries/posaune.git"
 
-if [ -d ".git" ]; then
-    echo "Repository existiert bereits – ziehe Updates"
-    git reset --hard
-    git pull
-else
-    echo "Clone Repository"
-    git clone "$REPO_URL" .
-fi
+git reset --hard
+git pull
 
 
 #======// Requirements //========================================================================//
 
-echo "=== Virtual Environment erstellen ==="
-
-python3 -m venv venv
 source venv/bin/activate
 
 echo "=== Pip aktualisieren ==="
@@ -100,9 +83,7 @@ sleep 3
 
 echo "=== Öffne Browser im Vollbild ==="
 
-URL="http://127.0.0.1:5000"
-
-chromium --start-fullscreen "$URL" &
+chromium --start-fullscreen "http://127.0.0.1:5000" &
 
 echo "=== Setup abgeschlossen ==="
 echo "Flask läuft mit PID $FLASK_PID"
