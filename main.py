@@ -16,16 +16,15 @@ if not CONFIG_PATH.exists():
         yaml.safe_dump(cfg.model_dump(), f)
 else:
     with CONFIG_PATH.open(encoding="utf-8") as f:
-        data = yaml.safe_load(f)
-    cfg = Config(**data)
+        cfg = Config(**yaml.safe_load(f))
+    
 
 
 #======// App //=================================================================================//
 
 app = Flask(__name__)
 app.jinja_env.globals['type'] = type
-app.jinja_env.globals['sort_stunden_by_fach'] = lambda x: sorted(x, key=lambda s: (s.fach is None, s.fach)  # None kommt ans Ende
-)
+app.jinja_env.globals['sort_stunden_by_fach'] = lambda x: sorted(x, key=lambda s: (s.fach is None, s.fach))  # None kommt ans Ende
 
 vp = Vertretungsplan(
     cfg.vertretungsplan.schulnummer,

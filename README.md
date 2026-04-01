@@ -15,7 +15,7 @@
 ### Installation
 Die Posaune kann per curl heruntergeladen und installiert werden:
 ```sh
-curl -sSL https://raw.githubusercontent.com/Operators-Diaries/posaune/main/scripts/start.sh | bash
+((sudo apt-get update && sudo apt-get install -y curl) || (sudo dnf install -y curl) || (sudo pacman -Sy --noconfirm curl)) && curl -sSL https://raw.githubusercontent.com/Operators-Diaries/posaune/main/scripts/start.sh | bash
 ```
 Dafür ist beim ersten Ausführen wahrscheinlich die Eingabe des Systempassworts nötig. (Das Verzeichnis, **in dem dieser Befehl ausgeführt wurde** sei als `~` bezeichnet) Der curl-Befehl erzeugt das Verzeichnis `~/posaune`.
 
