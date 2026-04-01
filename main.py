@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-from vpmobil import Vertretungsplan, Stundenplan24Pfade
+from vpmobil import Vertretungsplan, Standardpfade
 from pathlib import Path
 import yaml
 
@@ -41,7 +41,7 @@ def index():
         try:
             data = vp.fetch()
         except:
-            data = vp.fetch(datei=Stundenplan24Pfade.Klassen)
+            data = vp.fetch(datei=Standardpfade.Klassen)
 
         return render_template(
             'main.jinja',

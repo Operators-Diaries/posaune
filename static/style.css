@@ -307,11 +307,6 @@ body {
     align-items: center;
 }
 
-.ticker-wrapper {
-    overflow: hidden;
-    white-space: nowrap;
-}
-
 .ticker {
     display: inline-flex;
     width: max-content;
@@ -324,15 +319,13 @@ body {
 .ticker-item {
     flex: 0 0 auto;
     white-space: nowrap;
-    padding-right: 20vw;
-    /* Abstand zwischen Wiederholungen */
+    padding-right: 20vw; /* Abstand zwischen Wiederholungen */
 }
 
 @keyframes ticker-scroll {
     from {
         transform: translateX(0);
     }
-
     to {
         transform: translateX(-50%);
     }

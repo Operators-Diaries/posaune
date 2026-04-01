@@ -10,14 +10,13 @@
 - Unix-Shell
 - Benutzer mit Administratorrechten
 - `apt`, `dnf` oder `pacman` Paket-Manager
-- `curl`
 
 ### Installation
 Die Posaune kann per curl heruntergeladen und installiert werden:
 ```sh
-((sudo apt-get update && sudo apt-get install -y curl) || (sudo dnf install -y curl) || (sudo pacman -Sy --noconfirm curl)) && curl -sSL https://raw.githubusercontent.com/Operators-Diaries/posaune/main/scripts/start.sh | bash
+((sudo apt-get update && sudo apt-get install -y curl) || (sudo dnf install -y curl) || (sudo pacman -Sy --noconfirm curl)) && curl -sSL https://raw.githubusercontent.com/Operators-Diaries/posaune/main/scripts/install.sh | bash
 ```
-Dafür ist beim ersten Ausführen wahrscheinlich die Eingabe des Systempassworts nötig. (Das Verzeichnis, **in dem dieser Befehl ausgeführt wurde** sei als `~` bezeichnet) Der curl-Befehl erzeugt das Verzeichnis `~/posaune`.
+Dafür ist beim ersten Ausführen wahrscheinlich die Eingabe des Systempassworts nötig. (Das Verzeichnis, **in dem dieser Befehl ausgeführt wurde** sei als `~` bezeichnet) Die Installation erzeugt das Verzeichnis `~/posaune`.
 
 **Zu beachten**
 - Die Option *"Cache deaktivieren"* ist in den Netzwerk-Einstellungen der Entwickler-Tools des Browsers **abzuwählen bzw. abgewählt zu lassen**, um Flackern beim Neuladen zu vermeiden
