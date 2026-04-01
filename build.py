@@ -1,12 +1,12 @@
 from pathlib import Path
 from flask import render_template
-from main import app, vp, cfg, Standardpfade, fetch_solar
+from main import app, vp, cfg, Stundenplan24Pfade, fetch_solar
 
 with app.app_context():
     try:
         data = vp.fetch()
     except:
-        data = vp.fetch(datei=Standardpfade.Klassen)
+        data = vp.fetch(datei=Stundenplan24Pfade.Klassen)
 
     solardaten = fetch_solar()
 
