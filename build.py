@@ -1,6 +1,6 @@
 from pathlib import Path
 from flask import render_template
-from main import app, vp, cfg, Stundenplan24Pfade, fetch_solar
+from main import app, vp, cfg, Stundenplan24Pfade, fetch_solar, get_next_departures_by_line_and_direction
 
 with app.app_context():
     try:
@@ -11,7 +11,7 @@ with app.app_context():
     solardaten = fetch_solar()
 
     with app.test_request_context():
-        html = render_template("main.jinja", vp=data, cfg=cfg, sol=solardaten)
+        html = render_template("main.jinja", vp=data, cfg=cfg, sol=solardaten, dvb=get_next_departures_by_line_and_direction())
 
     # GitHub Pages: absolute /static/... in relative static/... umwandeln
     html = html.replace('href="/static/', 'href="static/')
