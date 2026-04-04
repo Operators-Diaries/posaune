@@ -262,7 +262,7 @@ body {
     font-weight: 700;
 }
 
-#solardaten {
+.sidebar-content-wrapper {
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -291,6 +291,17 @@ body {
     height: 5%;
     justify-content: center;
     align-items: center;
+}
+
+.haltestelle-wrapper {
+    width: 70%;
+}
+
+.abfahrt {
+    display: grid;
+    grid-template-columns: 50px 50px 50px;
+    column-gap: 0px;
+    white-space: nowrap;
 }
 
 

@@ -1,0 +1,18 @@
+@font-face {
+    font-family: "CMU Roman";
+    /* src: url("cmunrm.ttf") format("truetype"); */
+    src: url("cmunbx.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* @font-face {
+    font-family: "CMU Roman";
+    font-weight: bold;
+    font-style: normal;
+} */
+
+body {
+    font-family: "CMU Roman";
+    font-weight: bold !important;
+}

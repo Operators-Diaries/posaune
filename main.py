@@ -5,6 +5,7 @@ import yaml
 
 from lib.config import Config
 from lib.solar import fetch_solar
+from lib.dvb import get_next_departures_by_line_and_direction
 
 CONFIG_PATH = Path("config.yaml")
 
@@ -47,7 +48,8 @@ def index():
             'main.jinja',
             vp=data,
             cfg=cfg,
-            sol=solardaten
+            sol=solardaten,
+            dvb=get_next_departures_by_line_and_direction()
         )
     
     except Exception as e:
