@@ -2,7 +2,10 @@
 <h1 align="center">Posaune</h1>
 <h6 align="center">Vertretungsplan-Anzeige für das St. Benno Gymnasium</h6>
 
-<p align="center"><a href="https://operators-diaries.github.io/posaune/">Live-Demo</a></p>
+<p align="center">
+    <a href="https://operators-diaries.github.io/posaune/">Live-Demo</a> - 
+    <a href="https://github.com/operators-diaries/posaune?tab=contributing-ov-file">Erläuterung</a>
+</p>
 
 ## Setup
 **Voraussetzungen**
