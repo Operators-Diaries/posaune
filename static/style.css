@@ -262,7 +262,7 @@ body {
     font-weight: 700;
 }
 
-.sidebar-content-wrapper {
+.sidebar-content-section {
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -273,7 +273,7 @@ body {
     padding: 20px;
 }
 
-.solarheader {
+.sidebar-section-header {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -284,6 +284,42 @@ body {
     font-weight: 700;
 }
 
+.haltestellen-wrapper {
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 20px
+}
+
+.haltestelle-wrapper {
+}
+
+.haltestelle {
+    font-weight: 600;
+    font-size: 17px;
+    margin: 0;
+    margin-bottom: 5px;
+}
+
+.abfahrten-wrapper {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 40px;
+}
+
+.abfahrt {
+    display: grid;
+    grid-template-columns: 40px 60px 25px;
+    column-gap: 0px;
+    white-space: nowrap;
+    font-size: 19px;
+}
+
+.abfahrt > :last-child {
+    text-align: right;
+    font-weight: 500;
+}
+
 #watermark {
     margin-left: 10px;
     color: hsl(from var(--secondary-text) h s calc(l * 2));
@@ -291,17 +327,6 @@ body {
     height: 5%;
     justify-content: center;
     align-items: center;
-}
-
-.haltestelle-wrapper {
-    width: 70%;
-}
-
-.abfahrt {
-    display: grid;
-    grid-template-columns: 50px 50px 50px;
-    column-gap: 0px;
-    white-space: nowrap;
 }
 
 

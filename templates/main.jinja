@@ -118,24 +118,29 @@
                     <span id="time"></span>
                     <span id="date"></span>
                 </div>
-                <div id="solardaten" class="sidebar-content-wrapper">
-                    <div class="solarheader">Solaranlage</div>
+                <div id="solardaten" class="sidebar-content-section">
+                    <div class="sidebar-section-header">Solaranlage</div>
                     <span id="ertrag">{{ sol.EnergieErtragGesamt }} erzeugt</span>
                     <span id="ertrag">{{ sol.CO2EinsparungGesamt }} CO2 eingespart</span>
                 </div>
-                <div id="abfahrten" class="sidebar-content-wrapper">
-                    {% for haltestelle, details in dvb.items() %}
+                <div id="abfahrten" class="sidebar-content-section">
+                    <div class="sidebar-section-header">Abfahrten</div>
+                    <div class="haltestellen-wrapper">
+                        {% for haltestelle, details in dvb.items() %}
                         <div class="haltestelle-wrapper">
                             <p class="haltestelle">{{ haltestelle }}</p>
-                            {% for linie, eta in details.items() if not linie[1].upper().startswith("FÄL") %}
+                            <div class="abfahrten-wrapper">
+                                {% for linie, eta in details.items() if not linie[1].upper().startswith("FÄL") %}
                                 <div class="abfahrt">
                                     <span>{{ linie[0] }}</span>
                                     <span>{{ linie[1][:3].upper() }}</span>
                                     <span>{{ eta }}</span>
                                 </div>
-                            {% endfor %}
+                                {% endfor %}
+                            </div>
                         </div>
-                    {% endfor %}
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
             <div id="watermark"><p>&copy github.com/annhilati</p></div> 
