@@ -12,7 +12,6 @@ with app.app_context():
 
     # DEBUG
     print(data.datum)
-    print(data._data)
 
     with app.test_request_context():
         html = render_template("main.jinja", vp=data, cfg=cfg, sol=solardaten, dvb=get_next_departures_by_line_and_direction())

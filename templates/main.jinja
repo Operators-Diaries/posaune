@@ -103,7 +103,7 @@
                     </div>
                     {% endfor %}
                 </div>
-                <div class="debug">{{ vp.datum.strftime('%A der %d. %B %Y') }}</div>
+                <div class="debug">{{ vp.datum.strftime('%A der %d. %B %Y') if vp.datum else "" }}</div>
             </div>
             <div id="footer-section">
                 <div class="ticker-wrapper">
