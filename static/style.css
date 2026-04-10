@@ -178,6 +178,12 @@ body {
     width: 220px;
 }
 
+.debug {
+    text-align: center;
+    color: hsl(from var(--secondary-text) h s calc(2 * l)) ;
+    font-size: 13px;
+}
+
 
 /* ====== // Detailled overrides //================================================================ */
 
@@ -295,7 +301,7 @@ body {
 }
 
 .haltestelle {
-    font-weight: 600;
+    font-weight: 700;
     font-size: 17px;
     margin: 0;
     margin-bottom: 5px;
@@ -309,7 +315,7 @@ body {
 
 .abfahrt {
     display: grid;
-    grid-template-columns: 40px 60px 25px;
+    grid-template-columns: 45px 60px 25px;
     column-gap: 0px;
     white-space: nowrap;
     font-size: 19px;
@@ -317,7 +323,7 @@ body {
 
 .abfahrt > :last-child {
     text-align: right;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 #watermark {
