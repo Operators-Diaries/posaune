@@ -10,6 +10,7 @@
     <link href="https://www.benno-gymnasium.de/favicon.ico" rel="icon">
 
     <script>
+        window.cfg = JSON.parse(`{{ json.dumps(cfg.model_dump()) | safe }}`);
         setInterval(() => {
             location.reload();
         }, {{ cfg.updatecycle }} * 60 * 1000);
@@ -27,7 +28,7 @@
     
     <div id="content-section">
         <div id="plan-section">
-            <div id="content-scroller" data-scrollspeed="{{ cfg.content.scrollspeed }}" data-dev="{{ cfg.dev | lower }}">
+            <div id="content-scroller">
 
                 {# Unter- & Mittelstufe #}
                 <div class="plan-wrapper">

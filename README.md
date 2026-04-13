@@ -7,6 +7,9 @@
     <a href="https://github.com/operators-diaries/posaune?tab=contributing-ov-file">Erläuterung</a>
 </p>
 
+> [!CAUTION]
+> Der Code enthält momentan eine sicherheitskritische Implementierung, die die gesamte Konfiguration einschließlich sensibler Daten (z.B. Passwörter) im Browser verfügbar macht. Es wird dringend empfohlen, die Anwendung nur lokal in einem vertrauenswürdigen Netzwerk zu verwenden, bis eine sicherere Lösung implementiert ist.
+
 ## Setup
 **Voraussetzungen**
 

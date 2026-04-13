@@ -1,3 +1,5 @@
+config = window.cfg || {};
+
 //=====// Uhr //=================================================================================//
 function updateDateTime() {
     const now = new Date();
@@ -24,8 +26,8 @@ setInterval(updateDateTime, 1000);
 
 //=====// Auto-Scroller //=======================================================================//
 const container = document.getElementById("content-scroller");
-const scrollspeed = parseFloat(container.dataset.scrollspeed);
-const isDev = container.dataset.dev === "true";
+const scrollspeed = config.content.scrollspeed;
+const isDev = config.dev;
 
 let isScrolling = true;
 

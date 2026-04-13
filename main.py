@@ -1,7 +1,7 @@
 from flask import Flask, render_template
 from vpmobil import Vertretungsplan, Stundenplan24Pfade
 from pathlib import Path
-import yaml
+import yaml, json
 
 from lib.config import Config
 from lib.solar import fetch_solar
@@ -25,6 +25,7 @@ else:
 
 app = Flask(__name__)
 app.jinja_env.globals['type'] = type
+app.jinja_env.globals['json'] = json
 app.jinja_env.globals['sort_stunden_by_fach'] = lambda x: sorted(x, key=lambda s: (s.fach is None, s.fach))  # None kommt ans Ende
 
 vp = Vertretungsplan(
