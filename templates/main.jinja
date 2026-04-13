@@ -27,7 +27,7 @@
     
     <div id="content-section">
         <div id="plan-section">
-            <div id="content-scroller">
+            <div id="content-scroller" data-scrollspeed="{{ cfg.content.scrollspeed }}" data-dev="{{ cfg.dev | lower }}">
 
                 {# Unter- & Mittelstufe #}
                 <div class="plan-wrapper">
@@ -150,33 +150,6 @@
     </div>
 
 <script src="{{ url_for('static', filename='main.js') }}"></script>
-
-{# Auto-Scroller #}
-<script> 
-    const container = document.getElementById("content-scroller");
-
-    let isScrolling = true;
-
-    function autoScroll() {
-        if (!isScrolling) return;
-
-        container.scrollTop += 1;
-
-        if (container.scrollTop + container.clientHeight >= container.scrollHeight) {
-            isScrolling = false;
-            setTimeout(() => {
-                container.scrollTop = 0;
-                setTimeout(() => {
-                    isScrolling = true;
-                }, 3000);
-            }, 1800);
-        }
-    }
-
-    {% if not cfg.dev %}
-    setInterval(autoScroll, {{ cfg.content.scrollspeed }} * 1000);
-    {% endif %}
-</script>
 
 </body>
 </html>

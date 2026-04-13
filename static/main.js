@@ -22,18 +22,49 @@ updateDateTime();
 setInterval(updateDateTime, 1000);
 
 
-//=====// Scroll-Fortschritt speichern //========================================================//
-const box = document.getElementById("content-scroller");
+//=====// Auto-Scroller //=======================================================================//
+const container = document.getElementById("content-scroller");
+const scrollspeed = parseFloat(container.dataset.scrollspeed);
+const isDev = container.dataset.dev === "true";
 
-box.addEventListener("scroll", () => {
-    localStorage.setItem("scrollPos", box.scrollTop);
-});
+let isScrolling = true;
 
-window.addEventListener("load", () => {
+if (!isDev) {
+    setInterval(() => {
+        if (!isScrolling) return;
+
+        container.scrollTop += 1;
+
+        if (container.scrollTop + container.clientHeight >= container.scrollHeight) {
+            isScrolling = false;
+
+            setTimeout(() => {
+                container.scrollTop = 0;
+
+                setTimeout(() => {
+                    isScrolling = true;
+                }, 3000);
+
+            }, 1800);
+        }
+    }, scrollspeed * 1000);
+}
+
+//=====// Scroll-Fortschritt beim Reload wiederherstellen //=======================================//
+document.addEventListener("DOMContentLoaded", () => {
+    const box = document.getElementById("content-scroller");
+    if (!box) return; 
+
     const saved = localStorage.getItem("scrollPos");
     if (saved !== null) {
-        box.scrollTop = parseInt(saved, 10);
+        setTimeout(() => {
+            box.scrollTop = parseInt(saved, 10);
+        }, 0);
     }
+
+    window.addEventListener("pagehide", () => {
+        localStorage.setItem("scrollPos", box.scrollTop);
+    });
 });
 
 
