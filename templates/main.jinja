@@ -83,7 +83,7 @@
                             <div class="periode">
                                 <div class="periode-zahl">{{ periode }}</div>
                                 <div class="stunden-wrapper">
-                                    {% for stunde in sort_stunden_by_fach(klasse.stunden[periode]) if (not cfg.content.nuränderungen) or stunde.geändert %}
+                                    {% for stunde in csort(klasse.stunden[periode], 2, fach_sorting_key) if (not cfg.content.nuränderungen) or stunde.geändert %}
                                     <div class="stunde">
                                         <div class="stunden-flr">
                                                 <span class="fach{% if stunde.fachgeändert %} änderung{% endif %}">{{ stunde.fach or klasse.kurse[stunde.kursnummer].kürzel or ""}}</span>
@@ -132,7 +132,7 @@
                         <div class="haltestelle-wrapper">
                             <p class="haltestelle">{{ haltestelle }}</p>
                             <div class="abfahrten-wrapper">
-                                {% for linie, eta in details.items() if not linie[1].upper().startswith("FÄL") %}
+                                {% for linie, eta in csort(details.items(), 2, abfahrt_sorting_key) if not linie[1].upper().startswith("FÄL") %}
                                 <div class="abfahrt">
                                     <span>{{ linie[0] }}</span>
                                     <span>{{ linie[1][:3].upper() }}</span>

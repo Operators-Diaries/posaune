@@ -6,6 +6,7 @@ import yaml, json
 from lib.config import Config
 from lib.solar import fetch_solar
 from lib.dvb import get_next_departures_by_line_and_direction
+from lib.sorter import csort
 
 CONFIG_PATH = Path("config.yaml")
 
@@ -20,13 +21,14 @@ else:
         cfg = Config(**yaml.safe_load(f))
     
 
-
 #======// App //=================================================================================//
 
 app = Flask(__name__)
 app.jinja_env.globals['type'] = type
 app.jinja_env.globals['json'] = json
-app.jinja_env.globals['sort_stunden_by_fach'] = lambda x: sorted(x, key=lambda s: (s.fach is None, s.fach))  # None kommt ans Ende
+app.jinja_env.globals['fach_sorting_key'] = lambda s: (s.fach is None, s.fach)  # None kommt ans Ende
+app.jinja_env.globals['abfahrt_sorting_key'] = lambda s: (s[1])
+app.jinja_env.globals['csort'] = csort
 
 vp = Vertretungsplan(
     cfg.vertretungsplan.schulnummer,
