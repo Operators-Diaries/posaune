@@ -251,10 +251,11 @@ body {
     display: flex;
     overflow-y: hidden;
     overflow-x: hidden;
-    padding: 40px 20px;
+    padding: 1.4vw 1.4vw;
     flex-direction: column;
-    gap: 50px;
+    gap: 2vh;
     align-items: center;
+    font-size: 0.8vw;
 }
 
 #clock {
@@ -264,7 +265,7 @@ body {
 }
 
 #clock #time {
-    font-size: 40px;
+    font-size: 3.3vw;
     font-weight: 700;
 }
 
@@ -276,7 +277,7 @@ body {
     background-color: var(--background);
     box-shadow: -8px -8px 20px #ffffff, 8px 8px 20px var(--shadow);
     border-radius: calc(0.6em + 10px);
-    padding: 20px;
+    padding: 15px 2.5vh;
 }
 
 .sidebar-section-header {
@@ -286,7 +287,7 @@ body {
     width: 6em;
     height: 1.2em;
     padding-bottom: 10px;
-    font-size: 22px;
+    font-size: 1.2vw;
     font-weight: 700;
 }
 
@@ -302,23 +303,23 @@ body {
 
 .haltestelle {
     font-weight: 700;
-    font-size: 17px;
+    font-size: 0.8vw;
     margin: 0;
-    margin-bottom: 5px;
+    margin-bottom: 0.8vh;
 }
 
 .abfahrten-wrapper {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    column-gap: 40px;
+    column-gap: 2vw;
 }
 
 .abfahrt {
     display: grid;
-    grid-template-columns: 45px 60px 25px;
+    font-size: 0.9vw;
+    grid-template-columns: 2vw 2vw 1.7vw;
     column-gap: 0px;
     white-space: nowrap;
-    font-size: 19px;
 }
 
 .abfahrt > :last-child {
@@ -333,6 +334,10 @@ body {
     height: 5%;
     justify-content: center;
     align-items: center;
+    font-size: 1vw;
+}
+#watermark > * {
+    margin: 0
 }
 
 
