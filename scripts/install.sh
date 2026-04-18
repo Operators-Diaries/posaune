@@ -23,13 +23,13 @@ else
 
     if command -v apt &> /dev/null; then
         sudo apt update
-        sudo apt install -y python3 python3-pip git python3.12-venv chromium
+        sudo apt install -y python3 python3-pip git python3-venv chromium
 
     elif command -v dnf &> /dev/null; then
-        sudo dnf install -y python3 python3-pip git python3.12-venv chromium
+        sudo dnf install -y python3 python3-pip git python3-venv chromium
 
     elif command -v pacman &> /dev/null; then
-        sudo pacman -Sy --noconfirm python python-pip git python3.12-venv chromium
+        sudo pacman -Sy --noconfirm python python-pip git python3-venv chromium
 
     else
         echo "Kein unterstützter Paketmanager gefunden"
