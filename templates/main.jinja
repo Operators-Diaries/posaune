@@ -132,7 +132,7 @@
                         <div class="haltestelle-wrapper">
                             <p class="haltestelle">{{ haltestelle }}</p>
                             <div class="abfahrten-wrapper">
-                                {% for linie, eta in csort(details.items(), 2, abfahrt_sorting_key) if not linie[1].upper().startswith("FÄL") %}
+                                {% for linie, eta in csort(details.items(), 2, abfahrt_sorting_key) if not linie[1].upper().startswith("FÄL") and linie[0] != "X" %}
                                 <div class="abfahrt">
                                     <span>{{ linie[0] }}</span>
                                     <span>{{ linie[1][:3].upper() }}</span>
