@@ -26,49 +26,12 @@ jobs:
               run: |
                 pip install -r requirements.txt
 
-            # - name: Patch vpmobil vollständig
-            #   run: |
-            #       python - <<'PY'
-            #       from pathlib import Path
-            #       import sysconfig
-            #       import re
-  
-            #       base = Path(sysconfig.get_paths()["purelib"]) / "vpmobil"
-  
-            #       for file in base.rglob("*.py"):
-            #           text = file.read_text(encoding="utf-8")
-  
-            #           original = text
-  
-            #           # 1️⃣ Problem: doppelte Quotes in f-strings (find("..."))
-            #           text = text.replace(
-            #               'find("Kopf/planart").text',
-            #               "find('Kopf/planart').text"
-            #           )
-  
-            #           # 2️⃣ Problem: f-string mit verschachtelten Quotes wie:
-            #           # f"... {", ".join(...)} ..."
-            #           text = re.sub(
-            #               r'\{", "\.join\((.*?)\)\}',
-            #               r"{', '.join(\1)}",
-            #               text
-            #           )
-  
-            #           # 3️⃣ Optional: weitere typische Fehler patterns
-            #           text = text.replace('"{", ".join', '"{\', \'.join')
-  
-            #           if text != original:
-            #               file.write_text(text, encoding="utf-8")
-            #               print(f"Patched: {file}")
-  
-            #       print("Patch abgeschlossen")
-            #       PY
-
             - name: Build-Ordner erstellen
               run: mkdir -p build
 
             - name: Flask Seite rendern
-              run: python build.py
+              run: |
+                PYTHONPATH=$GITHUB_WORKSPACE python .github/workflows/build.py
 
             - name: Statische Dateien kopieren
               run: |
