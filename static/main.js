@@ -47,7 +47,7 @@ if (!isDev) {
                     isScrolling = true;
                 }, 3000);
 
-            }, 1800);
+            }, 3000);
         }
     }, scrollspeed * 1000);
 }

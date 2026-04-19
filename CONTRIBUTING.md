@@ -1,6 +1,6 @@
 # Technische Erläuterung
 
-Posaune ist eine leichtgewichtige Software zum Bereiben von Vertretungsplan-Monitoren. 
+Posaune ist eine leichtgewichtige Software zum Betreiben von Vertretungsplan-Monitoren. 
 Sie wurde für das St. Benno Gymnasium in Dresden entwickelt und ist dementsprächend auf
 die Ansprüche dort eingestellt.
 
