@@ -5,12 +5,10 @@ set -e
 
 #======// Startlogik: korrektes Arbeitsverzeichnis sicherstellen //================================//
 
-TARGET_NAME="posaune"
-
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-WORK_DIR="$(dirname "$SCRIPT_DIR")"
+POSAUNE_DIR="$(dirname "$SCRIPT_DIR")"
 
-cd "$WORK_DIR"
+cd "$POSAUNE_DIR"
 echo "Arbeitsverzeichnis: $PWD"
 
 
@@ -18,13 +16,23 @@ echo "Arbeitsverzeichnis: $PWD"
 
 echo "=== Repository herunterladen ==="
 
-REPO_URL="https://github.com/Operators-Diaries/posaune.git"
+# Repository überprüfen
+if ! git rev-parse --git-dir > /dev/null 2>&1; then
+    echo "Die Installation von Posaune ist unvollständig. Bitte leere das Verzeichnis und installiere das Repository erneut."
+    exit 1
+fi
 
 git reset --hard
 git pull
 
 
-#======// Requirements //========================================================================//
+#======// Pakete überprüfen //========================================================================//
+
+# venv überprüfen
+if [ ! -d "venv" ] || [ ! -f "venv/bin/activate" ]; then
+    echo "Die Installation von Posaune ist unvollständig. Bitte leere das Verzeichnis und installiere das Repository erneut."
+    exit 1
+fi
 
 source venv/bin/activate
 
@@ -32,7 +40,6 @@ echo "=== Pip aktualisieren ==="
 python3 -m pip install --upgrade pip
 
 echo "=== Installiere/aktualisiere benötigte Pakete ==="
-
 python3 -m pip install -r requirements.txt
 
 
@@ -43,9 +50,6 @@ echo "=== Starte Flask-Server ==="
 python3 main.py &
 
 FLASK_PID=$!
-
-sleep 3
-
 
 #======// Website öffnen //========================================================================//
 

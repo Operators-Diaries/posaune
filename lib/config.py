@@ -1,7 +1,10 @@
 from pydantic_settings import BaseSettings
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 class Config(BaseSettings):
+    model_config = ConfigDict(
+        extra="ignore",
+    )
 
     class Vertretungsplan(BaseModel):
         schulnummer: int = 10000000
@@ -16,6 +19,7 @@ class Config(BaseSettings):
         scrollspeed: float = 0.02
         sidebar: bool = True
 
+    vermächtnis: str | None = None
     dev: bool = False
     content: Content = Content()
     vertretungsplan: Vertretungsplan = Vertretungsplan()

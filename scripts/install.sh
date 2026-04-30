@@ -7,7 +7,7 @@ mkdir -p posaune
 cd posaune
 
 
-#======// Python, Git & Chromium sicherstellen //==================================================//
+#======// Installationen sicherstellen //==================================================//
 
 echo "=== Prüfe Installationen ==="
 

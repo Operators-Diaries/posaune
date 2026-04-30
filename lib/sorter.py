@@ -16,8 +16,8 @@ def csort[_T, SupportsRichComparison](iterable: Iterable[_T], columns, key: Call
         1, 3, 5,
         2, 4, 6
     ]
-    sortiert.
     ```
+    sortiert.
     
     """
     items = list(iterable)
