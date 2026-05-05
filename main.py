@@ -15,13 +15,13 @@ CONFIG_PATH = Path("config.yaml")
 CONFIGURATIONS_PATH = Path("configurations.yml")
 
 # lokale Konfiguration laden
-_config_data = load_yaml(CONFIG_PATH)
-if not _config_data:
+_config_dict = load_yaml(CONFIG_PATH)
+if not _config_dict:
     cfg = PosauneConfig()
     with CONFIG_PATH.open("w", encoding="utf-8") as f:
         yaml.safe_dump(cfg.model_dump(), f)
 else:
-    cfg = PosauneConfig(**_config_data)
+    cfg = PosauneConfig(**_config_dict)
 
 # alle benannten Konfigurationen laden
 configs: dict[str, PosauneConfig] = {}
@@ -36,7 +36,7 @@ if cfg.vermächtnis is not None:
     cfg = inherited
 
 # lokale Datei nochmals als höchste Priorität anwenden
-update_config_recursively(cfg, _config_data or {})
+update_config_recursively(cfg, _config_dict or {})
 
 #======// App //=================================================================================//
 
@@ -74,9 +74,7 @@ def get_payload() -> dict[str]:
         else:
             vp_fallback = None # es gibt kein sinnvolles Fallback
             vpdaten = vpzugang.get(datei=Standardpfade.Klassen)
-            
-    print(vpdaten.klassen)
-            
+                        
     try:
         solardaten = solar.fetch_solar()
     except Exception as e:

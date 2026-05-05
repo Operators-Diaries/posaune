@@ -25,13 +25,14 @@ setInterval(updateDateTime, 1000);
 
 
 //=====// Auto-Scroller //=======================================================================//
-const container = document.getElementById("content-scroller");
-const scrollspeed = config.content.scrollspeed;
-const isDev = config.dev;
+((isDev) => {
+    const container = document.getElementById("content-scroller");
+    
+    if (isDev) { return }
 
-let isScrolling = true;
+    const scrollspeed = config.content.scrollspeed;
+    let isScrolling = true;
 
-if (!isDev) {
     setInterval(() => {
         if (!isScrolling) return;
 
@@ -46,11 +47,11 @@ if (!isDev) {
                 setTimeout(() => {
                     isScrolling = true;
                 }, 3000);
-
             }, 3000);
         }
     }, scrollspeed * 1000);
-}
+
+})(config.dev);
 
 //=====// Scroll-Fortschritt beim Reload wiederherstellen //=======================================//
 document.addEventListener("DOMContentLoaded", () => {
