@@ -1,6 +1,6 @@
 from pathlib import Path
 from flask import render_template
-from main import app, vp, cfg, Stundenplan24Pfade, get_payload
+from main import app, cfg, get_payload
 
 with app.app_context():
     try:
