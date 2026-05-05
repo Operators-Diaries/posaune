@@ -10,6 +10,7 @@ class Solardaten:
     # EnergieErtragJahrChart: str = None
 
 def fetch_solar():
+    "Kann raisen"
 
     response = requests.get("https://www.sunnyportal.com/Templates/PublicPage.aspx?page=4985fc6b-b3bb-40d6-9452-1a061cba4d48")
     

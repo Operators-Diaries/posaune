@@ -19,7 +19,7 @@ als WSGI-Application bereitgestellt.
 #### 📯 Konfiguration
 
 - `config.yml` enthält die Konfigurationsparameter mit der höchsten Priorität
-  - Kein Key muss vorhanden sein
+  - Kein Key *muss* vorhanden sein
   - Unbekannte Keys werden ignoriert
   - Der Parameter `vermächtnis` kann einen Bezeichner für eine andere Konfiguration enthalten, deren Werte übernommen werden, wenn sie nicht in der aktuellen Konfiguration definiert sind
 - `configurations.yaml` enthält benannte Konfigurationen

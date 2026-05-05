@@ -1,7 +1,7 @@
 from flask import Flask, render_template
-from vpmobil import Vertretungsplan, Stundenplan24Pfade
+from vpmobil import Vertretungsplan, Stundenplan24Pfade, KlassenVertretungsTag
 from pathlib import Path
-import yaml, json
+import yaml, json, datetime
 
 from lib.config import Config
 from lib.solar import fetch_solar
@@ -98,23 +98,31 @@ vp = Vertretungsplan(
     cfg.vertretungsplan.passwort
 )
 
+fallback: KlassenVertretungsTag | None = None
+
 @app.route('/')
 def index():
 
-    solardaten = fetch_solar()
-
     try:
+        solardaten = fetch_solar()
+        dvb = get_next_departures_by_line_and_direction()
+
         try:
             data = vp.fetch()
+            fallback = data
         except:
-            data = vp.fetch(datei=Stundenplan24Pfade.Klassen)
+            if fallback and fallback.datum == datetime.date.today():
+                data = fallback
+            else:
+                fallback = None # es gibt kein sinnvolles Fallback
+                data = vp.fetch(datei=Stundenplan24Pfade.Klassen)
 
         return render_template(
             'main.jinja',
             vp=data,
             cfg=cfg,
             sol=solardaten,
-            dvb=get_next_departures_by_line_and_direction()
+            dvb=dvb
         )
     
     except Exception as e:
