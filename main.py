@@ -36,7 +36,7 @@ if cfg.vermächtnis is not None:
     cfg = inherited
 
 # lokale Datei nochmals als höchste Priorität anwenden
-update_config_recursively(cfg, _config_data)
+update_config_recursively(cfg, _config_data or {})
 
 #======// App //=================================================================================//
 
