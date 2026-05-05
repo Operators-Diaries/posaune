@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-from vpmobil import Vertretungsplan, Stundenplan24Pfade, KlassenVertretungsTag
+from vpmobil import VertretungsplanZugang, Standardpfade, Vertretungsplan
 from pathlib import Path
 import yaml, json, datetime
 
@@ -49,13 +49,13 @@ app.jinja_env.globals |= dict(
     sorting_key_abfahrten = lambda s: (s[1]),
 )
 
-vpzugang = Vertretungsplan(
+vpzugang = VertretungsplanZugang(
     cfg.vertretungsplan.schulnummer,
     cfg.vertretungsplan.benutzer,
     cfg.vertretungsplan.passwort
 )
 
-vp_fallback: KlassenVertretungsTag | None = None
+vp_fallback: Vertretungsplan | None = None
 timestamp: datetime.datetime | None = None
 
 def get_payload() -> dict[str]:
@@ -65,7 +65,7 @@ def get_payload() -> dict[str]:
     global vp_fallback
 
     try:
-        vpdaten = vpzugang.fetch()
+        vpdaten = vpzugang.get()
         timestamp = datetime.datetime.now()
         vp_fallback = vpdaten
     except:
@@ -73,7 +73,9 @@ def get_payload() -> dict[str]:
             vpdaten = vp_fallback
         else:
             vp_fallback = None # es gibt kein sinnvolles Fallback
-            vpdaten = vpzugang.fetch(datei=Stundenplan24Pfade.Klassen)
+            vpdaten = vpzugang.get(datei=Standardpfade.Klassen)
+            
+    print(vpdaten.klassen)
             
     try:
         solardaten = solar.fetch_solar()
@@ -105,6 +107,7 @@ def index():
         )
     
     except Exception as e:
+        raise e
         return render_template(
             '404.jinja',
             cfg=cfg,

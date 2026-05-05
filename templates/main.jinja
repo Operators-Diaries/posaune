@@ -34,27 +34,27 @@
                 <div class="plan-wrapper">
                     {% for klasse in vp.klassen.values()
                         if klasse.kürzel in cfg.content.klassen
-                        and (not cfg.content.nuränderungen or (klasse.stunden.values() | sum(start=[]) | selectattr('geändert') | list | length > 0))
+                        and (not cfg.content.nuränderungen or (klasse.stunden.values() | sum(start=()) | selectattr('änderung') | list | length > 0))
                     %}
                         <div class="klasse">
                             <div class="klassenkürzel">{{ klasse.kürzel }}</div>
                             <div class="perioden-wrapper">
                                 {% for periode, stunden in klasse.stunden.items()
                                     if not cfg.content.nuränderungen
-                                    or (stunden | selectattr('geändert') | list | length > 0)
+                                    or (stunden | selectattr('änderung') | list | length > 0)
                                 %}
                                     <div class="periode">
                                         <div class="periode-zahl">{{ periode }}</div>
                                         <div class="stunden-wrapper">
-                                            {% for stunde in klasse.stunden[periode] if (not cfg.content.nuränderungen) or stunde.geändert %}
+                                            {% for stunde in klasse.stunden[periode] if (not cfg.content.nuränderungen) or stunde.änderung %}
                                                 <div class="stunde">
                                                     <div class="stunden-flr">
-                                                            <span class="fach {% if stunde.fachgeändert %}änderung{% endif %}">
+                                                            <span class="fach {% if stunde.fachänderung %}änderung{% endif %}">
                                                                 {{ (stunde.fach or (klasse.kurse[stunde.kursnummer].kürzel if stunde.kursnummer in klasse.kurse else '') or '').replace("Fördern", "Fö") }}
                                                             </span>
                                                         {% if not stunde.ausfall %}
-                                                            <span class="lehrer {% if stunde.lehrergeändert %}änderung{% endif %}">{{ ", ".join(stunde.lehrer)}}</span>
-                                                            <span class="raum {% if stunde.raumgeändert %}änderung{% endif %}">{{ ", ".join(stunde.räume) }}</span>
+                                                            <span class="lehrer {% if stunde.lehreränderung %}änderung{% endif %}">{{ ", ".join(stunde.lehrer)}}</span>
+                                                            <span class="raum {% if stunde.raumgänderung %}änderung{% endif %}">{{ ", ".join(stunde.räume) }}</span>
                                                         {% else %}
                                                             <span class="änderung">Ausfall</span>
                                                         {% endif %}
@@ -78,18 +78,18 @@
                         <div class="perioden-wrapper">
                             {% for periode, stunden in klasse.stunden.items()
                                 if not cfg.content.nuränderungen
-                                or (stunden | selectattr('geändert') | list | length > 0)
+                                or (stunden | selectattr('änderung') | list | length > 0)
                             %}
                             <div class="periode">
                                 <div class="periode-zahl">{{ periode }}</div>
                                 <div class="stunden-wrapper">
-                                    {% for stunde in csort(klasse.stunden[periode], 2, sorting_key_fächer) if (not cfg.content.nuränderungen) or stunde.geändert %}
+                                    {% for stunde in csort(klasse.stunden[periode], 2, sorting_key_fächer) if (not cfg.content.nuränderungen) or stunde.änderung %}
                                     <div class="stunde">
                                         <div class="stunden-flr">
-                                                <span class="fach{% if stunde.fachgeändert %} änderung{% endif %}">{{ stunde.fach or klasse.kurse[stunde.kursnummer].kürzel or ""}}</span>
+                                                <span class="fach{% if stunde.fachänderung %} änderung{% endif %}">{{ stunde.fach or klasse.kurse[stunde.kursnummer].kürzel or ""}}</span>
                                             {% if not stunde.ausfall %}
-                                                <span class="lehrer{% if stunde.lehrergeändert %} änderung{% endif %}">{{ ",".join(stunde.lehrer)}}</span>
-                                                <span class="raum{% if stunde.raumgeändert %} änderung{% endif %}">{{ ",".join(stunde.räume) }}</span>
+                                                <span class="lehrer{% if stunde.lehreränderung %} änderung{% endif %}">{{ ",".join(stunde.lehrer)}}</span>
+                                                <span class="raum{% if stunde.raumänderung %} änderung{% endif %}">{{ ",".join(stunde.räume) }}</span>
                                             {% else %}
                                                 <span class="änderung">Ausfall</span>
                                             {% endif %}
