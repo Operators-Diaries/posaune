@@ -3,7 +3,7 @@ from vpmobil import Vertretungsplan, Stundenplan24Pfade, KlassenVertretungsTag
 from pathlib import Path
 import yaml, json, datetime
 
-from lib.config import Config
+from lib.config import Config, load_yaml, resolve_inheritance, update_config_recursively
 from lib.solar import fetch_solar
 from lib.dvb import get_next_departures_by_line_and_direction
 from lib.sorter import csort
@@ -13,24 +13,6 @@ from lib.sorter import csort
 
 CONFIG_PATH = Path("config.yaml")
 CONFIGURATIONS_PATH = Path("configurations.yml")
-
-def update_config_recursively(target, source_dict):
-    """Recursively update config, handling nested BaseModels."""
-    for param, value in source_dict.items():
-        if hasattr(target, param):
-            target_attr = getattr(target, param)
-            if hasattr(target_attr, "model_dump") and isinstance(value, dict):
-                update_config_recursively(target_attr, value)
-            else:
-                setattr(target, param, value)
-        else:
-            setattr(target, param, value)
-
-def load_yaml(path: Path):
-    if not path.exists():
-        return None
-    with path.open(encoding="utf-8") as f:
-        return yaml.safe_load(f) or {}
 
 # lokale Konfiguration laden
 config_data = load_yaml(CONFIG_PATH)
@@ -47,35 +29,9 @@ configurations_data = load_yaml(CONFIGURATIONS_PATH) or {}
 for key, c in configurations_data.items():
     configs[key] = Config(**c)
 
-def resolve_inheritance(name: str) -> Config:
-    chain = []
-    seen = set()
-    current = name
-
-    while current is not None:
-        if current in seen:
-            raise Exception(f"Zirkuläre Vererbung erkannt bei '{current}'.")
-
-        seen.add(current)
-
-        if current not in configs:
-            raise Exception(f"Vermächtnis '{current}' nicht gefunden.")
-
-        cfg_part = configs[current]
-        chain.append((current, cfg_part))
-        current = cfg_part.vermächtnis
-
-    resolved = Config()
-
-    for name, part in reversed(chain):
-        print(f"Konfiguration wird von '{name}' geerbt.")
-        update_config_recursively(resolved, part.model_dump(exclude_unset=True))
-
-    return resolved
-
 # zuerst die Vererbungskette der lokalen config auflösen
 if cfg.vermächtnis is not None:
-    inherited = resolve_inheritance(cfg.vermächtnis)
+    inherited = resolve_inheritance(cfg.vermächtnis, configs)
     update_config_recursively(inherited, cfg.model_dump())
     cfg = inherited
 
@@ -102,6 +58,7 @@ fallback: KlassenVertretungsTag | None = None
 
 @app.route('/')
 def index():
+    global fallback
 
     try:
         solardaten = fetch_solar()

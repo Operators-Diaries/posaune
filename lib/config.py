@@ -1,5 +1,7 @@
 from pydantic_settings import BaseSettings
 from pydantic import BaseModel, ConfigDict
+from pathlib import Path
+import yaml
 
 class Config(BaseSettings):
     model_config = ConfigDict(
@@ -24,3 +26,47 @@ class Config(BaseSettings):
     content: Content = Content()
     vertretungsplan: Vertretungsplan = Vertretungsplan()
     updatecycle: float = 1
+
+def update_config_recursively(target, source_dict):
+    """Recursively update config, handling nested BaseModels."""
+    for param, value in source_dict.items():
+        if hasattr(target, param):
+            target_attr = getattr(target, param)
+            if hasattr(target_attr, "model_dump") and isinstance(value, dict):
+                update_config_recursively(target_attr, value)
+            else:
+                setattr(target, param, value)
+        else:
+            setattr(target, param, value)
+
+def load_yaml(path: Path):
+    if not path.exists():
+        return None
+    with path.open(encoding="utf-8") as f:
+        return yaml.safe_load(f) or {}
+
+def resolve_inheritance(name: str, configs: dict[str, Config]) -> Config:
+    chain = []
+    seen = set()
+    current = name
+
+    while current is not None:
+        if current in seen:
+            raise Exception(f"Zirkuläre Vererbung erkannt bei '{current}'.")
+
+        seen.add(current)
+
+        if current not in configs:
+            raise Exception(f"Vermächtnis '{current}' nicht gefunden.")
+
+        cfg_part = configs[current]
+        chain.append((current, cfg_part))
+        current = cfg_part.vermächtnis
+
+    resolved = Config()
+
+    for name, part in reversed(chain):
+        print(f"Konfiguration wird von '{name}' geerbt.")
+        update_config_recursively(resolved, part.model_dump(exclude_unset=True))
+
+    return resolved
