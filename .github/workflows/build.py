@@ -10,7 +10,8 @@ with app.app_context():
             html = render_template("main.jinja", **payload)
     
     except Exception as e:
-        html = render_template('404.jinja', cfg=cfg, e=e)
+        with app.test_request_context():
+            html = render_template('404.jinja', cfg=cfg, e=e)
 
     # GitHub Pages: absolute /static/... in relative static/... umwandeln
     html = html.replace('href="/static/', 'href="static/')
