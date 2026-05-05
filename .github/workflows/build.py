@@ -1,20 +1,16 @@
 from pathlib import Path
 from flask import render_template
-from main import app, vp, cfg, Stundenplan24Pfade, fetch_solar, get_next_departures_by_line_and_direction
+from main import app, vp, cfg, Stundenplan24Pfade, get_payload
 
 with app.app_context():
     try:
-        data = vp.fetch()
-    except:
-        data = vp.fetch(datei=Stundenplan24Pfade.Klassen)
+        payload = get_payload()
 
-    solardaten = fetch_solar()
-
-    # DEBUG
-    print(data.datum)
-
-    with app.test_request_context():
-        html = render_template("main.jinja", vp=data, cfg=cfg, sol=solardaten, dvb=get_next_departures_by_line_and_direction())
+        with app.test_request_context():
+            html = render_template("main.jinja", **payload)
+    
+    except Exception as e:
+        html = render_template('404.jinja', cfg=cfg, e=e)
 
     # GitHub Pages: absolute /static/... in relative static/... umwandeln
     html = html.replace('href="/static/', 'href="static/')
