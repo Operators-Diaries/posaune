@@ -3,9 +3,9 @@ from pydantic import BaseModel, ConfigDict
 from pathlib import Path
 import yaml
 
-class Config(BaseSettings):
+class PosauneConfig(BaseSettings):
     model_config = ConfigDict(
-        extra="ignore",
+        extra="allow", # Zusätzliche Felder sind dann einfach als Attribut verfügbar
     )
 
     class Vertretungsplan(BaseModel):
@@ -27,7 +27,7 @@ class Config(BaseSettings):
     vertretungsplan: Vertretungsplan = Vertretungsplan()
     updatecycle: float = 1
 
-def update_config_recursively(target, source_dict):
+def update_config_recursively(target: PosauneConfig, source_dict: dict):
     """Recursively update config, handling nested BaseModels."""
     for param, value in source_dict.items():
         if hasattr(target, param):
@@ -39,13 +39,13 @@ def update_config_recursively(target, source_dict):
         else:
             setattr(target, param, value)
 
-def load_yaml(path: Path):
+def load_yaml(path: Path) -> dict | list | None:
     if not path.exists():
         return None
     with path.open(encoding="utf-8") as f:
         return yaml.safe_load(f) or {}
 
-def resolve_inheritance(name: str, configs: dict[str, Config]) -> Config:
+def resolve_inheritance(name: str, configs: dict[str, PosauneConfig]) -> PosauneConfig:
     chain = []
     seen = set()
     current = name
@@ -63,7 +63,7 @@ def resolve_inheritance(name: str, configs: dict[str, Config]) -> Config:
         chain.append((current, cfg_part))
         current = cfg_part.vermächtnis
 
-    resolved = Config()
+    resolved = PosauneConfig()
 
     for name, part in reversed(chain):
         print(f"Konfiguration wird von '{name}' geerbt.")

@@ -44,7 +44,7 @@ def _fetch_departures(
     return resp.json()
 
 
-def get_next_departures_by_line_and_direction(
+def get_abfahrten(
     stop_names: list[str] = ["St. Benno Gymnasium", "Straßburger Platz", "Sachsenallee"],
     city: str = "Dresden",
     limit: int = 20,

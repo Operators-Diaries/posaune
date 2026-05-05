@@ -1,12 +1,12 @@
 from flask import Flask, render_template
 from vpmobil import Vertretungsplan, Stundenplan24Pfade, KlassenVertretungsTag
 from pathlib import Path
-import yaml, json, datetime, typing
+import yaml, json, datetime
 
-from lib.config import Config, load_yaml, resolve_inheritance, update_config_recursively
-from lib.solar import fetch_solar
-from lib.dvb import get_next_departures_by_line_and_direction
+from lib.config import PosauneConfig, load_yaml, resolve_inheritance, update_config_recursively
 from lib.sorter import csort
+from lib import solar
+from lib import dvb
 
 
 #======// Configuration //=======================================================================//
@@ -15,19 +15,19 @@ CONFIG_PATH = Path("config.yaml")
 CONFIGURATIONS_PATH = Path("configurations.yml")
 
 # lokale Konfiguration laden
-config_data = load_yaml(CONFIG_PATH)
-if not config_data:
-    cfg = Config()
+_config_data = load_yaml(CONFIG_PATH)
+if not _config_data:
+    cfg = PosauneConfig()
     with CONFIG_PATH.open("w", encoding="utf-8") as f:
         yaml.safe_dump(cfg.model_dump(), f)
 else:
-    cfg = Config(**config_data)
+    cfg = PosauneConfig(**_config_data)
 
 # alle benannten Konfigurationen laden
-configs: dict[str, Config] = {}
-configurations_data = load_yaml(CONFIGURATIONS_PATH) or {}
-for key, c in configurations_data.items():
-    configs[key] = Config(**c)
+configs: dict[str, PosauneConfig] = {}
+_configurations_data = load_yaml(CONFIGURATIONS_PATH) or {}
+for key, c in _configurations_data.items():
+    configs[key] = PosauneConfig(**c)
 
 # zuerst die Vererbungskette der lokalen config auflösen
 if cfg.vermächtnis is not None:
@@ -36,8 +36,7 @@ if cfg.vermächtnis is not None:
     cfg = inherited
 
 # lokale Datei nochmals als höchste Priorität anwenden
-config_dict = load_yaml(CONFIG_PATH) or {}
-update_config_recursively(cfg, config_dict)
+update_config_recursively(cfg, _config_data)
 
 #======// App //=================================================================================//
 
@@ -45,9 +44,9 @@ app = Flask(__name__)
 app.jinja_env.globals |= dict(
     type = type,
     json = json,
-    fach_sorting_key = lambda s: (s.fach is None, s.fach),  # None kommt ans Ende
-    abfahrt_sorting_key = lambda s: (s[1]),
-    csort = csort
+    csort = csort,
+    sorting_key_fächer = lambda s: (s.fach is None, s.fach),  # None kommt ans Ende
+    sorting_key_abfahrten = lambda s: (s[1]),
 )
 
 vpzugang = Vertretungsplan(
@@ -57,24 +56,17 @@ vpzugang = Vertretungsplan(
 )
 
 vp_fallback: KlassenVertretungsTag | None = None
+timestamp: datetime.datetime | None = None
 
-def get_payload() -> dict[str, typing.Any]:
+def get_payload() -> dict[str]:
     # In dieser Funktion wird das abrufen der Daten gesteuert und die entsprechenden Fehlermeldungen
     # konfiguriert. Exceptions sollen geraised werden. Sie werden in der App abgefangen.
+    
     global vp_fallback
 
     try:
-        solardaten = fetch_solar()
-    except Exception as e:
-        raise
-
-    try:
-        abfahrtsdaten = get_next_departures_by_line_and_direction()
-    except Exception as e:
-        raise e
-
-    try:
         vpdaten = vpzugang.fetch()
+        timestamp = datetime.datetime.now()
         vp_fallback = vpdaten
     except:
         if vp_fallback and vp_fallback.datum == datetime.date.today():
@@ -82,12 +74,23 @@ def get_payload() -> dict[str, typing.Any]:
         else:
             vp_fallback = None # es gibt kein sinnvolles Fallback
             vpdaten = vpzugang.fetch(datei=Stundenplan24Pfade.Klassen)
+            
+    try:
+        solardaten = solar.fetch_solar()
+    except Exception as e:
+        solardaten = solar.Solardaten()
+
+    try:
+        abfahrtsdaten = dvb.get_abfahrten()
+    except Exception as e:
+        abfahrtsdaten = {}
 
     return dict(
         vp = vpdaten,
         cfg = cfg,
         sol = solardaten,
-        dvb = abfahrtsdaten
+        dvb = abfahrtsdaten,
+        timestamp = timestamp
     )
 
 @app.route('/')

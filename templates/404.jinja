@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>404 - Page Not Found</title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    
+
     <title>Benno Vertretungsplan</title>
-    
+
     <script>
         setInterval(() => {
             location.reload();
@@ -23,38 +24,81 @@
             align-items: center;
             color: var(--secondary-text);
         }
-    
+
         #heading {
-            font-size: 40px;
+            font-size: 50px;
             font-weight: 800;
             color: var(--background-embed);
-            text-shadow: 2px 1px 1px rgba(0, 0, 0, 0.3), -2px -1px 1px rgba(255, 255, 255, 0.3);
+            text-shadow: 2px 1px 1px rgba(0, 0, 0, 0.3), -2px -1px 5px rgba(255, 255, 255, 0.97);
         }
-    
+
         #container {
             width: fit-content;
             min-width: 50vh;
-    
+
             height: fit-content;
             min-height: 15vh;
             padding: 30px 60px;
             background-color: var(--background-embed);
             box-shadow: inset 18px 18px 20px var(--shadow), inset -18px -18px 20px #ffffff;
             border-radius: 20px;
-    
+
             display: flex;
             flex-direction: column;
-    
+
             justify-content: center;
             align-items: center;
+        }
+
+        .debug {
+            margin-top: 15px;
+            font-size: 0.8em;
+            opacity: 0.7;
+            max-width: 70vh;
+            word-break: break-word;
+        }
+
+        .debug pre {
+            text-align: left;
+            white-space: pre-wrap;
+            margin: 5px 0;
         }
     </style>
 
 </head>
+
 <body>
     <div id="container">
         <h2 id="heading">{{ type(e).__name__ }}</h2>
         <p>{{ e }}</p>
+
+        <div class="debug">
+            {# {% if e.args %}
+            <strong>Args:</strong>
+            <pre>{{ e.args }}</pre>
+            {% endif %} #}
+
+            {% if e.__cause__ %}
+            <strong>Cause:</strong>
+            <pre>{{ e.__cause__ }}</pre>
+            {% endif %}
+
+            {% if e.__context__ %}
+            <strong>Context:</strong>
+            <pre>{{ e.__context__ }}</pre>
+            {% endif %}
+
+            {% if e.__traceback__ %}
+            <strong>Traceback (letzter Frame):</strong>
+            <pre>{{ e.__traceback__.tb_frame.f_code.co_filename }}:{{ e.__traceback__.tb_lineno }} in {{ e.__traceback__.tb_frame.f_code.co_name }}</pre>
+            {% endif %}
+
+            {% if e.__notes__ %}
+            <strong>Notes:</strong>
+            <pre>{{ e.__notes__ }}</pre>
+            {% endif %}
+        </div>
     </div>
 </body>
+
 </html>

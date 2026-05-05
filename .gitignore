@@ -1,5 +1,6 @@
 .vscode/settings.json
 .env
+.venv
 config.yaml
 configurations.yml
 **__pycache__**
