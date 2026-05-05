@@ -1,7 +1,7 @@
 from flask import Flask, render_template
 from vpmobil import Vertretungsplan, Stundenplan24Pfade, KlassenVertretungsTag
 from pathlib import Path
-import yaml, json, datetime
+import yaml, json, datetime, typing
 
 from lib.config import Config, load_yaml, resolve_inheritance, update_config_recursively
 from lib.solar import fetch_solar
@@ -42,44 +42,63 @@ update_config_recursively(cfg, config_dict)
 #======// App //=================================================================================//
 
 app = Flask(__name__)
-app.jinja_env.globals['type'] = type
-app.jinja_env.globals['json'] = json
-app.jinja_env.globals['fach_sorting_key'] = lambda s: (s.fach is None, s.fach)  # None kommt ans Ende
-app.jinja_env.globals['abfahrt_sorting_key'] = lambda s: (s[1])
-app.jinja_env.globals['csort'] = csort
+app.jinja_env.globals |= dict(
+    type = type,
+    json = json,
+    fach_sorting_key = lambda s: (s.fach is None, s.fach),  # None kommt ans Ende
+    abfahrt_sorting_key = lambda s: (s[1]),
+    csort = csort
+)
 
-vp = Vertretungsplan(
+vpzugang = Vertretungsplan(
     cfg.vertretungsplan.schulnummer,
     cfg.vertretungsplan.benutzer,
     cfg.vertretungsplan.passwort
 )
 
-fallback: KlassenVertretungsTag | None = None
+vp_fallback: KlassenVertretungsTag | None = None
 
-@app.route('/')
-def index():
-    global fallback
+def get_payload() -> dict[str, typing.Any]:
+    # In dieser Funktion wird das abrufen der Daten gesteuert und die entsprechenden Fehlermeldungen
+    # konfiguriert. Exceptions sollen geraised werden. Sie werden in der App abgefangen.
+    global vp_fallback
 
     try:
         solardaten = fetch_solar()
-        dvb = get_next_departures_by_line_and_direction()
+    except Exception as e:
+        raise
 
-        try:
-            data = vp.fetch()
-            fallback = data
-        except:
-            if fallback and fallback.datum == datetime.date.today():
-                data = fallback
-            else:
-                fallback = None # es gibt kein sinnvolles Fallback
-                data = vp.fetch(datei=Stundenplan24Pfade.Klassen)
+    try:
+        abfahrtsdaten = get_next_departures_by_line_and_direction()
+    except Exception as e:
+        raise e
+
+    try:
+        vpdaten = vpzugang.fetch()
+        vp_fallback = vpdaten
+    except:
+        if vp_fallback and vp_fallback.datum == datetime.date.today():
+            vpdaten = vp_fallback
+        else:
+            vp_fallback = None # es gibt kein sinnvolles Fallback
+            vpdaten = vpzugang.fetch(datei=Stundenplan24Pfade.Klassen)
+
+    return dict(
+        vp = vpdaten,
+        cfg = cfg,
+        sol = solardaten,
+        dvb = abfahrtsdaten
+    )
+
+@app.route('/')
+def index():
+
+    try:
+        payload = get_payload()
 
         return render_template(
             'main.jinja',
-            vp=data,
-            cfg=cfg,
-            sol=solardaten,
-            dvb=dvb
+            **payload
         )
     
     except Exception as e:
