@@ -2,6 +2,16 @@
 
 set -e
 
+fehler() {
+    printf "\e[1;37;41m FEHLER \e[0m %s\n" "$1" 
+}
+head() {
+    printf "\e[1;38;2;255;255;255;48;2;0;191;255m %s \e[0m\n" "$1" 
+}
+info() {
+    printf "\e[1;37;42m INFO \e[0m %s\n" "$1" 
+}
+
 mkdir -p posaune
 
 cd posaune
@@ -9,7 +19,7 @@ cd posaune
 
 #======// Installationen sicherstellen //==================================================//
 
-echo "=== Prüfe Installationen ==="
+head "Prüfe Installationen"
 
 if command -v python3 &> /dev/null && command -v git &> /dev/null && python3 -m pip --version &> /dev/null && python3 -m venv --version &> /dev/null && command -v chromium &> /dev/null; then
     echo "Python: $(python3 --version)"
@@ -18,8 +28,7 @@ if command -v python3 &> /dev/null && command -v git &> /dev/null && python3 -m 
     echo "Venv: $(python3 -m venv --version)"
     echo "Chromium: $(chromium --version)"
 else
-    echo "Mindestens eine Installation fehlt"
-    echo "=== Prüfe Paketmanager ==="
+    info "Mindestens eine Installation fehlt"
 
     if command -v apt &> /dev/null; then
         sudo apt update
@@ -32,7 +41,7 @@ else
         sudo pacman -Sy --noconfirm python python-pip git python3-venv chromium
 
     else
-        echo "Kein unterstützter Paketmanager gefunden"
+        fehler "Kein unterstützter Paketmanager gefunden. Bitte installiere apt, dnf oder pacman."
         exit 1
     fi
 
@@ -41,7 +50,7 @@ fi
 
 #======// Repository klonen //=====================================================================//
 
-echo "=== Repository herunterladen ==="
+head "Repository herunterladen"
 
 REPO_URL="https://github.com/Operators-Diaries/posaune.git"
 
@@ -51,7 +60,7 @@ git clone "$REPO_URL" .
 
 #======// Environment //==========================================================================//
 
-echo "=== Virtual Environment erstellen ==="
+head "Virtual Environment erstellen"
 
 python3 -m venv venv
 
