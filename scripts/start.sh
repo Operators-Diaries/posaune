@@ -18,7 +18,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 POSAUNE_DIR="$(dirname "$SCRIPT_DIR")"
 
 cd "$POSAUNE_DIR"
-echo "Arbeitsverzeichnis: $PWD"
+info "Arbeitsverzeichnis: $PWD"
 
 
 #======// Repository pullen //=====================================================================//
@@ -39,7 +39,7 @@ git pull
 
 # venv überprüfen
 if [ ! -d "venv" ] || [ ! -f "venv/bin/activate" ]; then
-    fehler "Das Virtual Environmentt fehlt oder ist fehlerhaft. Bitte installiere Posaune erneut"
+    fehler "Das Virtual Environment fehlt oder ist fehlerhaft. Bitte installiere Posaune erneut"
     exit 1
 fi
 
