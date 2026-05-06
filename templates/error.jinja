@@ -1,8 +1,8 @@
-<div id="container">
-    <h2 id="heading">{{ type(e).__name__ }}</h2>
+<div id="error">
+    <h2>{{ type(e).__name__ }}</h2>
     <p>{{ e }}</p>
 
-    <div class="debug">
+    <div id="debug">
         {# {% if e.args %}
         <strong>Args:</strong>
         <pre>{{ e.args }}</pre>

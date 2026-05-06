@@ -59,7 +59,6 @@ vp_fallback: Vertretungsplan | None = None
 timestamp: datetime.datetime | None = None
 
 
-
 @app.route('/')
 def index():
     global vp_fallback
@@ -84,7 +83,7 @@ def index():
     
     except Exception as e:
         return render_template(
-            '404.jinja',
+            'error.jinja',
             cfg=cfg,
             e=e
         )
@@ -104,7 +103,7 @@ def get_plan():
             else:
                 vp_fallback = None # es gibt kein sinnvolles Fallback
                 vpdaten = vpzugang.get(datei=Standardpfade.Klassen)
-
+        
         return render_template(
             'plan.jinja',
             timestamp=timestamp,
@@ -114,7 +113,7 @@ def get_plan():
             
     except Exception as e:
         return render_template(
-            '404.jinja',
+            'error.jinja',
             cfg=cfg,
             e=e
         )
@@ -136,7 +135,7 @@ def get_dvb():
             
     except Exception as e:
         return render_template(
-            '404.jinja',
+            'error.jinja',
             cfg=cfg,
             e=e
         )
@@ -158,7 +157,7 @@ def get_solar():
             
     except Exception as e:
         return render_template(
-            '404.jinja',
+            'error.jinja',
             cfg=cfg,
             e=e
         )

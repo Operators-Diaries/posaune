@@ -45,15 +45,15 @@
                     <span id="time"></span>
                     <span id="date"></span>
                 </div>
-                <div id="solardaten" class="sidebar-content-section">
+                <div class="sidebar-section">
                     <div class="sidebar-section-header">Solaranlage</div>
-                    <div hx-get="/solar" hx-trigger="load, every 1m" hx-swap="innerHTML">
+                    <div class="sidebar-section-content" hx-get="/solar" hx-trigger="load, every 60m" hx-swap="innerHTML">
                         Lade ...
                     </div>
                 </div>
-                <div id="abfahrten" class="sidebar-content-section">
+                <div class="sidebar-section">
                     <div class="sidebar-section-header">Abfahrten</div>
-                    <div class="haltestellen-wrapper" hx-get="/dvb" hx-trigger="load, every 1m" hx-swap="innerHTML">
+                    <div class="sidebar-section-content" hx-get="/dvb" hx-trigger="load, every 1m" hx-swap="innerHTML">
                         Lade ...
                     </div>
                 </div>
@@ -64,9 +64,6 @@
         </div>
     
     </div>
-    {# <div hx-get="/data" hx-trigger="load, every 1m" hx-swap="innerHTML">
-        Lade Daten... 
-    </div> #}
 
 <script src="{{ url_for('static', filename='main.js') }}"></script>
 

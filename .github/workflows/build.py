@@ -1,13 +1,21 @@
 from pathlib import Path
 from flask import render_template
-from main import app, cfg, get_payload
+from main import app, cfg, vpzugang
+import datetime
+from vpmobil import Standardpfade
 
 with app.app_context():
     try:
-        payload = get_payload()
+        try:
+            vpdaten = vpzugang.get()
+            timestamp = datetime.datetime.now()
+            vp_fallback = vpdaten
+        except:
+            vp_fallback = None # es gibt kein sinnvolles Fallback
+            vpdaten = vpzugang.get(datei=Standardpfade.Klassen)
 
         with app.test_request_context():
-            html = render_template("main.jinja", **payload)
+            html = render_template("main.jinja", vp=vpdaten)
     
     except Exception as e:
         with app.test_request_context():
