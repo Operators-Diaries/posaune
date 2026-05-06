@@ -1,20 +1,17 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    {# <link rel="stylesheet" href="{{ url_for('static', filename='overlay.css') }}"> #}
-    
     <title>Benno Vertretungsplan</title>
     <link href="https://www.benno-gymnasium.de/favicon.ico" rel="icon">
 
-    <script src="https://unpkg.com/htmx.org@1.9.12"></script>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    
     <script>
         window.cfg = JSON.parse(`{{ json.dumps(cfg.model_dump()) | safe }}`);
     </script>
-
+    <script src="https://unpkg.com/htmx.org@1.9.12"></script>
 </head>
 <body>
     <div id="header-section">
@@ -25,7 +22,9 @@
         </div>
     </div>
 
-    <div hx-get="/data" hx-trigger="load, every 1m" hx-swap="innerHTML"> Lade Daten... </div>
+    <div hx-get="/data" hx-trigger="load, every 1m" hx-swap="innerHTML">
+        Lade Daten... 
+    </div>
 
 <script src="{{ url_for('static', filename='main.js') }}"></script>
 
