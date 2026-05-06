@@ -1,0 +1,15 @@
+{% for haltestelle, details in dvb.items() %}
+<div class="haltestelle-wrapper">
+    <p class="haltestelle">{{ haltestelle }}</p>
+    <div class="abfahrten-wrapper">
+        {% for linie, eta in csort(details.items(), 2, sorting_key_abfahrten) if not
+        linie[1].upper().startswith("FÄL") and linie[0] != "X" %}
+        <div class="abfahrt">
+            <span>{{ linie[0] }}</span>
+            <span>{{ linie[1][:3].upper() }}</span>
+            <span>{{ eta }}</span>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endfor %}

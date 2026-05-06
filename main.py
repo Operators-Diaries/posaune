@@ -58,50 +58,28 @@ vpzugang = VertretungsplanZugang(
 vp_fallback: Vertretungsplan | None = None
 timestamp: datetime.datetime | None = None
 
-def get_payload() -> dict[str]:
-    # In dieser Funktion wird das abrufen der Daten gesteuert und die entsprechenden Fehlermeldungen
-    # konfiguriert. Exceptions sollen geraised werden. Sie werden in der App abgefangen.
-    
-    global vp_fallback
 
-    try:
-        vpdaten = vpzugang.get()
-        timestamp = datetime.datetime.now()
-        vp_fallback = vpdaten
-    except:
-        if vp_fallback and vp_fallback.datum == datetime.date.today():
-            vpdaten = vp_fallback
-        else:
-            vp_fallback = None # es gibt kein sinnvolles Fallback
-            vpdaten = vpzugang.get(datei=Standardpfade.Klassen)
-                        
-    try:
-        solardaten = solar.fetch_solar()
-    except Exception as e:
-        solardaten = solar.Solardaten()
-
-    try:
-        abfahrtsdaten = dvb.get_abfahrten()
-    except Exception as e:
-        abfahrtsdaten = {}
-
-    return dict(
-        vp = vpdaten,
-        cfg = cfg,
-        sol = solardaten,
-        dvb = abfahrtsdaten,
-        timestamp = timestamp
-    )
 
 @app.route('/')
 def index():
+    global vp_fallback
 
     try:
-        payload = get_payload()
+        try:
+            vpdaten = vpzugang.get()
+            timestamp = datetime.datetime.now()
+            vp_fallback = vpdaten
+        except:
+            if vp_fallback and vp_fallback.datum == datetime.date.today():
+                vpdaten = vp_fallback
+            else:
+                vp_fallback = None # es gibt kein sinnvolles Fallback
+                vpdaten = vpzugang.get(datei=Standardpfade.Klassen)
 
         return render_template(
             'main.jinja',
-            **payload
+            cfg=cfg,
+            vp=vpdaten
         )
     
     except Exception as e:
@@ -111,17 +89,73 @@ def index():
             e=e
         )
 
-@app.route('/data')
-def data():
+@app.route('/plan')
+def get_plan():
+    global vp_fallback
 
     try:
-        payload = get_payload()
+        try:
+            vpdaten = vpzugang.get()
+            timestamp = datetime.datetime.now()
+            vp_fallback = vpdaten
+        except:
+            if vp_fallback and vp_fallback.datum == datetime.date.today():
+                vpdaten = vp_fallback
+            else:
+                vp_fallback = None # es gibt kein sinnvolles Fallback
+                vpdaten = vpzugang.get(datei=Standardpfade.Klassen)
 
         return render_template(
-            'content.jinja',
-            **payload
+            'plan.jinja',
+            timestamp=timestamp,
+            cfg=cfg,
+            vp=vpdaten
         )
+            
+    except Exception as e:
+        return render_template(
+            '404.jinja',
+            cfg=cfg,
+            e=e
+        )
+
+@app.route('/dvb')
+def get_dvb():
     
+    try:
+        
+        try:
+            abfahrtsdaten = dvb.get_abfahrten()
+        except Exception as e:
+            abfahrtsdaten = {}
+            
+        return render_template(
+            'dvb.jinja',
+            dvb=abfahrtsdaten
+        )
+            
+    except Exception as e:
+        return render_template(
+            '404.jinja',
+            cfg=cfg,
+            e=e
+        )
+        
+@app.route('/solar')
+def get_solar():
+    
+    try:
+        
+        try:
+            solardaten = solar.fetch_solar()
+        except Exception as e:
+            solardaten = solar.Solardaten()
+            
+        return render_template(
+            'sol.jinja',
+            sol=solardaten
+        )
+            
     except Exception as e:
         return render_template(
             '404.jinja',

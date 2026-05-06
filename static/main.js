@@ -21,7 +21,7 @@ function updateDateTime() {
 }
 
 updateDateTime();
-setInterval(updateDateTime, 1000);
+setInterval(updateDateTime, 10000);
 
 
 //=====// Auto-Scroller //=======================================================================//
@@ -52,23 +52,6 @@ setInterval(updateDateTime, 1000);
     }, scrollspeed * 1000);
 
 })(config.dev);
-
-//=====// Scroll-Fortschritt beim Reload wiederherstellen //=======================================//
-document.addEventListener("DOMContentLoaded", () => {
-    const box = document.getElementById("content-scroller");
-    if (!box) return; 
-
-    const saved = localStorage.getItem("scrollPos");
-    if (saved !== null) {
-        setTimeout(() => {
-            box.scrollTop = parseInt(saved, 10);
-        }, 0);
-    }
-
-    window.addEventListener("pagehide", () => {
-        localStorage.setItem("scrollPos", box.scrollTop);
-    });
-});
 
 
 //=====// Ticker //==============================================================================//
