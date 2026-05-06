@@ -105,7 +105,24 @@ def index():
         )
     
     except Exception as e:
-        raise e
+        return render_template(
+            '404.jinja',
+            cfg=cfg,
+            e=e
+        )
+
+@app.route('/data')
+def data():
+
+    try:
+        payload = get_payload()
+
+        return render_template(
+            'content.jinja',
+            **payload
+        )
+    
+    except Exception as e:
         return render_template(
             '404.jinja',
             cfg=cfg,
