@@ -6,7 +6,7 @@ fehler() {
     printf "\e[1;37;41m FEHLER \e[0m %s\n" "$1" 
 }
 head() {
-    printf "\e[1;38;2;255;255;255;48;2;0;191;255m %s \e[0m\n" "$1" 
+    printf "\n\e[1;38;2;255;255;255;48;2;0;191;255m %s \e[0m\n" "$1" 
 }
 info() {
     printf "\e[1;37;42m INFO \e[0m %s\n" "$1" 
@@ -15,6 +15,11 @@ info() {
 mkdir -p posaune
 
 cd posaune
+
+
+# Locale erzeugen
+sudo locale-gen de_DE.UTF-8
+sudo update-locale
 
 
 #======// Installationen sicherstellen //==================================================//

@@ -56,19 +56,18 @@ vpzugang = VertretungsplanZugang(
     cfg.vertretungsplan.passwort
 )
 
-error = lambda e: render_template('components/error.jinja', cfg=cfg.frontend, e=e)
+
+
+#======// Hauptroute //==================================//
 
 @app.route('/')
 def index():
-    global vp_fallback
 
     try:
-
         return render_template(
             'main.jinja',
             cfg=cfg.frontend,
         )
-    
     except Exception as e:
         raise e
 
@@ -77,6 +76,7 @@ def index():
 
 vp_fallback: Vertretungsplan | None = None
 timestamp: datetime.datetime | None = None
+error = lambda e: render_template('components/error.jinja', cfg=cfg.frontend, e=e)
 
 @app.route('/plan')
 def get_plan():

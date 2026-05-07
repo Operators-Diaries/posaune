@@ -28,10 +28,8 @@ als WSGI-Application bereitgestellt.
 
 #### 📯 Aktualisierung
 
-Die Daten können momentan auschließlich durch eine neue Anfrage aktualisiert werden,
-deswegen lädt die Seite in regelmäßigen Abständen automatisch neu.
+*veraltet*
 
 #### 📯 Fehlerbehandlung
 
-Wenn ein serverseitiger Fehler auftritt, wird eine Platzhalter-Seite gerendert aus
-ausgeliefert, die lediglich den Typ des Fehlers und dessen Nachricht anzeigt.
+*veraltet*

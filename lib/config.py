@@ -24,7 +24,7 @@ class PosauneConfig(BaseSettings):
         sidebar: bool = True
 
     frontend: Frontend = Frontend()
-    vermächtnis: str | None = None
+    vermächtnis: str | None = None # DIESER PARAMETER SOLLTE NICHT VERÄNDERT WERDEN, DAMIT FERNKONFIGURATION MÖGLICH BLEIBT
     vertretungsplan: Vertretungsplan = Vertretungsplan()
     
 
