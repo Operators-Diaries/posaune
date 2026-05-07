@@ -37,9 +37,9 @@ function initAutoScroller(root = document) {
     if (container.dataset.autoscrollerInit === '1') return;
     container.dataset.autoscrollerInit = '1';
 
-    if (config.dev) return;
+    if (!config.autoscroll) return;
 
-    const scrollspeed = config.content?.scrollspeed ?? 1;
+    const scrollspeed = config.scrollspeed ?? 1;
     let isScrolling = true;
 
     setInterval(() => {

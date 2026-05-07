@@ -20,7 +20,7 @@ _config_dict = load_yaml(CONFIG_PATH)
 if not _config_dict:
     cfg = PosauneConfig()
     with CONFIG_PATH.open("w", encoding="utf-8") as f:
-        yaml.safe_dump(cfg.model_dump(), f)
+        yaml.safe_dump(cfg.model_dump(), f, allow_unicode=True)
 else:
     cfg = PosauneConfig(**_config_dict)
 
@@ -56,7 +56,7 @@ vpzugang = VertretungsplanZugang(
     cfg.vertretungsplan.passwort
 )
 
-error = lambda e: render_template('components/error.jinja', cfg=cfg, e=e)
+error = lambda e: render_template('components/error.jinja', cfg=cfg.frontend, e=e)
 
 @app.route('/')
 def index():
@@ -66,10 +66,12 @@ def index():
 
         return render_template(
             'main.jinja',
-            cfg=cfg,        )
+            cfg=cfg.frontend,
+        )
     
     except Exception as e:
-        return error(e)
+        raise e
+
 
 #======// Komponenten //=================================//
 
@@ -91,16 +93,17 @@ def get_plan():
             else:
                 vp_fallback = None # es gibt kein sinnvolles Fallback
                 vpdaten = vpzugang.get(datei=Standardpfade.Klassen)
-        
+                
+        # vpdaten = vpzugang.get(datetime.date(2026, 5, 14)) # DEBUG
         return render_template(
             'components/plan.jinja',
             timestamp=timestamp,
-            cfg=cfg,
+            cfg=cfg.frontend,
             vp=vpdaten
         )
             
     except Exception as e:
-        return error(e)
+        return render_template('components/error.jinja', cfg=cfg.frontend, e=e)
 
 @app.route('/dvb')
 def get_dvb():

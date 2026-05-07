@@ -19,27 +19,28 @@
     <div id="header-section">
         <div class="ticker-wrapper">
             <div class="ticker">
-                {{ "  +++  ".join(cfg.content.ticker) }}
+                {{ "  +++  ".join(cfg.ticker) }}
             </div>
         </div>
     </div>
 
     <div id="content-section">
         
-        <div id="plan-section" hx-get="/plan" hx-trigger="load, every 1m" hx-swap="none">
+        <div id="plan-section" hx-get="/plan" hx-trigger="load, every {{ cfg.updatecycle }}m" hx-target="#plan-content" hx-swap="innerHTML">
+        {# Falls die Elemente nicht gefunden werden, wird die Response durch hx-target vollständig in #content-scroller gegeben #}
         
             <div id="content-scroller">
-                <div id="plan-content">Daten...</div>
+                <div id="plan-content" style="height: 100%; display: flex; align-items: center; justify-content: center; ">Daten...</div>
                 {# Hier lädt HTMX den Inhalt von components/plan.jinja#plan-content #}
             </div>
         
             <div id="footer-section">
-                <div id="footer-content">Daten...</div>
+                <div id="footer-content">{# wir lassen hier einfach leer, denn man sieht ja im Plan, wie es mit dem Laden aussieht #}</div>
                 {# Hier lädt HTMX den Inhalt von components/plan.jinja#footer-content #}
             </div>
         </div>
         
-        <div id="sidebar-section" {% if not cfg.content.sidebar %}style="display: none;" {% endif %}>
+        <div id="sidebar-section" {% if not cfg.sidebar %}style="display: none;" {% endif %}>
             <div class="sidebar-container" style="background-image: url('{{ url_for('static', filename='logo.svg') }}') ">
                 <div id="clock">
                     <span id="time"></span>

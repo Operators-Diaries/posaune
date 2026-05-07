@@ -1,22 +1,22 @@
-<div id="plan-content" hx-swap-oob="true">
+<div hx-swap-oob="true" id="plan-content">
     {# Unter- & Mittelstufe #}
     <div class="plan-wrapper">
-        {% for kürzel in cfg.content.klassen %}
+        {% for kürzel in cfg.klassen %}
             {% for klasse in vp.klassen.values()
                 if klasse.kürzel == kürzel
-                and (not cfg.content.nuränderungen or (klasse.stunden.values() | sum(start=()) | selectattr('änderung') | list | length > 0))
+                and (not cfg.nuränderungen or (klasse.stunden.values() | sum(start=()) | selectattr('änderung') | list | length > 0))
             %}
             <div class="klasse">
                 <div class="klassenkürzel">{{ klasse.kürzel }}</div>
                 <div class="perioden-wrapper">
                     {% for periode, stunden in klasse.stunden.items()
-                    if not cfg.content.nuränderungen
+                    if not cfg.nuränderungen
                     or (stunden | selectattr('änderung') | list | length > 0)
                     %}
                     <div class="periode">
                         <div class="periode-zahl">{{ periode }}</div>
                         <div class="stunden-wrapper">
-                            {% for stunde in klasse.stunden[periode] if (not cfg.content.nuränderungen) or
+                            {% for stunde in klasse.stunden[periode] if (not cfg.nuränderungen) or
                             stunde.änderung %}
                             <div class="stunde">
                                 <div class="stunden-flr">
@@ -49,19 +49,19 @@
 
     {# Oberstufe #}
     <div class="plan-wrapper detailed">
-        {% for klasse in vp.klassen.values() if klasse.kürzel in cfg.content.klassendetailiert %}
+        {% for klasse in vp.klassen.values() if klasse.kürzel in cfg.klassendetailiert %}
         <div class="klasse">
             <div class="klassenkürzel">{{ klasse.kürzel }}</div>
             <div class="perioden-wrapper">
                 {% for periode, stunden in klasse.stunden.items()
-                if not cfg.content.nuränderungen
+                if not cfg.nuränderungen
                 or (stunden | selectattr('änderung') | list | length > 0)
                 %}
                 <div class="periode">
                     <div class="periode-zahl">{{ periode }}</div>
                     <div class="stunden-wrapper">
                         {% for stunde in csort(klasse.stunden[periode], 2, sorting_key_fächer) if (not
-                        cfg.content.nuränderungen) or stunde.änderung %}
+                        cfg.nuränderungen) or stunde.änderung %}
                         <div class="stunde">
                             <div class="stunden-flr">
                                 <span class="fach{% if stunde.fachänderung %} änderung{% endif %}">{{
@@ -90,7 +90,8 @@
         %} abgerufen am {{ timestamp.strftime("%d.%m.%Y") }} um {{ timestamp.strftime("%H:%M") }}{% endif %}
     </div>
 </div>
-<div id="footer-content" hx-swap-oob="true">
+
+<div hx-swap-oob="true" id="footer-content">
     <div class="ticker-wrapper">
         <div class="ticker">
             {{ (vp.zusatzInfo or "").replace('\n', ' +++ ').replace('\r\n', ' +++ ') }}

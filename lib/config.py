@@ -5,27 +5,28 @@ import yaml
 
 class PosauneConfig(BaseSettings):
     model_config = ConfigDict(
-        extra="allow", # Zusätzliche Felder sind dann einfach als Attribut verfügbar
+        extra="allow", # Zusätzliche Felder sind dann einfach als Attribut verfügbar, aber nur auf oberster Ebene ist das erlaubt.
     )
 
     class Vertretungsplan(BaseModel):
         schulnummer: int = 10000000
         benutzer: str = "schueler"
         passwort: str = "password"
-
-    class Content(BaseModel):
+        
+    class Frontend(BaseModel):
+        updatecycle: float = 1 # Minuten
         ticker: list[str] = ["Alternative für die VpMobil24 App jetzt auf vertretungsapp.de!"]
         klassen: list[str] = ["5a", "5b", "5c", "6a", "6b", "6c", "7a", "7b", "7c", "8a", "8b", "8c", "9a", "9b", "9c", "10a", "10b", "10c"]
         klassendetailiert: list[str] = ["11", "12"]
-        nuränderungen: bool = False
+        nuränderungen: bool = True
+        autoscroll: bool = True
         scrollspeed: float = 0.02
         sidebar: bool = True
 
+    frontend: Frontend = Frontend()
     vermächtnis: str | None = None
-    dev: bool = False
-    content: Content = Content()
     vertretungsplan: Vertretungsplan = Vertretungsplan()
-    updatecycle: float = 1
+    
 
 def update_config_recursively(target: PosauneConfig, source_dict: dict):
     """Recursively update config, handling nested BaseModels."""
@@ -46,7 +47,7 @@ def load_yaml(path: Path) -> dict | list | None:
         return yaml.safe_load(f) or {}
 
 def resolve_inheritance(name: str, configs: dict[str, PosauneConfig]) -> PosauneConfig:
-    chain = []
+    chain: list[tuple[str, PosauneConfig]] = []
     seen = set()
     current = name
 
