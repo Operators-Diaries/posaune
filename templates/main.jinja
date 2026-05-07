@@ -26,12 +26,16 @@
 
     <div id="content-section">
         
-        <div id="plan-section">
-            <div id="content-scroller" hx-get="/plan" hx-trigger="load, every 1m" hx-swap="innerHTML" hx-select="#plan-content">
-                Lade Daten...
+        <div id="plan-section" hx-get="/plan" hx-trigger="load, every 1m" hx-swap="none">
+        
+            <div id="content-scroller">
+                <div id="plan-content">Daten...</div>
+                {# Hier lädt HTMX den Inhalt von components/plan.jinja#plan-content #}
             </div>
-            <div id="footer-section" hx-get="/plan" hx-trigger="load, every 1m" hx-swap="innerHTML" hx-select="#footer-content">
-                Lade Daten...
+        
+            <div id="footer-section">
+                <div id="footer-content">Daten...</div>
+                {# Hier lädt HTMX den Inhalt von components/plan.jinja#footer-content #}
             </div>
         </div>
         
@@ -45,12 +49,14 @@
                     <div class="sidebar-section-header">Solaranlage</div>
                     <div class="sidebar-section-content" hx-get="/solar" hx-trigger="load, every 60m" hx-swap="innerHTML">
                         Lade ...
+                        {# Hier lädt HTMX components/solar.jinja #}
                     </div>
                 </div>
                 <div class="sidebar-section">
                     <div class="sidebar-section-header">Abfahrten</div>
                     <div class="sidebar-section-content" hx-get="/dvb" hx-trigger="load, every 1m" hx-swap="innerHTML">
                         Lade ...
+                        {# Hier lädt HTMX components/dvb.jinja #}
                     </div>
                 </div>
             </div>

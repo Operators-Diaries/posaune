@@ -1,4 +1,4 @@
-<div id="plan-content">
+<div id="plan-content" hx-swap-oob="true">
     {# Unter- & Mittelstufe #}
     <div class="plan-wrapper">
         {% for kürzel in cfg.content.klassen %}
@@ -90,7 +90,7 @@
         %} abgerufen am {{ timestamp.strftime("%d.%m.%Y") }} um {{ timestamp.strftime("%H:%M") }}{% endif %}
     </div>
 </div>
-<div id="footer-content">
+<div id="footer-content" hx-swap-oob="true">
     <div class="ticker-wrapper">
         <div class="ticker">
             {{ (vp.zusatzInfo or "").replace('\n', ' +++ ').replace('\r\n', ' +++ ') }}

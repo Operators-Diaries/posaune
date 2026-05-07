@@ -56,10 +56,6 @@ vpzugang = VertretungsplanZugang(
     cfg.vertretungsplan.passwort
 )
 
-vp_fallback: Vertretungsplan | None = None
-timestamp: datetime.datetime | None = None
-
-
 error = lambda e: render_template('components/error.jinja', cfg=cfg, e=e)
 
 @app.route('/')
@@ -73,7 +69,12 @@ def index():
             cfg=cfg,        )
     
     except Exception as e:
-        error(e)
+        return error(e)
+
+#======// Komponenten //=================================//
+
+vp_fallback: Vertretungsplan | None = None
+timestamp: datetime.datetime | None = None
 
 @app.route('/plan')
 def get_plan():
@@ -99,7 +100,7 @@ def get_plan():
         )
             
     except Exception as e:
-        error(e)
+        return error(e)
 
 @app.route('/dvb')
 def get_dvb():
@@ -117,7 +118,7 @@ def get_dvb():
         )
             
     except Exception as e:
-        error(e)
+        return error(e)
         
 @app.route('/solar')
 def get_solar():
@@ -135,7 +136,7 @@ def get_solar():
         )
             
     except Exception as e:
-        error(e)
+        return error(e)
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -6,16 +6,9 @@ from vpmobil import Standardpfade
 
 with app.app_context():
     try:
-        try:
-            vpdaten = vpzugang.get()
-            timestamp = datetime.datetime.now()
-            vp_fallback = vpdaten
-        except:
-            vp_fallback = None # es gibt kein sinnvolles Fallback
-            vpdaten = vpzugang.get(datei=Standardpfade.Klassen)
 
         with app.test_request_context():
-            html = render_template("main.jinja", vp=vpdaten)
+            html = render_template("main.jinja", cfg=cfg)
     
     except Exception as e:
         with app.test_request_context():
