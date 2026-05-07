@@ -1,13 +1,14 @@
 from flask import Flask, render_template
 from vpmobil import VertretungsplanZugang, Standardpfade, Vertretungsplan
 from pathlib import Path
-import yaml, json, datetime
+import yaml, json, datetime, locale
 
 from lib.config import PosauneConfig, load_yaml, resolve_inheritance, update_config_recursively
 from lib.sorter import csort
 from lib import solar
 from lib import dvb
 
+locale.setlocale(locale.LC_TIME, "de_DE.UTF-8")
 
 #======// Configuration //=======================================================================//
 
@@ -59,34 +60,20 @@ vp_fallback: Vertretungsplan | None = None
 timestamp: datetime.datetime | None = None
 
 
+error = lambda e: render_template('components/error.jinja', cfg=cfg, e=e)
+
 @app.route('/')
 def index():
     global vp_fallback
 
     try:
-        try:
-            vpdaten = vpzugang.get()
-            timestamp = datetime.datetime.now()
-            vp_fallback = vpdaten
-        except:
-            if vp_fallback and vp_fallback.datum == datetime.date.today():
-                vpdaten = vp_fallback
-            else:
-                vp_fallback = None # es gibt kein sinnvolles Fallback
-                vpdaten = vpzugang.get(datei=Standardpfade.Klassen)
 
         return render_template(
             'main.jinja',
-            cfg=cfg,
-            vp=vpdaten
-        )
+            cfg=cfg,        )
     
     except Exception as e:
-        return render_template(
-            'error.jinja',
-            cfg=cfg,
-            e=e
-        )
+        error(e)
 
 @app.route('/plan')
 def get_plan():
@@ -105,18 +92,14 @@ def get_plan():
                 vpdaten = vpzugang.get(datei=Standardpfade.Klassen)
         
         return render_template(
-            'plan.jinja',
+            'components/plan.jinja',
             timestamp=timestamp,
             cfg=cfg,
             vp=vpdaten
         )
             
     except Exception as e:
-        return render_template(
-            'error.jinja',
-            cfg=cfg,
-            e=e
-        )
+        error(e)
 
 @app.route('/dvb')
 def get_dvb():
@@ -129,16 +112,12 @@ def get_dvb():
             abfahrtsdaten = {}
             
         return render_template(
-            'dvb.jinja',
+            'components/dvb.jinja',
             dvb=abfahrtsdaten
         )
             
     except Exception as e:
-        return render_template(
-            'error.jinja',
-            cfg=cfg,
-            e=e
-        )
+        error(e)
         
 @app.route('/solar')
 def get_solar():
@@ -151,16 +130,12 @@ def get_solar():
             solardaten = solar.Solardaten()
             
         return render_template(
-            'sol.jinja',
+            'components/sol.jinja',
             sol=solardaten
         )
             
     except Exception as e:
-        return render_template(
-            'error.jinja',
-            cfg=cfg,
-            e=e
-        )
+        error(e)
 
 if __name__ == "__main__":
     app.run(debug=True)
