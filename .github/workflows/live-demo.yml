@@ -18,6 +18,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb wget
+          sudo apt-get install -y nodejs npm
+
+      - name: Install Playwright
+        run: |
+          npm init -y >/dev/null 2>&1
+          npm install playwright >/dev/null 2>&1
+          npx playwright install --with-deps chromium
+
       - name: Install via remote script
         run: |
           curl -fsSL https://raw.githubusercontent.com/Operators-Diaries/posaune/main/scripts/install.sh -o install.sh
@@ -39,23 +51,27 @@ jobs:
           echo "Website did not become available in time"
           exit 1
 
-      - name: Mirror site into snapshot
+      - name: Render HTMX state and save snapshot
         run: |
-          mkdir -p snapshot/raw snapshot/public
+          mkdir -p snapshot/public
 
-          wget \
-            --mirror \
-            --convert-links \
-            --adjust-extension \
-            --page-requisites \
-            --no-parent \
-            --directory-prefix=snapshot/raw \
-            http://127.0.0.1:5000/
+          cat > render.mjs <<'EOF'
+          import { chromium } from 'playwright';
+          import fs from 'node:fs/promises';
 
-          SITE_DIR="$(find snapshot/raw -mindepth 1 -maxdepth 1 -type d | head -n 1)"
-          test -n "$SITE_DIR"
+          const browser = await chromium.launch({ headless: true });
+          const page = await browser.newPage();
 
-          cp -a "$SITE_DIR"/. snapshot/public/
+          await page.goto('http://127.0.0.1:5000/', { waitUntil: 'networkidle' });
+          await page.waitForTimeout(1000);
+
+          await fs.writeFile('snapshot/public/index.html', await page.content());
+          await page.screenshot({ path: 'snapshot/public/page.png', fullPage: true });
+
+          await browser.close();
+          EOF
+
+          node render.mjs
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
