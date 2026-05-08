@@ -1,51 +1,80 @@
 name: Deploy Live Demo
 
 on:
-    push:
-        branches: [ main ]
-    workflow_dispatch:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 permissions:
-    contents: read
-    pages: write
-    id-token: write
+  contents: read
+
+concurrency:
+  group: pages-snapshot
+  cancel-in-progress: true
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
+  build-snapshot:
+    runs-on: ubuntu-latest
 
-        steps:
-            - name: Repository auschecken
-              uses: actions/checkout@v4
+    steps:
+      - name: Install via remote script
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/Operators-Diaries/posaune/main/scripts/install.sh -o install.sh
+          chmod +x install.sh
+          ./install.sh
 
-            - name: Python installieren
-              uses: actions/setup-python@v5
-              with:
-                python-version: '3.13'  
-            - name: Abhängigkeiten installieren
-              run: |
-                pip install -r requirements.txt
+      - name: Wait for local website
+        run: |
+          for i in {1..30}; do
+            if curl -fsS http://127.0.0.1:8080/ >/dev/null; then
+              echo "Website is live"
+              exit 0
+            fi
 
-            - name: Build-Ordner erstellen
-              run: mkdir -p build
+            echo "Waiting for website..."
+            sleep 5
+          done
 
-            - name: Flask Seite rendern
-              run: |
-                PYTHONPATH=$GITHUB_WORKSPACE python .github/workflows/build.py
+          echo "Website did not become available in time"
+          exit 1
 
-            - name: Statische Dateien kopieren
-              run: |
-                cp -r static build/
+      - name: Mirror site into snapshot
+        run: |
+          mkdir -p snapshot/raw snapshot/public
 
-            - name: Pages Artifact hochladen
-              uses: actions/upload-pages-artifact@v3
-              with:
-                path: build
+          wget \
+            --mirror \
+            --convert-links \
+            --adjust-extension \
+            --page-requisites \
+            --no-parent \
+            --directory-prefix=snapshot/raw \
+            http://127.0.0.1:8080/
 
-    deploy:
-        needs: build
-        runs-on: ubuntu-latest
+          SITE_DIR="$(find snapshot/raw -mindepth 1 -maxdepth 1 -type d | head -n 1)"
+          test -n "$SITE_DIR"
 
-        steps:
-            - name: GitHub Pages deployen
-              uses: actions/deploy-pages@v4
+          cp -a "$SITE_DIR"/. snapshot/public/
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: snapshot/public
+
+  deploy:
+    needs: build-snapshot
+    runs-on: ubuntu-latest
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
