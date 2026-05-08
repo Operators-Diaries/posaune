@@ -45,9 +45,18 @@ jobs:
           npm install playwright
           npx playwright install chromium --with-deps
 
-      - name: Mirror site into snapshot (with JS rendering)
+      - name: Mirror site into snapshot
         run: |
+          # 1. Ordnerstruktur vorbereiten
           mkdir -p snapshot/public
+
+          # 2. Den statischen Content aus deinem Projekt kopieren
+          # Ich nehme an, der Ordner heißt "static" im Hauptverzeichnis
+          if [ -d "static" ]; then
+            cp -r static snapshot/public/
+          fi
+
+          # 3. Playwright Script ausführen (für das dynamische HTML)
           cat << 'EOF' > capture.js
           const { chromium } = require('playwright');
           const fs = require('fs');
@@ -56,18 +65,21 @@ jobs:
             const browser = await chromium.launch();
             const page = await browser.newPage();
             
-            // Gehe zur lokalen Seite
             await page.goto('http://127.0.0.1:5000/');
-            
-            // Warte, bis keine Netzwerkaktivität mehr stattfindet (HTMX fertig geladen)
             await page.waitForLoadState('networkidle');
-            
-            // Optional: Ein kurzer Puffer, falls HTMX-Trigger verzögert sind
             await page.waitForTimeout(1000);
 
-            const content = await page.content();
-            fs.writeFileSync('snapshot/public/index.html', content);
+            // Holen des gerenderten HTML (inkl. HTMX-Inhalt)
+            let content = await page.content();
             
+            // WICHTIGER FIX: Falls die Seite in einem Unterordner auf GitHub Pages liegt,
+            // müssen wir absolute Pfade (/static/...) in relative (static/...) umwandeln.
+            // Wenn deine Seite direkt unter der Hauptdomain läuft, kannst du das lassen, 
+            // aber es schadet meistens nicht:
+            content = content.replace(/href="\/static\//g, 'href="static/');
+            content = content.replace(/src="\/static\//g, 'src="static/');
+
+            fs.writeFileSync('snapshot/public/index.html', content);
             await browser.close();
           })();
           EOF
