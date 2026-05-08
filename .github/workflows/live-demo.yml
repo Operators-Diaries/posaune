@@ -18,21 +18,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y xvfb wget
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Install Playwright
-        run: |
-          npm init -y >/dev/null 2>&1
-          npm install playwright >/dev/null 2>&1
-          npx playwright install --with-deps chromium
-
       - name: Install via remote script
         run: |
           curl -fsSL https://raw.githubusercontent.com/Operators-Diaries/posaune/main/scripts/install.sh -o install.sh
@@ -44,8 +29,10 @@ jobs:
           for i in {1..30}; do
             if curl -fsS http://127.0.0.1:5000/ >/dev/null; then
               echo "Website is live"
+              sleep 5
               exit 0
             fi
+
             echo "Waiting for website..."
             sleep 5
           done
@@ -53,66 +40,42 @@ jobs:
           echo "Website did not become available in time"
           exit 1
 
-      - name: Mirror local assets
+      - name: Install Playwright
+        run: npm install playwright
+
+      - name: Mirror site into snapshot (with JS rendering)
         run: |
           mkdir -p snapshot/public
-          wget \
-            --mirror \
-            --page-requisites \
-            --convert-links \
-            --adjust-extension \
-            --no-parent \
-            --no-host-directories \
-            --directory-prefix=snapshot/public \
-            http://127.0.0.1:5000/
+          cat << 'EOF' > capture.js
+          const { chromium } = require('playwright');
+          const fs = require('fs');
 
-      - name: Render final HTMX DOM
-        run: |
-          cat > render.mjs <<'EOF'
-          import { chromium } from 'playwright';
-          import fs from 'node:fs/promises';
+          (async () => {
+            const browser = await chromium.launch();
+            const page = await browser.newPage();
+            
+            // Gehe zur lokalen Seite
+            await page.goto('http://127.0.0.1:5000/');
+            
+            // Warte, bis keine Netzwerkaktivität mehr stattfindet (HTMX fertig geladen)
+            await page.waitForLoadState('networkidle');
+            
+            // Optional: Ein kurzer Puffer, falls HTMX-Trigger verzögert sind
+            await page.waitForTimeout(1000);
 
-          const browser = await chromium.launch({ headless: true });
-          const page = await browser.newPage();
-
-          await page.addInitScript(() => {
-            window.__htmxPending = 0;
-            window.__htmxLastChange = Date.now();
-
-            const mark = () => {
-              window.__htmxLastChange = Date.now();
-            };
-
-            document.addEventListener('htmx:beforeRequest', () => {
-              window.__htmxPending += 1;
-              mark();
-            });
-
-            document.addEventListener('htmx:afterRequest', () => {
-              window.__htmxPending = Math.max(0, window.__htmxPending - 1);
-              mark();
-            });
-
-            document.addEventListener('htmx:afterSwap', mark);
-            document.addEventListener('htmx:afterSettle', mark);
-          });
-
-          await page.goto('http://127.0.0.1:5000/', { waitUntil: 'domcontentloaded' });
-
-          await page.waitForFunction(() => {
-            return window.__htmxPending === 0 && (Date.now() - window.__htmxLastChange) > 5000;
-          }, null, { timeout: 120000 });
-
-          await fs.writeFile('snapshot/public/index.html', await page.content());
-          await browser.close();
+            const content = await page.content();
+            fs.writeFileSync('snapshot/public/index.html', content);
+            
+            await browser.close();
+          })();
           EOF
-
-          node render.mjs
+          node capture.js
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: snapshot/public
+
 
   deploy:
     needs: build-snapshot
