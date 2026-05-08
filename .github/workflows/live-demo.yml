@@ -22,7 +22,10 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y xvfb wget
-          sudo apt-get install -y nodejs npm
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
 
       - name: Install Playwright
         run: |
@@ -43,7 +46,6 @@ jobs:
               echo "Website is live"
               exit 0
             fi
-
             echo "Waiting for website..."
             sleep 5
           done
@@ -51,10 +53,21 @@ jobs:
           echo "Website did not become available in time"
           exit 1
 
-      - name: Render HTMX state and save snapshot
+      - name: Mirror local assets
         run: |
           mkdir -p snapshot/public
+          wget \
+            --mirror \
+            --page-requisites \
+            --convert-links \
+            --adjust-extension \
+            --no-parent \
+            --no-host-directories \
+            --directory-prefix=snapshot/public \
+            http://127.0.0.1:5000/
 
+      - name: Render HTMX state into index.html
+        run: |
           cat > render.mjs <<'EOF'
           import { chromium } from 'playwright';
           import fs from 'node:fs/promises';
@@ -66,8 +79,6 @@ jobs:
           await page.waitForTimeout(1000);
 
           await fs.writeFile('snapshot/public/index.html', await page.content());
-          await page.screenshot({ path: 'snapshot/public/page.png', fullPage: true });
-
           await browser.close();
           EOF
 
