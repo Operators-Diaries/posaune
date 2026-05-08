@@ -22,12 +22,12 @@ jobs:
         run: |
           curl -fsSL https://raw.githubusercontent.com/Operators-Diaries/posaune/main/scripts/install.sh -o install.sh
           chmod +x install.sh
-          ./install.sh
+          nohup xvfb-run --auto-servernum ./install.sh > app.log 2>&1 &
 
       - name: Wait for local website
         run: |
           for i in {1..30}; do
-            if curl -fsS http://127.0.0.1:8080/ >/dev/null; then
+            if curl -fsS http://127.0.0.1:5000/ >/dev/null; then
               echo "Website is live"
               exit 0
             fi
@@ -50,7 +50,7 @@ jobs:
             --page-requisites \
             --no-parent \
             --directory-prefix=snapshot/raw \
-            http://127.0.0.1:8080/
+            http://127.0.0.1:5000/
 
           SITE_DIR="$(find snapshot/raw -mindepth 1 -maxdepth 1 -type d | head -n 1)"
           test -n "$SITE_DIR"
