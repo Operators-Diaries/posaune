@@ -34,7 +34,7 @@ jobs:
             fi
 
             echo "Waiting for website..."
-            sleep 5
+            sleep 10
           done
 
           echo "Website did not become available in time"
@@ -84,6 +84,16 @@ jobs:
           })();
           EOF
           node capture.js
+
+      - name: Debug Output (Folder Structure)
+        run: |
+          echo "--- STATISTIK DES RESULT-ORDNERS ---"
+          if [ -d "snapshot/public" ]; then
+            find snapshot/public -maxdepth 3 -not -path '*/.*'
+          else
+            echo "Ordner snapshot/public existiert nicht!"
+          fi
+          echo "------------------------------------"
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
