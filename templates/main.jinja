@@ -2,10 +2,11 @@
 <html lang="de">
 <head>
     <title>Benno Vertretungsplan</title>
-    <link href="https://www.benno-gymnasium.de/favicon.ico" rel="icon">
+    <link rel="icon" href="https://www.benno-gymnasium.de/favicon.ico">
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     
     <script>
@@ -42,7 +43,8 @@
             </div>
         </div>
         
-        <div id="sidebar-section" {% if not cfg.sidebar %}style="display: none;" {% endif %}>
+        {% if cfg.sidebar %}
+        <div id="sidebar-section" style="display: none;">
             <div class="sidebar-container" style="background-image: url('{{ url_for('static', filename='logo.svg') }}') ">
                 <div id="clock">
                     <span id="time"></span>
@@ -67,6 +69,7 @@
                 <p>&copy github.com/annhilati</p>
             </div>
         </div>
+        {% endif %}
     
     </div>
 
