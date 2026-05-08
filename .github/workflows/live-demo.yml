@@ -18,21 +18,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y xvfb wget
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Install Playwright
-        run: |
-          npm init -y >/dev/null 2>&1
-          npm install playwright >/dev/null 2>&1
-          npx playwright install --with-deps chromium
-
       - name: Install via remote script
         run: |
           curl -fsSL https://raw.githubusercontent.com/Operators-Diaries/posaune/main/scripts/install.sh -o install.sh
@@ -44,8 +29,10 @@ jobs:
           for i in {1..30}; do
             if curl -fsS http://127.0.0.1:5000/ >/dev/null; then
               echo "Website is live"
+              sleep 5
               exit 0
             fi
+
             echo "Waiting for website..."
             sleep 5
           done
@@ -53,55 +40,23 @@ jobs:
           echo "Website did not become available in time"
           exit 1
 
-      - name: Mirror local assets
+      - name: Mirror site into snapshot
         run: |
-          mkdir -p snapshot/public
+          mkdir -p snapshot/raw snapshot/public
+
           wget \
             --mirror \
-            --page-requisites \
             --convert-links \
             --adjust-extension \
+            --page-requisites \
             --no-parent \
-            --no-host-directories \
-            --directory-prefix=snapshot/public \
+            --directory-prefix=snapshot/raw \
             http://127.0.0.1:5000/
 
-      - name: Render HTMX state into index.html
-        run: |
-          cat > render.mjs <<'EOF'
-          import { chromium } from 'playwright';
-          import fs from 'node:fs/promises';
+          SITE_DIR="$(find snapshot/raw -mindepth 1 -maxdepth 1 -type d | head -n 1)"
+          test -n "$SITE_DIR"
 
-          const REPO = process.env.GITHUB_REPOSITORY.split('/')[1];
-          const BASE = `/${REPO}/`;
-
-          const browser = await chromium.launch({ headless: true });
-          const page = await browser.newPage();
-
-          await page.goto('http://127.0.0.1:5000/', {
-            waitUntil: 'networkidle'
-          });
-
-          await page.waitForTimeout(1000);
-
-          let html = await page.content();
-
-          if (html.includes('<head>')) {
-            html = html.replace(
-              '<head>',
-              `<head><base href="${BASE}">`
-            );
-          }
-
-          await fs.writeFile(
-            'snapshot/public/index.html',
-            html
-          );
-
-          await browser.close();
-          EOF
-
-          node render.mjs
+          cp -a "$SITE_DIR"/. snapshot/public/
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
