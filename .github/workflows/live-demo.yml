@@ -72,13 +72,32 @@ jobs:
           import { chromium } from 'playwright';
           import fs from 'node:fs/promises';
 
+          const REPO = process.env.GITHUB_REPOSITORY.split('/')[1];
+          const BASE = `/${REPO}/`;
+
           const browser = await chromium.launch({ headless: true });
           const page = await browser.newPage();
 
-          await page.goto('http://127.0.0.1:5000/', { waitUntil: 'networkidle' });
+          await page.goto('http://127.0.0.1:5000/', {
+            waitUntil: 'networkidle'
+          });
+
           await page.waitForTimeout(1000);
 
-          await fs.writeFile('snapshot/public/index.html', await page.content());
+          let html = await page.content();
+
+          if (html.includes('<head>')) {
+            html = html.replace(
+              '<head>',
+              `<head><base href="${BASE}">`
+            );
+          }
+
+          await fs.writeFile(
+            'snapshot/public/index.html',
+            html
+          );
+
           await browser.close();
           EOF
 
