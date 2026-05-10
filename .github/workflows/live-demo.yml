@@ -27,11 +27,13 @@ jobs:
 
       - name: Install Playwright and Browser
         run: |
+          # Wait for any background apt processes to finish
+          sudo fuser -v /var/lib/apt/lists/lock >/dev/null 2>&1 || true
           while sudo fuser /var/lib/apt/lists/lock >/dev/null 2>&1; do
-            echo "Waiting for apt lock..."
+            echo "Waiting for other apt process to finish..."
             sleep 5
           done
-
+          
           npm install playwright
           npx playwright install chromium --with-deps
 
