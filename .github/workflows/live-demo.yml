@@ -22,8 +22,7 @@ jobs:
         run: |
           curl -fsSL https://raw.githubusercontent.com/Operators-Diaries/posaune/main/scripts/install.sh -o install.sh
           chmod +x install.sh
-          # Wir führen das Skript aus. Es wird wahrscheinlich einen Unterordner erstellen.
-          nohup xvfb-run --auto-servernum ./install.sh > app.log 2>&1 &
+          xvfb-run --auto-servernum ./install.sh
 
       - name: Install Playwright and Browser
         run: |
