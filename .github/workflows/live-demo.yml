@@ -22,10 +22,16 @@ jobs:
         run: |
           curl -fsSL https://raw.githubusercontent.com/Operators-Diaries/posaune/main/scripts/install.sh -o install.sh
           chmod +x install.sh
-          xvfb-run --auto-servernum ./install.sh
+          # Wir führen das Skript aus. Es wird wahrscheinlich einen Unterordner erstellen.
+          nohup xvfb-run --auto-servernum ./install.sh > app.log 2>&1 &
 
       - name: Install Playwright and Browser
         run: |
+          while sudo fuser /var/lib/apt/lists/lock >/dev/null 2>&1; do
+            echo "Waiting for apt lock..."
+            sleep 5
+          done
+
           npm install playwright
           npx playwright install chromium --with-deps
 
