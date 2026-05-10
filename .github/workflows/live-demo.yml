@@ -14,18 +14,18 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-snapshot:
+  snapshot:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Install via remote script
+      - name: Installationsskript starten
         run: |
           curl -fsSL https://raw.githubusercontent.com/Operators-Diaries/posaune/main/scripts/install.sh -o install.sh
           chmod +x install.sh
           # Wir führen das Skript aus. Es wird wahrscheinlich einen Unterordner erstellen.
           nohup xvfb-run --auto-servernum ./install.sh > app.log 2>&1 &
 
-      - name: Wait for local website
+      - name: Auf Seite warten
         run: |
           for i in {1..30}; do
             if curl -fsS http://127.0.0.1:5000/ >/dev/null; then
@@ -39,12 +39,12 @@ jobs:
           echo "Website did not become available in time"
           exit 1
 
-      - name: Install Playwright and Browser
+      - name: Playwright installieren
         run: |
           npm install playwright
           npx playwright install chromium --with-deps
 
-      - name: Mirror site into snapshot
+      - name: Snapshot der Seite erstellen
         run: |
           mkdir -p snapshot/public
 
@@ -84,7 +84,7 @@ jobs:
           EOF
           node capture.js
 
-      - name: Debug Output (Folder Structure)
+      - name: Debug
         run: |
           echo "--- STATISTIK DES RESULT-ORDNERS ---"
           find snapshot/public -maxdepth 3 -not -path '*/.*'
@@ -96,7 +96,7 @@ jobs:
           path: snapshot/public
 
   deploy:
-    needs: build-snapshot
+    needs: snapshot
     runs-on: ubuntu-latest
     permissions:
       pages: write
