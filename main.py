@@ -81,6 +81,7 @@ error = lambda e: render_template('components/error.jinja', cfg=cfg.frontend, e=
 @app.route('/plan')
 def get_plan():
     global vp_fallback
+    global timestamp
 
     try:
         try:
