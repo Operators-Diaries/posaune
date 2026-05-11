@@ -5,6 +5,12 @@
 <p align="center">
     <a href="https://operators-diaries.github.io/posaune/">Live-Demo</a> - 
     <a href="https://github.com/operators-diaries/posaune?tab=contributing-ov-file">Erläuterung</a>
+    <br><br>
+    <a href="#"><img alt="Static Badge" src="https://img.shields.io/badge/Flask-x?style=for-the-badge&logo=python&logoColor=ffffff&labelColor=4c75a9&color=161926"></a>
+    <!-- <a href="#"><img alt="Static Badge" src="https://img.shields.io/badge/Python-x?style=for-the-badge&logo=python&logoColor=ffffff&color=4c75a9"></a> -->
+    <a href="#"><img alt="Static Badge" src="https://img.shields.io/badge/Jinja-x?style=for-the-badge&logo=jinja&logoColor=ffffff&labelColor=a52a22&color=161926"></a>
+    <a href="#"><img alt="Static Badge" src="https://img.shields.io/badge/Browser%20JS-x?style=for-the-badge&logo=javascript&logoColor=000000&labelColor=f1df40&color=161926"></a>
+    <a href="#"><img alt="Static Badge" src="https://img.shields.io/badge/HTMX-x?style=for-the-badge&logo=htmx&logoColor=000000&labelColor=f1df40&color=161926"></a>
 </p>
 
 

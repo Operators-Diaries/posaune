@@ -78,14 +78,12 @@ jobs:
 
             const html = await page.content();
 
-            html = html.replace(
-              /(src|href)="\/(?!\/)/g,
-              '$1="'
-            );
-
             fs.writeFileSync(
               'snapshot/127.0.0.1:5000/index.html',
-              html
+              html.replace(
+                /(src|href)="\/(?!\/)/g,
+                '$1="'
+              );
             );
 
             await browser.close();
