@@ -83,7 +83,7 @@ jobs:
               html.replace(
                 /(src|href)="\/(?!\/)/g,
                 '$1="'
-              );
+              )
             );
 
             await browser.close();
