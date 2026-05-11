@@ -46,59 +46,48 @@ jobs:
           npm install --no-save playwright
           npx playwright install chromium --with-deps
 
-      - name: Snapshot der Seite erstellen
+      - name: Seite spiegeln
         run: |
-          mkdir -p snapshot/public
+          mkdir -p snapshot
 
+          wget \
+            --mirror \
+            --convert-links \
+            --adjust-extension \
+            --page-requisites \
+            --no-parent \
+            --directory-prefix=snapshot \
+            http://127.0.0.1:5000/
+
+      - name: HTMX Snapshot rendern
+        run: |
           cat << 'EOF' > capture.js
           const { chromium } = require('playwright');
           const fs = require('fs');
 
           (async () => {
-            const browser = await chromium.launch({ headless: true });
-            const page = await browser.newPage({
-              viewport: { width: 1440, height: 1600 }
-            });
+            const browser = await chromium.launch();
+            const page = await browser.newPage();
 
             await page.goto('http://127.0.0.1:5000/', {
-              waitUntil: 'domcontentloaded',
-              timeout: 60000
+              waitUntil: 'networkidle'
             });
 
-            // Netzwerk beruhigen lassen; bei HTMX lieber zusätzlich einen festen Puffer
-            try {
-              await page.waitForLoadState('networkidle', { timeout: 15000 });
-            } catch (_) {}
-
+            // HTMX fertig laden lassen
             await page.waitForTimeout(5000);
 
-            // Optional: Wenn du ein zuverlässiges "fertig geladen"-Element hast,
-            // hier eintragen und in der Aktion per env setzen.
-            const loadedSelector = process.env.LOADED_SELECTOR;
-            if (loadedSelector) {
-              await page.waitForSelector(loadedSelector, { timeout: 30000 });
-            }
+            const html = await page.content();
 
-            let content = await page.content();
+            fs.writeFileSync(
+              'snapshot/127.0.0.1:5000/index.html',
+              html
+            );
 
-            // Nur die häufigsten Root-Referenzen für lokale Pages anpassen.
-            content = content
-              .replace(/(src|href)="\/static\//g, '$1="static/')
-              .replace(/url\("\/static\//g, 'url("static/')
-              .replace(/url\('\/static\//g, "url('static/")
-              .replace(/url\(\s*\/static\//g, 'url(static/');
-
-            fs.writeFileSync('snapshot/public/index.html', content);
             await browser.close();
-          })().catch(err => {
-            console.error(err);
-            process.exit(1);
-          });
+          })();
           EOF
 
           node capture.js
-        env:
-          LOADED_SELECTOR: ""
 
       - name: Debug
         run: |
