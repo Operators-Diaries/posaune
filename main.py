@@ -3,10 +3,10 @@ from vpmobil import VertretungsplanZugang, Standardpfade, Vertretungsplan
 from pathlib import Path
 import yaml, json, datetime, locale
 
-from lib.config import PosauneConfig, load_yaml, resolve_inheritance, update_config_recursively
-from lib.sorter import csort
-from lib import solar
-from lib import dvb
+from src.lib.config import PosauneConfig, load_yaml, resolve_inheritance, update_config_recursively
+from src.lib.sorter import csort
+from src.lib import solar
+from src.lib import dvb
 
 locale.setlocale(locale.LC_TIME, "de_DE.UTF-8")
 
@@ -41,7 +41,11 @@ update_config_recursively(cfg, _config_dict or {})
 
 #======// App //=================================================================================//
 
-app = Flask(__name__)
+app = Flask(
+    __name__,
+    static_folder="src",
+    template_folder="src"
+)
 app.jinja_env.globals |= dict(
     type = type,
     json = json,
