@@ -80,10 +80,11 @@ jobs:
 
             fs.writeFileSync(
               'snapshot/127.0.0.1:5000/index.html',
-              html.replace(
-                /(src|href)="\/(?!\/)/g,
-                '$1="'
-              )
+              html
+              .replace(/(src|href)="\/(?!\/)/g, '$1="')
+              .replace(/url\(\s*'\/(?!\/)/g, "url('")
+              .replace(/url\(\s*"\/(?!\/)/g, 'url("')
+              .replace(/url\(\s*\/(?!\/)/g, 'url(')
             );
 
             await browser.close();
