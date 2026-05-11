@@ -48,13 +48,13 @@ jobs:
         run: |
           mkdir -p snapshot/public
 
-          # FIX: Suche dynamisch nach dem static-Ordner, egal wo das Skript ihn abgelegt hat
-          STATIC_DIR=$(find . -name "static" -type d -not -path "*/.*" | head -n 1)
+          # FIX: Suche dynamisch nach dem src-Ordner, egal wo das Skript ihn abgelegt hat
+          STATIC_DIR=$(find . -name "src" -type d -not -path "*/.*" | head -n 1)
           if [ -n "$STATIC_DIR" ]; then
-            echo "Gefundener static-Ordner: $STATIC_DIR"
+            echo "Gefundener src-Ordner: $STATIC_DIR"
             cp -r "$STATIC_DIR" snapshot/public/
           else
-            echo "WARNUNG: Kein static-Ordner gefunden!"
+            echo "WARNUNG: Kein src-Ordner gefunden!"
           fi
 
           # Playwright Script für dynamisches HTML

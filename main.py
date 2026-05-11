@@ -4,9 +4,9 @@ from pathlib import Path
 import yaml, json, datetime, locale
 
 from src.lib.config import PosauneConfig, load_yaml, resolve_inheritance, update_config_recursively
-from src.lib.sorter import csort
+from src.lib.sorting import csort
 from src.lib import solar
-from src.lib import dvb
+from src.lib import öpnv
 
 locale.setlocale(locale.LC_TIME, "de_DE.UTF-8")
 
@@ -18,11 +18,11 @@ CONFIGURATIONS_PATH = Path("configurations.yml")
 # lokale Konfiguration laden
 _config_dict = load_yaml(CONFIG_PATH)
 if not _config_dict:
-    cfg = PosauneConfig()
+    config = PosauneConfig()
     with CONFIG_PATH.open("w", encoding="utf-8") as f:
-        yaml.safe_dump(cfg.model_dump(), f, allow_unicode=True)
+        yaml.safe_dump(config.model_dump(), f, allow_unicode=True)
 else:
-    cfg = PosauneConfig(**_config_dict)
+    config = PosauneConfig(**_config_dict)
 
 # alle benannten Konfigurationen laden
 configs: dict[str, PosauneConfig] = {}
@@ -31,13 +31,13 @@ for key, c in _configurations_data.items():
     configs[key] = PosauneConfig(**c)
 
 # zuerst die Vererbungskette der lokalen config auflösen
-if cfg.vermächtnis is not None:
-    inherited = resolve_inheritance(cfg.vermächtnis, configs)
-    update_config_recursively(inherited, cfg.model_dump())
-    cfg = inherited
+if config.vermächtnis is not None:
+    inherited = resolve_inheritance(config.vermächtnis, configs)
+    update_config_recursively(inherited, config.model_dump())
+    config = inherited
 
 # lokale Datei nochmals als höchste Priorität anwenden
-update_config_recursively(cfg, _config_dict or {})
+update_config_recursively(config, _config_dict or {})
 
 #======// App //=================================================================================//
 
@@ -55,9 +55,9 @@ app.jinja_env.globals |= dict(
 )
 
 vpzugang = VertretungsplanZugang(
-    cfg.vertretungsplan.schulnummer,
-    cfg.vertretungsplan.benutzer,
-    cfg.vertretungsplan.passwort
+    config.vertretungsplan.schulnummer,
+    config.vertretungsplan.benutzer,
+    config.vertretungsplan.passwort
 )
 
 
@@ -70,7 +70,7 @@ def index():
     try:
         return render_template(
             'main.jinja',
-            cfg=cfg.frontend,
+            cfg=config.frontend,
         )
     except Exception as e:
         raise e
@@ -80,7 +80,7 @@ def index():
 
 vp_fallback: Vertretungsplan | None = None
 timestamp: datetime.datetime | None = None
-error = lambda e: render_template('components/error.jinja', cfg=cfg.frontend, e=e)
+error = lambda e: render_template('components/error.jinja', cfg=config.frontend, e=e)
 
 @app.route('/plan')
 def get_plan():
@@ -103,26 +103,26 @@ def get_plan():
         return render_template(
             'components/plan.jinja',
             timestamp=timestamp,
-            cfg=cfg.frontend,
+            cfg=config.frontend,
             vp=vpdaten
         )
             
     except Exception as e:
-        return render_template('components/error.jinja', cfg=cfg.frontend, e=e)
+        return render_template('components/error.jinja', cfg=config.frontend, e=e)
 
-@app.route('/dvb')
-def get_dvb():
+@app.route('/öpnv')
+def get_öpnv():
     
     try:
         
         try:
-            abfahrtsdaten = dvb.get_abfahrten()
+            abfahrtsdaten = öpnv.get_abfahrten()
         except Exception as e:
             abfahrtsdaten = {}
             
         return render_template(
-            'components/dvb.jinja',
-            dvb=abfahrtsdaten
+            'components/öpnv.jinja',
+            öpnv=abfahrtsdaten
         )
             
     except Exception as e:

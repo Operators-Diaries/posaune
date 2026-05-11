@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import requests
 
 BASE_URL = "http://widgets.vvo-online.de/abfahrtsmonitor"
