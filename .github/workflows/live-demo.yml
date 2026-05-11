@@ -92,13 +92,13 @@ jobs:
       - name: Debug
         run: |
           echo "--- RESULT-ORDNER ---"
-          find snapshot/public -maxdepth 4 -not -path '*/.*' | sort
+          find snapshot/127.0.0.1:5000 -maxdepth 4 -not -path '*/.*' | sort
           echo "---------------------"
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: snapshot/public
+          path: snapshot/127.0.0.1:5000
 
   deploy:
     needs: snapshot
