@@ -69,7 +69,7 @@ def index():
 
     try:
         return render_template(
-            'main.html.jinja',
+            'main.html.j2',
             cfg=config.frontend,
         )
     except Exception as e:
@@ -80,7 +80,7 @@ def index():
 
 vp_fallback: Vertretungsplan | None = None
 timestamp: datetime.datetime | None = None
-error = lambda e: render_template('components/error.html.jinja', cfg=config.frontend, e=e)
+error = lambda e: render_template('components/error.html.j2', cfg=config.frontend, e=e)
 
 @app.route('/plan')
 def get_plan():
@@ -101,7 +101,7 @@ def get_plan():
                 
         # vpdaten = vpzugang.get(datetime.date(2026, 5, 14)) # DEBUG
         return render_template(
-            'components/plan.html.jinja',
+            'components/plan.html.j2',
             timestamp=timestamp,
             cfg=config.frontend,
             vp=vpdaten
@@ -121,7 +121,7 @@ def get_öpnv():
             abfahrtsdaten = {}
             
         return render_template(
-            'components/öpnv.html.jinja',
+            'components/öpnv.html.j2',
             öpnv=abfahrtsdaten
         )
             
@@ -139,7 +139,7 @@ def get_solar():
             solardaten = solar.Solardaten()
             
         return render_template(
-            'components/sol.html.jinja',
+            'components/sol.html.j2',
             sol=solardaten
         )
             

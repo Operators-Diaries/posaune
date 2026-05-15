@@ -34,12 +34,12 @@
         
             <div id="content-scroller">
                 <div id="plan-content" style="height: 100%; display: flex; align-items: center; justify-content: center; ">Daten...</div>
-                {# Hier lädt HTMX den Inhalt von components/plan.html.jinja#plan-content #}
+                {# Hier lädt HTMX den Inhalt von components/plan.html.j2#plan-content #}
             </div>
         
             <div id="footer-section">
                 <div id="footer-content">{# wir lassen hier einfach leer, denn man sieht ja im Plan, wie es mit dem Laden aussieht #}</div>
-                {# Hier lädt HTMX den Inhalt von components/plan.html.jinja#footer-content #}
+                {# Hier lädt HTMX den Inhalt von components/plan.html.j2#footer-content #}
             </div>
         </div>
         
@@ -54,14 +54,14 @@
                     <div class="sidebar-section-header">Solaranlage</div>
                     <div class="sidebar-section-content" hx-get="/solar" hx-trigger="load, every 60m" hx-swap="innerHTML">
                         Lade ...
-                        {# Hier lädt HTMX components/solar.html.jinja #}
+                        {# Hier lädt HTMX components/solar.html.j2 #}
                     </div>
                 </div>
                 <div class="sidebar-section">
                     <div class="sidebar-section-header">Abfahrten</div>
                     <div class="sidebar-section-content" hx-get="/öpnv" hx-trigger="load, every 1m" hx-swap="innerHTML">
                         Lade ...
-                        {# Hier lädt HTMX components/öpnv.html.jinja #}
+                        {# Hier lädt HTMX components/öpnv.html.j2 #}
                     </div>
                 </div>
             </div>

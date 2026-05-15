@@ -1,2 +1,3 @@
 # Auto detect text files and perform LF normalization
 .github/** linguist-detectable=false
+.j2 linguist-language=Jinja
