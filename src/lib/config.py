@@ -20,7 +20,7 @@ class PosauneConfig(BaseSettings):
         klassendetailiert: list[str] = ["11", "12"]
         nuränderungen: bool = True
         autoscroll: bool = True
-        scrollspeed: float = 0.02
+        scrollspeed: float = 0.02 # Seconds for one pixel
         sidebar: bool = True
 
     frontend: Frontend = Frontend()

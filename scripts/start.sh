@@ -27,7 +27,7 @@ head "Repository herunterladen"
 
 # Repository überprüfen
 if ! git rev-parse --git-dir > /dev/null 2>&1; then
-    fehler "Die Klonung des Repositorys fehlt oder ist fehlerhaft. Bitte installiere Posaune erneut"
+    fehler "Der Klon des Repositorys fehlt oder ist fehlerhaft. Bitte installiere Posaune erneut"
     exit 1
 fi
 

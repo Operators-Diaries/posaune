@@ -1,4 +1,15 @@
-const config = window.cfg || {};
+/**
+ * @typedef {Object} FrontendConfig
+ * @property {number} updatecycle           Aktualisierungszyklus in Minuten
+ * @property {string[]} ticker              Liste von Zeichenketten, die im Ticker angezeigt werden sollen
+ * @property {string[]} klassen             Liste von Klassenkürzeln, die im Vertretungsplan kompakt angezeigt werden sollen
+ * @property {string[]} klassendetailiert   Liste von Klassenkürzeln, die im Vertretungsplan detailliert angezeigt werden sollen
+ * @property {boolean} nuränderungen        Ob im Vertretungsplan nur Änderungen angezeigt werden sollen
+ * @property {boolean} autoscroll           Ob der Vertretungsplan automatisch scrollen soll
+ * @property {number} scrollspeed           Scrollgeschwindigkeit, des Auto-Scrollers in Sekunden pro Pixel
+ * @property {boolean} sidebar              Ob die Seitenleiste angezeigt werden soll
+ */
+const config = /** @type {FrontendConfig} */ (window.cfg || {});
 
 // ===== Uhr ==========================================================
 function updateDateTime() {
@@ -39,7 +50,7 @@ function initAutoScroller(root = document) {
 
     if (!config.autoscroll) return;
 
-    const scrollspeed = config.scrollspeed ?? 1;
+    const scrollspeed = config.scrollspeed;
     let isScrolling = true;
 
     setInterval(() => {
