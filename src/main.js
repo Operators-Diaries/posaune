@@ -15,7 +15,7 @@ const config = /** @type {FrontendConfig} */ (window.cfg || {});
 function updateDateTime() {
     const dateEl = document.getElementById('date');
     const timeEl = document.getElementById('time');
-    if (!dateEl || !timeEl) return;
+    if (!dateEl || !timeEl) console.error("Date or time element not found");
 
     const now = new Date();
 

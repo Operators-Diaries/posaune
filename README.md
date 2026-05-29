@@ -38,7 +38,7 @@ Nach dem ersten Starten wird eine Datei `~/posaune/config.yaml` mit Standardwert
 Die Konfigurationsparameter werden nur beim Start des Servers ausgelesen
 
 Alle Parameter, die in der `config.yaml` nicht gesetzt sind, können über den `vermächtnis`-Key aus einer anderen
-Konfiguration übernommen werden, die in einer Datei `configurations.yml` unter jenem Key liegt. Letztere
+Konfiguration übernommen werden, die in einer Datei `~/posaune/configurations.yml` unter jenem Key liegt. Letztere
 Datei kann aus beliebigen Quellen bezogen werden.
 
 ## Starten
