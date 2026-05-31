@@ -167,10 +167,34 @@ body {
     white-space: nowrap;
 }
 
+.stunden-flr .lehrer,
 .stunden-flr .raum {
-    display: flex;
-    justify-content: flex-end;
-    width: 100%;
+    display: block;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: clip;
+    text-align: right;
+}
+
+.stunden-flr .scroll-content {
+    display: inline-block;
+    padding-right: 2rem;
+    will-change: transform;
+}
+
+.scrolling-text .scroll-content {
+    animation: scroll-text var(--scroll-duration, 10s) linear infinite;
+    animation-delay: 1s;
+}
+
+@keyframes scroll-text {
+    0%, 12% {
+        transform: translateX(0);
+    }
+    88%, 100% {
+        transform: translateX(calc(-1 * var(--scroll-distance, 100px)));
+    }
 }
 
 .stundeninfo {
@@ -235,6 +259,7 @@ body {
 
 .detailed .stunden-flr .raum {
     justify-content: flex-start;
+    text-align: left;
 }
 
 /* ====== // Sidebar //============================================================================ */
