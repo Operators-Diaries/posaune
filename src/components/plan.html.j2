@@ -79,8 +79,9 @@
         </div>
         {% endfor %}
     </div>
-    <div class="debug">{{ vp.datum.strftime('%A der %d. %B %Y') if vp.datum else "" }}{%if timestamp is not none
-        %} abgerufen am {{ timestamp.strftime("%d.%m.%Y") }} um {{ timestamp.strftime("%H:%M") }}{% endif %}
+    <div class="debug">
+        {{ vp.datum.strftime('%A der %d. %B %Y') if vp.datum else "" }}
+        {% if timestamp is not none %} abgerufen am {{ timestamp.strftime("%d.%m.%Y") }} um {{ timestamp.strftime("%H:%M") }}{% endif %}
     </div>
 </div>
 

@@ -88,7 +88,7 @@ function initAutoScrollText(root = document) {
         const minGap = 40; // nur animieren bei deutlich sichtbarem Überlauf
         const distance = inner.scrollWidth - field.clientWidth;
 
-        if (text.length > 5 && distance > minGap) {
+        if (text.length > 6 && distance > minGap) {
             const moveDuration = Math.max(distance / 25, 4);
             const totalDuration = moveDuration + 4; // 2s Pause am Anfang und Ende
             field.style.setProperty('--scroll-distance', `${distance}px`);
