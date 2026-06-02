@@ -12,11 +12,12 @@
                     {% for periode, stunden in klasse.stunden.items()
                     if not cfg.nuränderungen
                     or (stunden | selectattr('änderung') | list | length > 0)
+                    or (stunden | selectattr('info') | list | length > 0)
                     %}
                     <div class="periode">
                         <div class="periode-zahl">{{ periode }}</div>
                         <div class="stunden-wrapper">
-                            {% for stunde in klasse.stunden[periode] if (not cfg.nuränderungen) or stunde.änderung %}
+                            {% for stunde in klasse.stunden[periode] if (not cfg.nuränderungen) or stunde.änderung or stunde.info is not none %}
                             <div class="stunde">
                                 <div class="stunden-flr">
                                     <span class="fach {% if stunde.fachänderung %}änderung{% endif %}">
@@ -53,11 +54,12 @@
                 {% for periode, stunden in klasse.stunden.items()
                 if not cfg.nuränderungen
                 or (stunden | selectattr('änderung') | list | length > 0)
+                or (stunden | selectattr('info') | list | length > 0)
                 %}
                 <div class="periode">
                     <div class="periode-zahl">{{ periode }}</div>
                     <div class="stunden-wrapper">
-                        {% for stunde in csort(klasse.stunden[periode], 2, sorting_key_fächer) if (not cfg.nuränderungen) or stunde.änderung %}
+                        {% for stunde in csort(klasse.stunden[periode], 2, sorting_key_fächer) if (not cfg.nuränderungen) or stunde.änderung or stunde.info is not none %}
                         <div class="stunde">
                             <div class="stunden-flr">
                                 <span class="fach{% if stunde.fachänderung %} änderung{% endif %}">{{

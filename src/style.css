@@ -91,7 +91,7 @@ body {
     max-width: 400px;
     min-width: 250px;
     position: relative;
-    padding: 5em 1.5em 2em 1.5em;
+    padding: 5.5em 1.5em 2em 1.5em;
     background-color: var(--background-embed);
     box-shadow: inset 18px 18px 14px var(--shadow), inset -18px -18px 14px #ffffff;
     border-radius: 15px;
@@ -162,27 +162,34 @@ body {
     font-size: 21px;
     font-weight: 500;
     display: grid;
-    grid-template-columns: 85px 65px 75px;
-    column-gap: 0px;
+    grid-template-columns: 85px 70px 75px;
+    column-gap: 5px;
     white-space: nowrap;
 }
 
-.stunden-flr .lehrer,
+.stunden-flr .lehrer {
+    display: block;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: clip;
+    text-align: left;
+}
+
 .stunden-flr .raum {
     display: block;
     min-width: 0;
     overflow: hidden;
-    white-space: nowrap;
     text-overflow: clip;
     text-align: right;
 }
 
-.stunden-flr .scroll-content {
+.stunden-flr .lehrer .scroll-content, .stunden-flr .raum .scroll-content {
     display: inline-block;
-    padding-right: 2rem;
+    padding-right: 1.0rem;
     will-change: transform;
 }
 
+/* Wird in main.js:initAutoScrollText() zugewiesen */
 .scrolling-text .scroll-content {
     animation: scroll-text var(--scroll-duration, 10s) linear infinite;
     animation-delay: 1s;
@@ -221,12 +228,13 @@ body {
 .detailed .perioden-wrapper {
     display: flex;
     flex-direction: column;
+    gap: 10px;
 }
 
 .detailed .perioden-wrapper > * {
     border-radius: 15px;
     box-shadow: -6px -6px 20px var(--background);
-    padding: 10px 0;
+    /* padding: 10px 0; */
 }
 
 .detailed .perioden-wrapper > *:last-child {

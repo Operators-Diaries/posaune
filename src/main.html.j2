@@ -33,7 +33,7 @@
         {# Falls die Elemente nicht gefunden werden, wird die Response durch hx-target vollständig in #plan-content gegeben #}
         
             <div id="content-scroller">
-                <div id="plan-content" style="height: 100%; display: flex; align-items: center; justify-content: center; ">Daten...</div>
+                <div id="plan-content" style="height: 100%; display: flex; align-items: center; justify-content: center; ">Lade Plan ...</div>
                 {# Hier lädt HTMX den Inhalt von components/plan.html.j2#plan-content #}
             </div>
         
@@ -53,14 +53,14 @@
                 <div class="sidebar-section">
                     <div class="sidebar-section-header">Solaranlage</div>
                     <div class="sidebar-section-content" hx-get="/solar" hx-trigger="load, every 60m" hx-swap="innerHTML">
-                        Lade ...
+                        Lade Solardaten ...
                         {# Hier lädt HTMX components/solar.html.j2 #}
                     </div>
                 </div>
                 <div class="sidebar-section">
                     <div class="sidebar-section-header">Abfahrten</div>
                     <div class="sidebar-section-content" hx-get="/öpnv" hx-trigger="load, every 1m" hx-swap="innerHTML">
-                        Lade ...
+                        Lade ÖPNV-Daten ...
                         {# Hier lädt HTMX components/öpnv.html.j2 #}
                     </div>
                 </div>

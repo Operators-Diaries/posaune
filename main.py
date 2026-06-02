@@ -1,5 +1,6 @@
 from flask import Flask, render_template
-from vpmobil import VertretungsplanZugang, Standardpfade, Vertretungsplan
+from vpmobil import VertretungsplanZugang, Standardpfade, Vertretungsplan, Parser as VpParser
+# from vpmobil.extensions import pp
 from pathlib import Path
 import yaml, json, datetime, locale
 
@@ -97,9 +98,9 @@ def get_plan():
                 vpdaten = vp_fallback
             else:
                 vp_fallback = None # es gibt kein sinnvolles Fallback
-                vpdaten = vpzugang.get(datei=Standardpfade.Klassen)
+                vpdaten = vpzugang.get(datei=Standardpfade.Klassen)#, parser=pp.StBennoGymnasium)
                 
-        # vpdaten = vpzugang.get(datetime.date(2026, 5, 14)) # DEBUG
+        # vpdaten = Vertretungsplan.fromfile("src/assets/debug_plan.xml", parser=VpParser())#, parser=pp.StBennoGymnasium) # DEBUG
         return render_template(
             'components/plan.html.j2',
             timestamp=timestamp,
@@ -108,7 +109,7 @@ def get_plan():
         )
             
     except Exception as e:
-        return render_template('components/error.html.jinja', cfg=config.frontend, e=e)
+        return render_template('components/error.html.j2', cfg=config.frontend, e=e)
 
 @app.route('/öpnv')
 def get_öpnv():
@@ -145,6 +146,7 @@ def get_solar():
             
     except Exception as e:
         return error(e)
+
 
 if __name__ == "__main__":
     app.run(debug=True)

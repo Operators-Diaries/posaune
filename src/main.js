@@ -75,26 +75,33 @@ function initAutoScroller(root = document) {
 // ===== Auto Scroll Text ============================================
 function initAutoScrollText(root = document) {
     root.querySelectorAll('.stunden-flr .lehrer, .stunden-flr .raum').forEach((field) => {
+        const text = field.textContent.trim();
+        const minGap = 40; // nur animieren bei deutlich sichtbarem Überlauf
+
         let inner = field.querySelector('.scroll-content');
         if (!inner) {
             inner = document.createElement('span');
             inner.className = 'scroll-content';
-            inner.textContent = field.textContent.trim();
+            inner.textContent = text;
             field.textContent = '';
             field.appendChild(inner);
+        } else {
+            inner.textContent = text;
         }
 
-        const text = inner.textContent.trim();
-        const minGap = 40; // nur animieren bei deutlich sichtbarem Überlauf
         const distance = inner.scrollWidth - field.clientWidth;
+        const needsScroll = text.length > 6 && distance > minGap;
 
-        if (text.length > 6 && distance > minGap) {
+        if (needsScroll) {
             const moveDuration = Math.max(distance / 25, 4);
-            const totalDuration = moveDuration + 4; // 2s Pause am Anfang und Ende
+            const totalDuration = moveDuration + 3; // 1.5s Pause am Anfang und Ende
             field.style.setProperty('--scroll-distance', `${distance}px`);
             field.style.setProperty('--scroll-duration', `${totalDuration}s`);
             field.classList.add('scrolling-text');
         } else {
+            if (inner) {
+                field.textContent = text;
+            }
             field.classList.remove('scrolling-text');
             field.style.removeProperty('--scroll-distance');
             field.style.removeProperty('--scroll-duration');

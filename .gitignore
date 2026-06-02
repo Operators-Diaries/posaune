@@ -5,3 +5,5 @@ config.yaml
 configurations.yml
 **__pycache__**
 test.py
+
+src/assets/debug_plan.xml
