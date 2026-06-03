@@ -28,7 +28,7 @@ class PosauneConfig(BaseSettings):
     vertretungsplan: Vertretungsplan = Vertretungsplan()
     
 
-def update_config_recursively(target: PosauneConfig, source_dict: dict):
+def update_config_recursively(target: PosauneConfig, source_dict: dict[str]):
     """Recursively update config, handling nested BaseModels."""
     for param, value in source_dict.items():
         if hasattr(target, param):
