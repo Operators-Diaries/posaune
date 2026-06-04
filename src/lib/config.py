@@ -18,7 +18,10 @@ class PosauneConfig(BaseSettings):
         
     class Frontend(BaseModel):
         updatecycle: float = 1 # Minuten
-        ticker: list[str] = ["Alternative für die VpMobil24 App jetzt auf vertretungsapp.de!", "Mache Vorschläge, wie wir die Vertretungsanzeige verbessern können auf github.com/Operators-Diaries/posaune/issues"]
+        ticker: list[str] = [
+            "Alternative für die VpMobil24 App jetzt auf vertretungsapp.de!",
+            "Wie können wir die Vertretungsanzeige verbessern? Vorschläge auf github.com/Operators-Diaries/posaune/issues oder per Schulmanager"
+        ]
         klassen: list[str] = ["5a", "5b", "5c", "6a", "6b", "6c", "7a", "7b", "7c", "8a", "8b", "8c", "9a", "9b", "9c", "10a", "10b", "10c"]
         klassendetailiert: list[str] = ["11", "12"]
         nuränderungen: bool = True

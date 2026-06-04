@@ -155,4 +155,5 @@ def get_solar():
 
 
 if __name__ == "__main__":
+    print(POSAUNE, "App läuft. Bei einem kritischen Fehler außerhalb der Anwendung, wird der Fehler hier angezeigt.")
     app.run(debug=True)
