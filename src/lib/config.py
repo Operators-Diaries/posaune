@@ -1,7 +1,7 @@
 from pydantic_settings import BaseSettings
 from pydantic import BaseModel, ConfigDict
 from pathlib import Path
-import yaml
+import toml
 
 class PosauneConfig(BaseSettings):
     model_config = ConfigDict(
@@ -15,16 +15,16 @@ class PosauneConfig(BaseSettings):
         
     class Frontend(BaseModel):
         updatecycle: float = 1 # Minuten
-        ticker: list[str] = ["Alternative für die VpMobil24 App jetzt auf vertretungsapp.de!"]
+        ticker: list[str] = ["Alternative für die VpMobil24 App jetzt auf vertretungsapp.de!", "Mache Vorschläge, wie wir die Vertretungsanzeige verbessern können auf github.com/Operators-Diaries/posaune/issues"]
         klassen: list[str] = ["5a", "5b", "5c", "6a", "6b", "6c", "7a", "7b", "7c", "8a", "8b", "8c", "9a", "9b", "9c", "10a", "10b", "10c"]
         klassendetailiert: list[str] = ["11", "12"]
         nuränderungen: bool = True
         autoscroll: bool = True
-        scrollspeed: float = 0.02 # Seconds for one pixel
+        scrollspeed: float = 0.02 # Sekunden pro Pixel
         sidebar: bool = True
 
     frontend: Frontend = Frontend()
-    vermächtnis: str | None = None # DIESER PARAMETER SOLLTE NICHT VERÄNDERT WERDEN, DAMIT FERNKONFIGURATION MÖGLICH BLEIBT
+    vermaechtnis: str | None = None # DIESER PARAMETER SOLLTE NICHT VERÄNDERT WERDEN, DAMIT FERNKONFIGURATION MÖGLICH BLEIBT
     vertretungsplan: Vertretungsplan = Vertretungsplan()
     
 
@@ -40,11 +40,10 @@ def update_config_recursively(target: PosauneConfig, source_dict: dict[str]):
         else:
             setattr(target, param, value)
 
-def load_yaml(path: Path) -> dict | list | None:
+def load_toml(path: Path) -> dict[str] | None:
     if not path.exists():
         return None
-    with path.open(encoding="utf-8") as f:
-        return yaml.safe_load(f) or {}
+    return toml.load(path) or {}
 
 def resolve_inheritance(name: str, configs: dict[str, PosauneConfig]) -> PosauneConfig:
     chain: list[tuple[str, PosauneConfig]] = []
@@ -62,7 +61,7 @@ def resolve_inheritance(name: str, configs: dict[str, PosauneConfig]) -> Posaune
 
         cfg_part = configs[current]
         chain.append((current, cfg_part))
-        current = cfg_part.vermächtnis
+        current = cfg_part.vermaechtnis
 
     resolved = PosauneConfig()
 

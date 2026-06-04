@@ -33,12 +33,12 @@ Dafür ist beim ersten Ausführen wahrscheinlich die Eingabe des Systempassworts
 - Es kann sinnvoll sein, browserseitig die Zoomstufe zu erhöhen. Normalerweise speichert der Browser das für eine Domain, sodass es nur einmal eingestellt werden muss. 
 
 ## Konfiguration
-Nach dem ersten Starten wird eine Datei `~/posaune/config.yaml` mit Standardwerten angelegt. 
+Nach dem ersten Starten wird eine Datei `~/posaune/config.toml` mit Standardwerten angelegt.
 
-Die Konfigurationsparameter werden nur beim Start des Servers ausgelesen
+Die Konfigurationsparameter werden nur beim Start des Servers ausgelesen.
 
-Alle Parameter, die in der `config.yaml` nicht gesetzt sind, können über den `vermächtnis`-Key aus einer anderen
-Konfiguration übernommen werden, die in einer Datei `~/posaune/configurations.yml` unter jenem Key liegt. Letztere
+Alle Parameter, die in der `config.toml` nicht gesetzt sind, können über den `vermächtnis`-Key aus einer anderen
+Konfiguration übernommen werden, die in einer Datei `~/posaune/configurations.toml` unter jenem Key liegt. Letztere
 Datei kann aus beliebigen Quellen bezogen werden.
 
 ## Starten

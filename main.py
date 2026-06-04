@@ -2,9 +2,9 @@ from flask import Flask, render_template
 from vpmobil import VertretungsplanZugang, Standardpfade, Vertretungsplan, Parser as VpParser
 # from vpmobil.extensions import pp
 from pathlib import Path
-import yaml, json, datetime, locale
+import toml, json, datetime, locale
 
-from src.lib.config import PosauneConfig, load_yaml, resolve_inheritance, update_config_recursively
+from src.lib.config import PosauneConfig, load_toml, resolve_inheritance, update_config_recursively
 from src.lib.sorting import csort
 from src.lib import solar
 from src.lib import öpnv
@@ -13,27 +13,27 @@ locale.setlocale(locale.LC_TIME, "de_DE.UTF-8")
 
 #======// Configuration //=======================================================================//
 
-CONFIG_PATH = Path("config.yaml")
-CONFIGURATIONS_PATH = Path("configurations.yml")
+CONFIG_PATH = Path("config.toml")
+CONFIGURATIONS_PATH = Path("configurations.toml")
 
 # lokale Konfiguration laden
-_config_dict = load_yaml(CONFIG_PATH)
+_config_dict = load_toml(CONFIG_PATH)
 if not _config_dict:
     config = PosauneConfig()
     with CONFIG_PATH.open("w", encoding="utf-8") as f:
-        yaml.safe_dump(config.model_dump(), f, allow_unicode=True)
+        toml.dump(config.model_dump(), f)
 else:
     config = PosauneConfig(**_config_dict)
 
 # alle benannten Konfigurationen laden
 configs: dict[str, PosauneConfig] = {}
-_configurations_data = load_yaml(CONFIGURATIONS_PATH) or {}
+_configurations_data = load_toml(CONFIGURATIONS_PATH) or {}
 for key, c in _configurations_data.items():
     configs[key] = PosauneConfig(**c)
 
 # zuerst die Vererbungskette der lokalen config auflösen
-if config.vermächtnis is not None:
-    inherited = resolve_inheritance(config.vermächtnis, configs)
+if config.vermaechtnis is not None:
+    inherited = resolve_inheritance(config.vermaechtnis, configs)
     update_config_recursively(inherited, config.model_dump())
     config = inherited
 

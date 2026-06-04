@@ -1,8 +1,8 @@
 .vscode/settings.json
 .env
 .venv
-config.yaml
-configurations.yml
+config.toml
+configurations.toml
 **__pycache__**
 test.py
 

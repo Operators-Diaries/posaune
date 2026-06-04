@@ -19,11 +19,11 @@ Das Laden und die Aktualisierung der angezeigten Daten erfolgt über [htmx](http
 
 #### 📯 Konfiguration
 
-- `config.yml` enthält die Konfigurationsparameter mit der höchsten Priorität
+- `config.toml` enthält die Konfigurationsparameter mit der höchsten Priorität
   - Kein Key *muss* vorhanden sein
   - Unbekannte Keys werden mitgetragen, aber an sich ignoriert 
   - Der Parameter `vermächtnis` kann einen Bezeichner für eine andere Konfiguration enthalten, deren Werte übernommen werden, wenn sie nicht in der aktuellen Konfiguration definiert sind
-- `configurations.yaml` enthält benannte Konfigurationen
+- `configurations.toml` enthält benannte Konfigurationen
   - Ist eine Map aus Keys (die in `config.yml` als `vermächtnis` referenziert werden können) auf die Struktur, die auch `config.yml` enthalten könnte
   - Auch `vermächtnis`-Parameter sind hier möglich, die Werte werden rekursiv übernommen
 
