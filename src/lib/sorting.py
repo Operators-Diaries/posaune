@@ -1,6 +1,6 @@
 from typing import Callable, Iterable
 
-def csort[_T, SupportsRichComparison](iterable: Iterable[_T], columns, key: Callable[[_T], SupportsRichComparison]=None) -> list[_T]:
+def csort[T, SupportsRichComparison](iterable: Iterable[T], columns, key: Callable[[T], SupportsRichComparison]=None) -> list[T]:
     """Sortiert eine Iterable so, dass Spalten, die horizontal aufgefüllt werden, wie vertikal aufgefüllt aussehen.
     
     Wenn eine Liste normalerweise die Anordnung

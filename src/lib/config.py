@@ -1,7 +1,10 @@
 from pydantic_settings import BaseSettings
 from pydantic import BaseModel, ConfigDict
 from pathlib import Path
+from rich import print
 import toml
+
+POSAUNE = "[#ffffff on #00b7ff] Posaune [default]"
 
 class PosauneConfig(BaseSettings):
     model_config = ConfigDict(
@@ -28,6 +31,12 @@ class PosauneConfig(BaseSettings):
     vertretungsplan: Vertretungsplan = Vertretungsplan()
     
 
+def load_toml(path: Path) -> dict[str] | None:
+    if not path.exists():
+        return None
+    return toml.load(path) or {}
+
+
 def update_config_recursively(target: PosauneConfig, source_dict: dict[str]):
     """Recursively update config, handling nested BaseModels."""
     for param, value in source_dict.items():
@@ -40,10 +49,17 @@ def update_config_recursively(target: PosauneConfig, source_dict: dict[str]):
         else:
             setattr(target, param, value)
 
-def load_toml(path: Path) -> dict[str] | None:
-    if not path.exists():
-        return None
-    return toml.load(path) or {}
+
+def flatten_keys(source: dict[str, object], parent: str = "") -> list[str]:
+    keys: list[str] = []
+    for key, value in source.items():
+        full_key = f"{parent}.{key}" if parent else key
+        if isinstance(value, dict):
+            keys.extend(flatten_keys(value, full_key))
+        else:
+            keys.append(full_key)
+    return keys
+
 
 def resolve_inheritance(name: str, configs: dict[str, PosauneConfig]) -> PosauneConfig:
     chain: list[tuple[str, PosauneConfig]] = []
@@ -66,7 +82,9 @@ def resolve_inheritance(name: str, configs: dict[str, PosauneConfig]) -> Posaune
     resolved = PosauneConfig()
 
     for name, part in reversed(chain):
-        print(f"Konfiguration wird von '{name}' geerbt.")
-        update_config_recursively(resolved, part.model_dump(exclude_unset=True))
+        part_dict = part.model_dump(exclude_unset=True)
+        print(POSAUNE, f"Konfiguration wird von '{name}' geerbt.")
+        print(POSAUNE, "Übernommene Keys:", ", ".join(flatten_keys(part_dict)))
+        update_config_recursively(resolved, part_dict)
 
     return resolved

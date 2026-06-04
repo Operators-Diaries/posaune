@@ -2,6 +2,7 @@ from flask import Flask, render_template
 from vpmobil import VertretungsplanZugang, Standardpfade, Vertretungsplan, Parser as VpParser
 # from vpmobil.extensions import pp
 from pathlib import Path
+from rich import print
 import toml, json, datetime, locale
 
 from src.lib.config import PosauneConfig, load_toml, resolve_inheritance, update_config_recursively
@@ -11,6 +12,10 @@ from src.lib import öpnv
 
 locale.setlocale(locale.LC_TIME, "de_DE.UTF-8")
 
+POSAUNE = "[#ffffff on #00b7ff] Posaune [default]"
+
+print(POSAUNE, "Das ist die Posaune")
+
 #======// Configuration //=======================================================================//
 
 CONFIG_PATH = Path("config.toml")
@@ -18,23 +23,25 @@ CONFIGURATIONS_PATH = Path("configurations.toml")
 
 # lokale Konfiguration laden
 _config_dict = load_toml(CONFIG_PATH)
-if not _config_dict:
+if _config_dict is None:
+    print(POSAUNE, f"Keine '{CONFIG_PATH.name}' in '{CONFIG_PATH.resolve().parent}' gefunden. Generiere neue Konfiguration ...")
     config = PosauneConfig()
     with CONFIG_PATH.open("w", encoding="utf-8") as f:
         toml.dump(config.model_dump(), f)
 else:
     config = PosauneConfig(**_config_dict)
+    print(POSAUNE, f"Konfiguration aus '{CONFIG_PATH.name}' geladen")
 
 # alle benannten Konfigurationen laden
 configs: dict[str, PosauneConfig] = {}
-_configurations_data = load_toml(CONFIGURATIONS_PATH) or {}
-for key, c in _configurations_data.items():
+for key, c in (load_toml(CONFIGURATIONS_PATH) or {}).items():
     configs[key] = PosauneConfig(**c)
+print(POSAUNE, f"Konfigurationen aus '{CONFIGURATIONS_PATH.name}' geladen: {len(configs)} " + f"({", ".join(configs.keys())})" if configs else "")
 
 # zuerst die Vererbungskette der lokalen config auflösen
 if config.vermaechtnis is not None:
     inherited = resolve_inheritance(config.vermaechtnis, configs)
-    update_config_recursively(inherited, config.model_dump())
+    update_config_recursively(inherited, config.model_dump(exclude_unset=True))
     config = inherited
 
 # lokale Datei nochmals als höchste Priorität anwenden
@@ -60,7 +67,6 @@ vpzugang = VertretungsplanZugang(
     config.vertretungsplan.benutzer,
     config.vertretungsplan.passwort
 )
-
 
 
 #======// Hauptroute //==================================//
