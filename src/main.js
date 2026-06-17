@@ -76,7 +76,7 @@ function initAutoScroller(root = document) {
 function initAutoScrollText(root = document) {
     root.querySelectorAll('.stunden-flr .lehrer, .stunden-flr .raum').forEach((field) => {
         const text = field.textContent.trim();
-        const minGap = 40; // nur animieren bei deutlich sichtbarem Überlauf
+        const minGap = 5; // nur animieren bei deutlich sichtbarem Überlauf
 
         let inner = field.querySelector('.scroll-content');
         if (!inner) {
@@ -93,7 +93,7 @@ function initAutoScrollText(root = document) {
         const needsScroll = text.length > 6 && distance > minGap;
 
         if (needsScroll) {
-            const moveDuration = Math.max(distance / 25, 4);
+            const moveDuration = Math.max(distance / 25, 1);
             const totalDuration = moveDuration + 3; // 1.5s Pause am Anfang und Ende
             field.style.setProperty('--scroll-distance', `${distance}px`);
             field.style.setProperty('--scroll-duration', `${totalDuration}s`);
