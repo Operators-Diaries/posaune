@@ -51,17 +51,17 @@
                     <span id="date"></span>
                 </div>
                 <div class="sidebar-section">
-                    <div class="sidebar-section-header">Solaranlage</div>
-                    <div class="sidebar-section-content" hx-get="/solar" hx-trigger="load, every 60m" hx-swap="innerHTML">
-                        Lade Solardaten ...
-                        {# Hier lädt HTMX components/solar.html.j2 #}
-                    </div>
-                </div>
-                <div class="sidebar-section">
                     <div class="sidebar-section-header">Abfahrten</div>
                     <div class="sidebar-section-content" hx-get="/öpnv" hx-trigger="load, every 1m" hx-swap="innerHTML">
                         Lade ÖPNV-Daten ...
                         {# Hier lädt HTMX components/öpnv.html.j2 #}
+                    </div>
+                </div>
+                <div class="sidebar-section">
+                    <div class="sidebar-section-header">Solaranlage</div>
+                    <div class="sidebar-section-content" hx-get="/solar" hx-trigger="load, every 60m" hx-swap="innerHTML">
+                        Lade Solardaten ...
+                        {# Hier lädt HTMX components/solar.html.j2 #}
                     </div>
                 </div>
             </div>

@@ -95,9 +95,9 @@ def get_plan():
     global timestamp
 
     try:
+        timestamp = datetime.datetime.now()
         try:
-            vpdaten = vpzugang.get(datetime.datetime.now().date())
-            timestamp = datetime.datetime.now()
+            vpdaten = vpzugang.get(timestamp.date())
             vp_fallback = vpdaten
         except:
             if vp_fallback and vp_fallback.datum == datetime.date.today():
@@ -115,6 +115,8 @@ def get_plan():
         )
             
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         return render_template('components/error.html.j2', cfg=config.frontend, e=e)
 
 @app.route('/öpnv')
