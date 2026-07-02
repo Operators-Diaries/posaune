@@ -62,9 +62,12 @@ FLASK_PID=$!
 
 #======// Website öffnen //========================================================================//
 
-head "Öffne Browser im Vollbild"
-
-chromium --start-fullscreen "http://127.0.0.1:5000" &
+if [ "$GITHUB_ACTIONS" != "true" ]; then
+    head "Öffne Browser im Vollbild"
+    chromium --start-fullscreen "http://127.0.0.1:5000" &
+else
+    info "Überspringe Browserstart (GitHub Actions Umgebung)"
+fi
 
 info "Setup abgeschlossen"
 echo "Flask läuft mit PID $FLASK_PID"

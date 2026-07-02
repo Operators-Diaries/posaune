@@ -26,24 +26,38 @@ sudo update-locale
 
 head "Prüfe Installationen"
 
-if command -v python3 &> /dev/null && command -v git &> /dev/null && python3 -m pip --version &> /dev/null && python3 -m venv --version &> /dev/null && command -v chromium &> /dev/null; then
+if command -v python3 &> /dev/null && command -v git &> /dev/null && python3 -m pip --version &> /dev/null && python3 -m venv --version &> /dev/null && { [ "$GITHUB_ACTIONS" = "true" ] || command -v chromium &> /dev/null; }; then
     echo "Python: $(python3 --version)"
     echo "Git: $(git --version)"
     echo "Pip: $(python3 -m pip --version)"
     echo "Venv: $(python3 -m venv --version)"
-    echo "Chromium: $(chromium --version)"
+    if [ "$GITHUB_ACTIONS" != "true" ]; then
+        echo "Chromium: $(chromium --version)"
+    fi
 else
     info "Mindestens eine Installation fehlt"
 
     if command -v apt &> /dev/null; then
         sudo apt update
-        sudo apt install -y python3 python3-pip git python3-venv chromium
+        if [ "$GITHUB_ACTIONS" = "true" ]; then
+            sudo apt install -y python3 python3-pip git python3-venv
+        else
+            sudo apt install -y python3 python3-pip git python3-venv chromium
+        fi
 
     elif command -v dnf &> /dev/null; then
-        sudo dnf install -y python3 python3-pip git python3-venv chromium
+        if [ "$GITHUB_ACTIONS" = "true" ]; then
+            sudo dnf install -y python3 python3-pip git python3-venv
+        else
+            sudo dnf install -y python3 python3-pip git python3-venv chromium
+        fi
 
     elif command -v pacman &> /dev/null; then
-        sudo pacman -Sy --noconfirm python python-pip git python3-venv chromium
+        if [ "$GITHUB_ACTIONS" = "true" ]; then
+            sudo pacman -Sy --noconfirm python python-pip git python3-venv
+        else
+            sudo pacman -Sy --noconfirm python python-pip git python3-venv chromium
+        fi
 
     else
         fehler "Kein unterstützter Paketmanager gefunden. Bitte installiere apt, dnf oder pacman."
