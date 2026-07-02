@@ -96,7 +96,7 @@ def get_plan():
 
     try:
         try:
-            vpdaten = vpzugang.get()
+            vpdaten = vpzugang.get(datetime.datetime.now().date())
             timestamp = datetime.datetime.now()
             vp_fallback = vpdaten
         except:
